@@ -1,0 +1,16 @@
+.hamburgerContainer{
+    height: 30px;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.line{
+    height: 2px;
+    width: 80%;
+    background-color: #63bbea;
+    border-radius: 10px;
+    margin: 3px 0;
+}

@@ -1,0 +1,241 @@
+.homeContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh + 150px);
+    width: 100%;
+    animation: fadeIn 0.5s forwards;
+    box-sizing: border-box;
+}
+
+.homeBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.homeMainBanner {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.homeTextContainer {
+    width: 100%;
+    height: calc(100vh);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 15%;
+}
+
+.logoAndText {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    width: 100%;
+}
+
+.homeTitle {
+    opacity: 0;
+    text-align: end;
+    font-size: 95px;
+    font-weight: 600;
+    color: #fff;
+    animation-name: btnsAnimation;
+    animation-duration: 0.8s;
+    animation-delay: 0.3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.homeSubtitleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin-top: 20px;
+}
+
+.homeSubtitle {
+    opacity: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    padding: 3px;
+    border-radius: 1px;
+    text-align: start;
+    display: flex;
+    font-size: 23px;
+    align-items: center;
+    animation-name: fadeInUp;
+    animation-duration: 0.8s;
+    animation-delay: 0.9s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.homeTitle span {
+    font-weight: 600;
+}
+
+.dotContainer {
+    position: relative;
+}
+
+.dotPng {
+    opacity: 0;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    height: 50px;
+    margin: 10px;
+    border-radius: 50%;
+    animation-name: btnsAnimation;
+    animation-duration: 0.8s;
+    animation-delay: 0.3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+}
+
+.homeBannerContainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.homeBanner {
+    width: 70%;
+    height: 250px;
+    margin: 0 15%;
+    overflow: hidden;
+    border-radius: 7px;
+    border: solid 1px #ffffff4b;
+    box-shadow: 0 12px 5px -12px rgba(0, 0, 0, 0.1);
+    background: url(../../Assets/loyaltyBanner.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 40px;
+}
+
+.homeBannerTitle {
+    font-family: "Encode Sans Expanded", sans-serif;
+    font-size: 60px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.homeBannerText {
+    font-weight: 500;
+    font-size: 18px;
+    color: #fff;
+    margin-top: 10px;
+    margin-left: 20px;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.loyaltyBanner {
+    cursor: pointer;
+    width: 100%;
+    transition: all 150ms ease-in-out;
+}
+
+.loyaltyBanner:hover {
+    transform: scale(1.05);
+}
+
+@keyframes titleAnimated {
+    from {
+        opacity: 0;
+        transform: translate(-200px, -15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/***BREAKPOINTS***/
+
+@media (max-width: 1024px) {
+    .homeTextContainer {
+        padding: 8%;
+    }
+
+    .homeBanner {
+        margin: 0 8%;
+        padding: 10px;
+        width: 84%;
+    }
+}
+
+@media (max-width: 768px) {
+    .homeTextContainer {
+        padding: 2%;
+    }
+
+    .homeBanner {
+        height: 300px;
+        width: 100%;
+        margin: 0 2%;
+    }
+
+    .homeTextContainer{
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dotPng{
+        height: 0px;
+        margin: 0px;
+    }
+
+    .homeTitle{
+        font-size: 80px;
+        text-align: center;
+    }
+    .homeSubtitle{
+        text-align: center;
+    }
+    .homeBg{
+        width: 0;
+        height: 0;
+    }
+}

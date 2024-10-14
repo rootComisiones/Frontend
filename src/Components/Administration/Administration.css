@@ -1,0 +1,31 @@
+.manComContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* background-color: aqua; */
+}
+
+.manComContainer p{
+    color: #fff;
+    background-color: #0E2D40;
+    border-radius: 7px;
+    padding: 5px 10px;
+    margin: 30px 0 10px 20px;
+    font-weight: 500;
+}
+
+.comsContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.checkbox{
+    width: 18px;
+    height: 18px;
+}
