@@ -8,6 +8,7 @@ import { UserContext } from "../../../../Context/UserContext";
 import FormCrear from "../FormCrear";
 import postAsesor from "../../../../DbFunctions/postAsesor";
 import { validateFormFields } from "../../../../Utils/handleValidateEmptyForm";
+import editAsesor from "../../../../DbFunctions/editAsesor";
 
 interface Company {
     name: String;
@@ -109,8 +110,11 @@ const FormCrearAsesor = () => {
             console.error('Faltan completar los siguientes campos: ' + errores.toString());
         } else {
             console.log(formObject);
-
-            // await postAsesor(formObject, formObject.role);
+            if (edicion !== null) {
+                await editAsesor(formObject, edicion.id)
+            } else {
+                await postAsesor(formObject, formObject.role);
+            }
         }
 
         setLoaderOn(false)
@@ -118,9 +122,15 @@ const FormCrearAsesor = () => {
 
     useEffect(() => {
         let companias = [];
-        edicion?.comisionEmpresa1 !== null && companias.push({ name: 'AR Partners', number: '1' })
-        edicion?.comisionEmpresa2 !== null && companias.push({ name: 'Inviu', number: '2' })
-        edicion?.comisionEmpresa3 !== null && companias.push({ name: 'Grupo IEB', number: '3' })
+
+
+        edicion !== null && edicion?.comisionEmpresa1 !== null && companias.push({ name: 'AR Partners', number: '1' })
+        edicion !== null && edicion?.comisionEmpresa2 !== null && companias.push({ name: 'Inviu', number: '2' })
+        edicion !== null && edicion?.comisionEmpresa3 !== null && companias.push({ name: 'Grupo IEB', number: '3' })
+
+        console.log("compamoas:", companias);
+        console.log("edicion:", edicion);
+
 
         setSelectedCompanies(companias)
     }, [])
@@ -215,19 +225,19 @@ const FormCrearAsesor = () => {
                 <div className="inputContainer">
                     <label className="label" htmlFor="checkArpartners">AR Partners</label>
                     <input onChange={handleSelectedCompanies} className="checkbox" value={"AR Partners"} type="checkbox" name="checkArpartners"
-                        defaultChecked={edicion === null? false : edicion?.comisionEmpresa1 !== null ? true : false}
+                        defaultChecked={edicion === null ? false : edicion?.comisionEmpresa1 !== null ? true : false}
                     />
                 </div>
                 <div className="inputContainer">
                     <label className="label" htmlFor="checkIeb">Grupo IEB</label>
                     <input onChange={handleSelectedCompanies} className="checkbox" value={"Grupo IEB"} type="checkbox" name="checkIeb"
-                        defaultChecked={edicion === null? false : edicion?.comisionEmpresa3 !== null ? true : false}
+                        defaultChecked={edicion === null ? false : edicion?.comisionEmpresa3 !== null ? true : false}
                     />
                 </div>
                 <div className="inputContainer">
                     <label className="label" htmlFor="checkInviu">Inviu</label>
                     <input onChange={handleSelectedCompanies} className="checkbox" value={"Inviu"} type="checkbox" name="checkInviu"
-                        defaultChecked={edicion === null? false : edicion?.comisionEmpres21 !== null ? true : false}
+                        defaultChecked={edicion === null ? false : edicion?.comisionEmpres21 !== null ? true : false}
                     />
                 </div>
             </div>
@@ -247,7 +257,7 @@ const FormCrearAsesor = () => {
             }
 
             <div className="formBtnContainer">
-                <button type="submit" className="btn xl btnDarkGreen">Crear asesor</button>
+                <button type="submit" className="btn xl btnDarkGreen">{edicion !== null ? 'Editar asesor' : `Crear asesor`}</button>
             </div>
         </form>
     );

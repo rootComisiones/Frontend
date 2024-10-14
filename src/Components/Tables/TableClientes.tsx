@@ -2,15 +2,22 @@ import React, { useContext } from "react";
 import '../../Styles/Reutilized.css'
 import { UserContext } from "../../Context/UserContext";
 import { deleteUser } from "../../DbFunctions/deleteUser";
+import { useNavigate } from "react-router-dom";
 
 
 const TableClientes = ({ setDetalleCliente, setIsDetalleOn } : { setDetalleCliente: any, setIsDetalleOn: any})  => {
 
-    const { allClientes } = useContext(UserContext)
+    const { allClientes, setEdicion } = useContext(UserContext)
+    const navigate = useNavigate();
 
     const handleDetalle = ( cliente: any ) =>{
         setDetalleCliente(cliente);
         setIsDetalleOn(true)
+    }
+
+    const handleEdit = (detalle: any) => {
+        setEdicion(detalle)
+        navigate('/administracion/clientes/crear')
     }
 
     return (
@@ -18,9 +25,9 @@ const TableClientes = ({ setDetalleCliente, setIsDetalleOn } : { setDetalleClien
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Apellido</th>
                     <th>Email</th>
                     <th>Teléfono</th>
+                    <th>Nro de cuenta</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -29,13 +36,13 @@ const TableClientes = ({ setDetalleCliente, setIsDetalleOn } : { setDetalleClien
                     allClientes.length &&
                     allClientes.map((cliente: any)=> {
                         return <tr key={"tabla_asesores_"+cliente.username}>
-                            <td>{cliente.nombre}</td>
-                            <td>{cliente.apellido}</td>
+                            <td>{cliente.nombre} {cliente.apellido}</td>
                             <td>{cliente.email}</td>
                             <td>{cliente.telefono}</td>
+                            <td>{cliente.numero_cuenta}</td>
                             <td className="tdContainer">
                                 <p onClick={()=>handleDetalle(cliente)}>Detalle</p>
-                                <p>Editar</p>
+                                <p onClick={()=>handleEdit(cliente)}>Editar</p>
                                 <p onClick={()=>deleteUser(cliente.id, 'cliente')}>Eliminar</p>
                             </td>
                         </tr>

@@ -2,25 +2,24 @@ import { useContext, useEffect, useState } from "react";
 import FormCrear from "../FormCrear";
 import { UserContext } from "../../../../Context/UserContext";
 import getAllAsesores from "../../../../DbFunctions/getAllAsesores";
-import { ActionFunctionArgs, Form, redirect } from "react-router-dom";
-import postClient from "../../../../DbFunctions/postClient";
 import { validateFormFields } from "../../../../Utils/handleValidateEmptyForm";
-
+import postClient from "../../../../DbFunctions/postClient";
+import editCliente from "../../../../DbFunctions/editCliente";
 
 const FormCrearCliente = () => {
 
     const [numeroCompanias, setNumeroCompanias] = useState(1);
-    const [rolAsesor, setRolAsesor] = useState('')
-    const { allAsesores } = useContext(UserContext);
+    const [rolAsesor, setRolAsesor] = useState('');
+    const { allAsesores, edicion, setLoaderOn } = useContext(UserContext);
 
     const handleNumeroCompanias = (e: any) => {
         const value = e.target.value;
-        setNumeroCompanias(Number(value))
+        setNumeroCompanias(Number(value));
     }
 
     const handleGetKey = (e: any) => {
         const key = e.target.selectedOptions[0].getAttribute('data-key');
-        setRolAsesor(key)
+        setRolAsesor(key);
     }
 
     const handleCompanias = () => {
@@ -30,8 +29,9 @@ const FormCrearCliente = () => {
                 <div className="comsContainer" key={index + "handleCompanias"}>
                     <div className="inputContainer">
                         <label className="label" htmlFor={`compania_${index + 1}`}>Compañía {index + 1}</label>
-                        <select
-                            className="input" name={`compania_${index + 1}`}>
+                        <select className="input" name={`compania_${index + 1}`}
+                            defaultValue={edicion !== null ? edicion.compania_id : ''}
+                        >
                             <option value="">Seleccione una compañía</option>
                             <option value="1">AR Partners</option>
                             <option value="2">IEB</option>
@@ -40,8 +40,9 @@ const FormCrearCliente = () => {
                     </div>
                     <div className="inputContainer">
                         <label className="label" htmlFor={`numero_cuenta_${index + 1}`}>Número de cuenta</label>
-                        <input
-                            className="input" type="text" name={`numero_cuenta_${index + 1}`} id={`numero_cuenta_${index + 1}`} />
+                        <input className="input" type="text" name={`numero_cuenta_${index + 1}`} id={`numero_cuenta_${index + 1}`}
+                            defaultValue={edicion !== null ? edicion[`numero_cuenta`] : ''}
+                        />
                     </div>
                 </div>
             );
@@ -49,110 +50,107 @@ const FormCrearCliente = () => {
         return innerHtml;
     };
 
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        setLoaderOn(true);
+
+        const formData = new FormData(e.currentTarget);
+        const postData = Array.from(formData.entries());
+
+        const formObject = postData.reduce((acc, [fieldName, value]) => {
+            let newValue;
+
+            if (fieldName === "asesor_id" || fieldName === "coordinador_id" || fieldName === "manager_id") {
+                newValue = value === "" ? null : Number(value);
+            } else if (fieldName.includes("numero_cuenta")) {
+                newValue = Number(value);
+            } else {
+                newValue = value;
+            }
+
+            acc[fieldName] = newValue;
+            return acc;
+        }, {} as any);
+
+        const errores = validateFormFields(formObject);
+
+        if (errores.length) {
+            console.error('Faltan completar los siguientes campos: ' + errores.toString());
+        } else {
+            console.log(formObject);
+            if (edicion !== null) {
+                await editCliente(formObject, edicion.id)
+            } else {
+                await postClient(formObject);
+            }
+        }
+
+        setLoaderOn(false);
+    };
 
     return (
-        <Form className="formContainer" method="post">
-            {/* <FormCrear label="Nombre" name="nombre" type="text" />
-            <FormCrear label="Apellido" name="apellido" type="text" /> */}
-            {/* <FormCrear label="Tipo de persona" name="tipo_persona" type="text" /> */}
+        <form className="formContainer" onSubmit={handleFormSubmit}>
+            <FormCrear label="Nombre" name="nombre" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Apellido" name="apellido" type="text" value={edicion !== null ? edicion : ''} />
+
             <div className="inputContainer">
                 <label className="label" htmlFor="tipo_persona">Tipo de persona</label>
-                <select
-                    className="input" name="tipo_persona"
-                >
+                <select className="input" name="tipo_persona">
                     <option value="Fisica">Fisica</option>
                     <option value="Juridica">Juridica</option>
                 </select>
             </div>
-            {/* <FormCrear label="CUIT" name="cuit" type="text" />
-            <FormCrear label="Fecha de inicio de actividades" name="fecha_inicio_actividades" type="date" />
-            <FormCrear label="Direccion" name="direccion" type="text" />
-            <FormCrear label="Código postal" name="codigo_postal" type="text" />
-            <FormCrear label="Provincia" name="provincia" type="text" />
-            <FormCrear label="Localidad" name="localidad" type="text" />
-            <FormCrear label="Teléfono" name="telefono" type="text" />
-            <FormCrear label="Email" name="email" type="text" /> */}
 
-            <div className="inputContainer">
-                <label className="label" htmlFor="numero_cias">Nº Compañías</label>
-                <select
-                    className="input" name="numero_cias"
-                    onChange={handleNumeroCompanias}
-                >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-            </div>
+            <FormCrear label="CUIT" name="cuit" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Fecha de inicio de actividades" name="fecha_inicio_actividades" type="date" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Dirección" name="direccion" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Código postal" name="codigo_postal" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Provincia" name="provincia" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Localidad" name="localidad" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Teléfono" name="telefono" type="text" value={edicion !== null ? edicion : ''} />
+            <FormCrear label="Email" name="email" type="text" value={edicion !== null ? edicion : ''} />
+
             {
-                handleCompanias()
+                edicion === null &&
+                <div className="inputContainer">
+                    <label className="label" htmlFor="numero_cias">Nº Compañías</label>
+                    <select className="input" name="numero_cias" onChange={handleNumeroCompanias}>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
             }
-            <div className="inputContainer">
-                <label className="label" htmlFor={rolAsesor}>Asesor</label>
-                <select
-                    className="input" name={rolAsesor}
-                    onChange={handleGetKey}
-                    >
-                    <option value="">Selecciona un asesor</option>
-                    {
-                        allAsesores.length &&
-                        allAsesores.map((asesor) => {
-                            return <option key={`${asesor.rol}_id`} data-key={`${asesor.rol}_id`} value={asesor.id}>
+
+            {handleCompanias()}
+
+            {
+                edicion === null &&
+                <div className="inputContainer">
+                    <label className="label" htmlFor={rolAsesor}>Asesor</label>
+                    <select className="input" name={rolAsesor} onChange={handleGetKey}>
+                        <option value="">Selecciona un asesor</option>
+                        {allAsesores.length && allAsesores.map((asesor) => (
+                            <option key={`${asesor.rol}_id`} data-key={`${asesor.rol}_id`} value={asesor.id}>
                                 {asesor.username}
                             </option>
-                        })
-                    }
-                </select>
-            </div>
+                        ))}
+                    </select>
+                </div>
+            }
+
             <div className="inputContainer">
                 <label className="label" htmlFor="observacion">Observación</label>
-                <textarea
-                    className="input" name="observacion" id="observation" />
+                <textarea className="input" name="observacion" id="observacion" />
             </div>
 
             <div className="formBtnContainer">
-                <button type="submit" className="btn xl btnDarkGreen">Crear cliente</button>
+                <button type="submit" className="btn xl btnDarkGreen">{edicion !== null ? 'Editar cliente' : `Crear cliente`}</button>
             </div>
-        </Form>
-    )
+        </form>
+    );
 }
 
 export default FormCrearCliente;
-
-export const action = async ({ request }: ActionFunctionArgs) => {
-    const formData = await request.formData();
-    const postData = Array.from(formData.entries());
-
-    const hola = postData.reduce((acc, [fieldName, value]) => {
-        let newValue;
-
-        if (fieldName === "asesor_id" || fieldName === "coordinador_id" || fieldName === "manager_id") {
-            console.log(fieldName, value);
-
-            if (value === "") {
-                console.error("falta que selecciones un asesor")
-            } else {
-                newValue = Number(value)
-            }
-        } else if ( fieldName.includes("numero_cuenta")) {
-            newValue = Number(value)
-         }
-        else {
-            newValue = value;
-        }
-
-        acc[fieldName] = newValue;
-        return acc;
-    }, {} as any);
-
-    console.log("hola", hola);
-    // validateFormFields(hola)
-    postClient(hola)
-
-    return null;
-};
-
-
-
-

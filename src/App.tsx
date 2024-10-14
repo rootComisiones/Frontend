@@ -5,7 +5,6 @@ import Administration from './Components/Administration/Administration';
 import { UserContext, UserProvider } from './Context/UserContext';
 import CrearAsesor from './Components/Administration/Crear/Asesor/CrearAsesor';
 import CrearCliente from './Components/Administration/Crear/Cliente/CrearCliente';
-import { action as crearCliente } from './Components/Administration/Crear/Cliente/FormCrearCliente';
 
 import Periodos from './Components/Periodos/Periodos';
 import Periodo from './Components/Periodos/Periodo';
@@ -31,7 +30,6 @@ function App() {
     }, {
       path: '/administracion/clientes/crear',
       element: <CrearCliente />,
-      action: crearCliente,
     }, {
       path: 'periodos',
       element: <Periodos />
@@ -53,11 +51,6 @@ function App() {
 
   return (
     <UserProvider>
-      {/* {
-        isLoading && (
-          <Loader />
-        )
-      } */}
       <RouterProvider router={router} />
     </UserProvider >
   );
