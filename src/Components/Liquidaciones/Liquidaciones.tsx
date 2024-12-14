@@ -4,8 +4,9 @@ import { UserContext } from "../../Context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Background from "../Background/Background";
-import bgLoyalty from '../../Assets/bgLoyalty.png';
-import dotLogo from '../../Assets/line.png';
+import bgLoyalty from '../../Assets/iconoLogoBlanco.png';
+import dotLogo from '../../Assets/iconoLogoBlanco.png';
+
 import TableLiquidaciones from "../Tables/TableLiquidaciones";
 import getAllPeriodos from "../../DbFunctions/getAllPeriodos";
 import getAllLiquidaciones from "../../DbFunctions/getAllLiquidaciones";
@@ -23,8 +24,7 @@ const Liquidaciones = () => {
     const [periodo_id, setPeriodo_id] = useState(0);
     const [liquiData, setLiquiData] = useState([])
 
-    const arPartners = { name: "arpartners", id: 1 }
-    const grupoIEB = { name: "grupoieb", id: 3 }
+    const grupoIEB = { name: "grupoieb", id: 1 }
     const inviu = { name: "inviu", id: 2 }
 
     const handleGetPeriodos = async () => {
@@ -74,10 +74,6 @@ const Liquidaciones = () => {
 
                 <h1 className="title marginYTitle"><img src={dotLogo} className="titlePng" />Liquidaciones</h1>
                 <div className="btnsContainer marginYTitle">
-                    <button
-                        onClick={() => setLiquidationState(arPartners)}
-                        className={`btn btnWhite marginXBtn ${liquidationState.name === "arpartners" && "active"}`}>
-                        AR Partners</button>
                     <button
                         onClick={() => setLiquidationState(grupoIEB)}
                         className={`btn btnWhite marginXBtn ${liquidationState.name === "grupoieb" && "active"}`}>

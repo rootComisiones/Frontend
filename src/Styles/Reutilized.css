@@ -21,7 +21,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    background-color: #264658;
+    background-color: #15674c;
     border-radius: 7px;
     padding: 20px;
     box-shadow: 0px 11px 20px 0px rgba(0, 0, 0, 0.13);
@@ -29,7 +29,7 @@
 
 .formContainer {
     display: flex;
-    background-color: #6591a8;
+    background-color: #1a815e;
     box-shadow: 0 12px 5px -12px rgba(0, 0, 0, 0.1);
     flex-direction: row;
     justify-content: center;
@@ -46,7 +46,7 @@
 
 .videoContainer {
     position: relative;
-    border: solid 3px #63bbea;
+    border: solid 3px #29ce97;
     border-radius: 7px;
     height: 500px;
     width: 850px;
@@ -66,7 +66,7 @@
 .videoThumbnail {
     height: 500px;
     width: 850px;
-    border: solid 3px #63bbea;
+    border: solid 3px #29ce97;
 }
 
 .playIcon {
@@ -270,7 +270,7 @@
 }
 
 .subtitle {
-    color: #cbecff;
+    color: #ddfaeb;
     text-decoration: underline;
     font-size: 16px;
     text-decoration-line: none;
@@ -279,7 +279,7 @@
 }
 
 .ordinaryText{
-    color: #cbecff;
+    color: #ddfaeb;
     font-size: 14px;
     font-weight: 300;
     align-self: flex-start;
@@ -294,11 +294,11 @@
 /*COLORS*/
 
 .purpleBg {
-    background-color: #63bbea;
+    background-color: #29ce97;
 }
 
 .purpleText {
-    color: #63bbea;
+    color: #29ce97;
 }
 
 .grayText {
@@ -330,7 +330,7 @@
     font-size: 16px;
     border-radius: 7px;
     font-weight: 500;
-    border: solid 2px #366680;
+    border: solid 2px #29ce97;
     cursor: pointer;
     width: 50%;
     padding: 10px 30px;
@@ -353,7 +353,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #48dc31;
+    color: #73c1a6;
     text-decoration: none;
     font-weight: 500;
     font-size: 16px;
@@ -365,7 +365,7 @@
 }
 
 .btnNoBg:hover {
-    background-color: #48dc31;
+    background-color: #73c1a6;
     color: #fff;
 }
 
@@ -391,7 +391,7 @@
 .plus.forBtn {
     margin-right: 20px;
     font-size: 20px;
-    color: #63bbea;
+    color: #29ce97;
 }
 
 .btnDarkGreen {
@@ -399,14 +399,14 @@
     justify-content: center;
     align-items: center;
     color: #ffffff;
-    background-color: #3E7592;
+    background-color: #1a815e;
     box-shadow: 0px 11px 20px 0px rgba(0, 0, 0, 0.13);
     text-transform: none;
 }
 
 .btnDarkGreen:hover {
-    background-color: #63bbea;
-    border-color: #63bbea;
+    background-color: #29ce97;
+    border-color: #29ce97;
 }
 
 .btnWhite {
@@ -414,7 +414,7 @@
     justify-content: center;
     align-items: center;
     color: #d9d9d9;
-    background-color: #0d171d;
+    background-color: #051a13;
     /* border-color: #254658; */
     background-image: linear-gradient(328deg, #00000011 25%, #ffffff03 25%);
     box-shadow: 0px 11px 20px 0px rgba(0, 0, 0, 0.13);
@@ -429,8 +429,8 @@
 
 .btnWhite:hover {
     color: #fff;
-    background-color: #63bbea;
-    border-color: #63bbea;
+    background-color: #29ce97;
+    border-color: #29ce97;
 }
 
 /*TABLES*/
@@ -442,8 +442,8 @@
     border-spacing: 0;
     width: 100%;
     box-shadow: 0 12px 5px -12px rgba(0, 0, 0, 0.1);
-    border: solid 2px #63bbea;
-    background-color: #0d171d;
+    border: solid 2px #29ce97;
+    background-color: #051a13;
 }
 
 .table.sm{
@@ -451,13 +451,13 @@
 }
 
 .table th {
-    color: #3E7592;
+    color: #1a815e;
     font-weight: 500;
     border: solid 1px #ffffff12;
 }
 
 .table td {
-    background-color: #0e2d4081;
+    background-color: #0e403381;
     color: #ffffffbd;
     border: solid 1px #ffffff12;
 }
@@ -487,16 +487,16 @@
 
 .tdContainer span{
     cursor: pointer;
-    color: #63bbea;
+    color: #29ce97;
 }
 
 .tdContainer span a{
-    color: #63bbea;
+    color: #29ce97;
     text-decoration: none;
 }
 
 .tdImportant{
-    background-color: #3E7592 !important;
+    background-color: #1a815e !important;
     color: #000 !important;
     font-weight: 600;
 }

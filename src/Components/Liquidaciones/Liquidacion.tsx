@@ -9,14 +9,14 @@ import TableProductores from "../Tables/TableProductores";
 const Liquidacion = () => {
 
     const { setLoaderOn } = useContext(UserContext);
-    const [selectedFile, setSelectedFile] = useState('aranceles');
+    const [selectedFile, setSelectedFile] = useState('archivo1');
     const [liquiData, setLiquiData] = useState<any>([]);
     const [totalLiquiData, setTotalLiquiData] = useState<any>(0);
 
     const pathname = window.location.pathname;
     const pathParts = pathname.split('/');
     const companyId = pathParts[2];
-    const companyName = companyId === "1" ? "AR Partners" : companyId === "2" ? "Grupo IEB" : "Inviu";
+    const companyName = companyId === "1" ? "Grupo IEB" : companyId === "2" && "Inviu";
 
     const periodo = pathParts[3].split('-');
     const periodo_id = periodo[0]
@@ -51,17 +51,17 @@ const Liquidacion = () => {
                 <h1 className="title2 marginYTitle">Liquidación del productor {productorUsername.toUpperCase()} - {companyName} - {date}</h1>
                 <div className="btnsContainer marginYTitle">
                     <button
-                        onClick={() => setSelectedFile("aranceles")}
-                        className={`btn btnWhite marginXBtn ${selectedFile === "aranceles" && "active"}`}>
-                        Aranceles</button>
+                        onClick={() => setSelectedFile("archivo1")}
+                        className={`btn btnWhite marginXBtn ${selectedFile === "archivo1" && "active"}`}>
+                        Archivo 1</button>
                     <button
-                        onClick={() => setSelectedFile("aranceles_pu")}
-                        className={`btn btnWhite marginXBtn ${selectedFile === "aranceles_pu" && "active"}`}>
-                        Aranceles Públicos</button>
+                        onClick={() => setSelectedFile("archivo2")}
+                        className={`btn btnWhite marginXBtn ${selectedFile === "archivo2" && "active"}`}>
+                        Archivo 2</button>
                     <button
-                        onClick={() => setSelectedFile("fondos")}
-                        className={`btn btnWhite marginXBtn ${selectedFile === "fondos" && "active"}`}>
-                        Fondos</button>
+                        onClick={() => setSelectedFile("archivo3")}
+                        className={`btn btnWhite marginXBtn ${selectedFile === "archivo3" && "active"}`}>
+                        Archivo 3</button>
                 </div>
 
                 <TableAranceles liquiData={liquiData} totalLiquiData={totalLiquiData} />

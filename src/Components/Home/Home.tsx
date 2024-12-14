@@ -4,7 +4,7 @@ import '../../Styles/Reutilized.css'
 import { UserContext } from '../../Context/UserContext';
 import getTeams from '../../DbFunctions/getTeams';
 import Background from '../Background/Background';
-import dotImage from '../../Assets/dot.png'
+import dotImage from '../../Assets/iconoLogoBlanco.png'
 
 const Home = () => {
 
@@ -40,13 +40,13 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='homeBannerContainer'>
+                    {/* <div className='homeBannerContainer'>
                         <div className='homeBanner' onClick={goToMainSite}>
                             <h1 className='homeBannerTitle'>Loyalty Investments</h1>
                             <p className='homeBannerText'>Más de 25 años de trayectoria en el sistema financiero.</p>
                             <p className='homeBannerText'>Agente Productor registrado bajo el N°991 ante la CNV.</p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </Background>

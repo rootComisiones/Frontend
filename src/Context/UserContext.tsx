@@ -14,16 +14,16 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     compañía: "none"
   });
   const [periodState, setPeriodState] = useState({
-    name: "arpartners",
+    name: "grupoieb",
     id: 1
   });
   const [liquidationState, setLiquidationState] = useState({
-    name: "arpartners",
+    name: "grupoieb",
     id: 1
   });
   const [adminState, setAdminState] = useState('Usuarios');
   const [adminComState, setAdminComState] = useState({
-    compañía: "arpartners",
+    compañía: "grupoieb",
     equipo: "",
     vendedor: "manager",
   })
@@ -39,12 +39,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const companies = [
     {
-      name: "AR Partners",
-      id: 1
-    },
-    {
       name: "Grupo IEB",
-      id: 3
+      id: 1
     },
     {
       name: "Inviu",

@@ -6,8 +6,9 @@ import Background from "../Background/Background";
 import TablePeriodos from "../Tables/TablePeriodos";
 import ModalNuevoPeriodo from "./ModalNuevoPeriodo";
 
-import bgLoyalty from '../../Assets/bgLoyalty.png';
-import dotLogo from '../../Assets/line.png';
+import bgLoyalty from '../../Assets/iconoLogoBlanco.png';
+import dotLogo from '../../Assets/iconoLogoBlanco.png';
+
 import Page404 from "../Page404/Page404";
 
 const Periodos = () => {
@@ -15,8 +16,7 @@ const Periodos = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [newPeriod, setNewPeriod] = useState(false);
 
-    const arPartners = { name: "arpartners", id: 1 }
-    const grupoIEB = { name: "grupoieb", id: 3 }
+    const grupoIEB = { name: "grupoieb", id: 1 }
     const inviu = { name: "inviu", id: 2 }
 
     const handleCloseModal = () => {
@@ -43,11 +43,6 @@ const Periodos = () => {
 
                             <h1 className="title marginYTitle"><img src={dotLogo} className="titlePng" />Períodos</h1>
                             <div className="btnsContainer marginYBtn">
-                                <button
-                                    onClick={() => setPeriodState(arPartners)}
-                                    className={`btn xl btnWhite marginXBtn ${periodState.name === "arpartners" && "active"}`}>
-                                    AR Partners
-                                </button>
                                 <button
                                     onClick={() => setPeriodState(grupoIEB)}
                                     className={`btn xl btnWhite marginXBtn ${periodState.name === "grupoieb" && "active"}`}>

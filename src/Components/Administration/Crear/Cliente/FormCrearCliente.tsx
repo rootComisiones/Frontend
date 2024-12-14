@@ -33,9 +33,8 @@ const FormCrearCliente = () => {
                             defaultValue={edicion !== null ? edicion.compania_id : ''}
                         >
                             <option value="">Seleccione una compañía</option>
-                            <option value="1">AR Partners</option>
-                            <option value="2">IEB</option>
-                            <option value="3">Inviu</option>
+                            <option value="1">Grupo IEB</option>
+                            <option value="2">Inviu</option>
                         </select>
                     </div>
                     <div className="inputContainer">

@@ -5,8 +5,9 @@ import { UserContext } from "../../Context/UserContext";
 import AdminUsers from "./AdminUsers";
 import AdminComissions from "./AdminComissions";
 import Background from "../Background/Background";
-import bgLoyalty from '../../Assets/bgLoyalty.png';
-import dotLogo from '../../Assets/line.png';
+import bgLoyalty from '../../Assets/iconoLogoBlanco.png';
+import dotLogo from '../../Assets/iconoLogoBlanco.png';
+
 import Page404 from "../Page404/Page404";
 
 const Administration = () => {

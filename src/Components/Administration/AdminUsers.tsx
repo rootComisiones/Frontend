@@ -76,7 +76,7 @@ const AdminUsers = () => {
                     <button
                         onClick={() => setAdminUsersState({
                             state: "Equipo",
-                            compañía: "arpartners"
+                            compañía: "grupoieb"
                         })}
                         className={`btn xl btnWhite marginXBtn ${adminUsersState.state === "Equipo" && "active"}`}>
                         Equipos
@@ -99,6 +99,15 @@ const AdminUsers = () => {
                     <Link to={`${createPath}/crear`} className="btnNoBg">
                         <FontAwesomeIcon icon={faPlus} className='plus' />
                         Crear nuevo {adminUsersState.state}
+                    </Link>
+                </div>
+            }
+            {
+                adminUsersState.state === "Cliente" &&
+                <div className="flexStart">
+                    <Link to={`${createPath}/crear`} className="btnNoBg">
+                        <FontAwesomeIcon icon={faPlus} className='plus' />
+                        Importar {adminUsersState.state}s via EXCEL
                     </Link>
                 </div>
             }

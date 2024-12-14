@@ -14,14 +14,14 @@
 
 .loginModalContainer {
     width: 450px;
-    background-color: #192F3A;
+    background-color: #0a3426;
     border-radius: 7px;
     padding: 1% 2%;
     position: relative;
     overflow: hidden;
     animation: fadeUpIn 0.4s forwards;
     box-sizing: border-box;
-    background-image: linear-gradient(180deg, #ffffff00 50%, #254658 100%);
+    background-image: linear-gradient(180deg, #ffffff00 50%, #1a815e 100%);
 }
 
 

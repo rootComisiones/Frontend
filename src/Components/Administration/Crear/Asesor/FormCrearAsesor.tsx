@@ -124,9 +124,8 @@ const FormCrearAsesor = () => {
         let companias = [];
 
 
-        edicion !== null && edicion?.comisionEmpresa1 !== null && companias.push({ name: 'AR Partners', number: '1' })
-        edicion !== null && edicion?.comisionEmpresa2 !== null && companias.push({ name: 'Inviu', number: '2' })
-        edicion !== null && edicion?.comisionEmpresa3 !== null && companias.push({ name: 'Grupo IEB', number: '3' })
+        edicion !== null && edicion?.comisionEmpresa2 !== null && companias.push({ name: 'Inviu', number: '1' })
+        edicion !== null && edicion?.comisionEmpresa3 !== null && companias.push({ name: 'Grupo IEB', number: '2' })
 
         console.log("compamoas:", companias);
         console.log("edicion:", edicion);
@@ -223,21 +222,15 @@ const FormCrearAsesor = () => {
 
             <div className="comsContainer marginYRegular">
                 <div className="inputContainer">
-                    <label className="label" htmlFor="checkArpartners">AR Partners</label>
-                    <input onChange={handleSelectedCompanies} className="checkbox" value={"AR Partners"} type="checkbox" name="checkArpartners"
-                        defaultChecked={edicion === null ? false : edicion?.comisionEmpresa1 !== null ? true : false}
-                    />
-                </div>
-                <div className="inputContainer">
                     <label className="label" htmlFor="checkIeb">Grupo IEB</label>
                     <input onChange={handleSelectedCompanies} className="checkbox" value={"Grupo IEB"} type="checkbox" name="checkIeb"
-                        defaultChecked={edicion === null ? false : edicion?.comisionEmpresa3 !== null ? true : false}
+                        defaultChecked={edicion === null ? false : edicion?.comisionEmpresa1 !== null ? true : false}
                     />
                 </div>
                 <div className="inputContainer">
                     <label className="label" htmlFor="checkInviu">Inviu</label>
                     <input onChange={handleSelectedCompanies} className="checkbox" value={"Inviu"} type="checkbox" name="checkInviu"
-                        defaultChecked={edicion === null ? false : edicion?.comisionEmpres21 !== null ? true : false}
+                        defaultChecked={edicion === null ? false : edicion?.comisionEmpresa2 !== null ? true : false}
                     />
                 </div>
             </div>

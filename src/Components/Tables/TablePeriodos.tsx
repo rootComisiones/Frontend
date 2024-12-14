@@ -48,18 +48,18 @@ const TablePeriodos: FC<TablePeriodosProps> = ({ company, newPeriod }) => {
                                 <td>{periodo.fecha_creacion}</td>
                                 <td className='tdContainer'>
                                     <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/aranceles`}>
-                                            Aranceles
+                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo1`}>
+                                            Archivo 1
                                         </Link>
                                     </span>
                                     <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/aranceles_publicos`}>
-                                            Aranceles Públicos
+                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo2`}>
+                                            Archivo 2
                                         </Link>
                                     </span>
                                     <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/fondos`}>
-                                            Fondos
+                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo3`}>
+                                            Archivo 3
                                         </Link>
                                     </span>
                                 </td>

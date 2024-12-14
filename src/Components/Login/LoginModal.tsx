@@ -4,7 +4,8 @@ import '../../Styles/Reutilized.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { LoginModalProps } from '../../Types/Types';
-import dotLogo from '../../Assets/line.png';
+import dotLogo from '../../Assets/iconoLogoBlanco.png';
+
 import handleLogin from '../../DbFunctions/handleLogin';
 import { UserContext } from '../../Context/UserContext';
 

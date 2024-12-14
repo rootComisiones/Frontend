@@ -19,7 +19,7 @@ const AdminComissions = () => {
 
     useEffect(() => {
         setAdminComState({
-            compañía: "arpartners",
+            compañía: "grupoieb",
             equipo: "",
             vendedor: "manager",
         })

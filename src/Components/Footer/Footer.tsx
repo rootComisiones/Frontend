@@ -8,7 +8,7 @@ const Footer = () => {
             <div className="upFooter">
             </div>
             <div className="lowFooter">
-                <p>Copyright © 2024 Loyalty Investments Comisiones | Desarrollado y diseñado por Custech</p>
+                <p>Copyright © 2024 Root Partners Comisiones | Desarrollado y diseñado por Custech</p>
             </div>
         </footer>
     )

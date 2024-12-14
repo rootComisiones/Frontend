@@ -21,7 +21,7 @@ const Navbar: FC<HeaderProps> = ({ setLoginOn }) => {
     const handleResetAdminState = () => {
         setAdminState("Usuarios");
         setAdminComState({
-            compañía: "arpartners",
+            compañía: "grupoieb",
             equipo: "",
             vendedor: "manager",
         })

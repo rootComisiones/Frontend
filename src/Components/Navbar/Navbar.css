@@ -38,7 +38,7 @@
     color: #fff;
     height: 40px;
     border-radius: 7px;
-    background-color: #63bbea;
+    background-color: #29ce97;
     overflow: hidden;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .log:hover {
-    color: #3E7592;
+    color: #1a815e;
     background-color: #fff;
 }
 
@@ -76,7 +76,7 @@
     width: 160px;
     border-radius: 0 0 0 10px;
     transform: translate3d(200px, 60px, 0);
-    border: solid 1px #63bbea;
+    border: solid 1px #29ce97;
     border-top-color: black;
     background-color: black;
     animation-duration: 200ms;

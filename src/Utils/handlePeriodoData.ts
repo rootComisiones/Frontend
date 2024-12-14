@@ -5,9 +5,6 @@ const handlePeriodoData = (company: string, type: string, date: string, periodoI
     let newDate;
     let newId;
 
-    if (company === "arpartners") {
-        newCompany = "AR Partners";
-    }
     if (company === "grupoieb") {
         newCompany = "Grupo IEB";
     }
@@ -15,14 +12,14 @@ const handlePeriodoData = (company: string, type: string, date: string, periodoI
         newCompany = "Inviu";
     }
 
-    if (type === "aranceles_publicos") {
-        newType = "Aranceles Públicos"
+    if (type === "archivo1") {
+        newType = "Archivo 1"
     }
-    if (type === "aranceles") {
-        newType = "Aranceles"
+    if (type === "archivo2") {
+        newType = "Archivo 2"
     }
-    if (type === "fondos") {
-        newType = "Fondos"
+    if (type === "archivo3") {
+        newType = "Archivo3"
     }
 
     const month = date.slice(0, 2);

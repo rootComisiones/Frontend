@@ -4,7 +4,7 @@ import '../../Styles/Reutilized.css'
 import Navbar from '../Navbar/Navbar';
 import { Link } from 'react-router-dom';
 import { HeaderProps } from '../../Types/Types';
-import logoImage from '../../Assets/loyaltyLogo.png';
+import logoImage from '../../Assets/logoRoot.png';
 
 const Header: FC<HeaderProps> = ({ setLoginOn }) => {
 

@@ -26,6 +26,7 @@ const TableAsesores = ({ setDetalleAsesor, setIsDetalleOn }: { setDetalleAsesor:
                 <tr>
                     <th>Username</th>
                     <th>Nombre</th>
+                    <th>Rol</th>
                     <th>Email</th>
                     <th>Acciones</th>
                 </tr>
@@ -37,11 +38,12 @@ const TableAsesores = ({ setDetalleAsesor, setIsDetalleOn }: { setDetalleAsesor:
                         return <tr key={"tabla_asesores_" + asesor.username}>
                             <td>{asesor.username}</td>
                             <td>{asesor.nombre + " " + asesor.apellido}</td>
+                            <td>{asesor.rol.toUpperCase()}</td>
                             <td>{asesor.email}</td>
                             <td className="tdContainer">
                                 <p onClick={()=>handleDetalle(asesor)}>Detalle</p>
                                 <p onClick={()=>handleEdit(asesor)}>Editar</p>
-                                <p onClick={()=>deleteUser(asesor.id, 'asesor')}>Eliminar</p>
+                                <p onClick={()=>deleteUser(asesor.id, asesor.rol)}>Eliminar</p>
                             </td>
                         </tr>
                     })
