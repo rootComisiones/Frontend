@@ -1,24 +1,13 @@
-import { AsesorData } from "../Types/Types";
+const sendEmails = async (data: any) => {
 
-const urlAsesor = `${process.env.REACT_APP_BASE_URL}/asesor/register`;
-const urlCoordinador = `${process.env.REACT_APP_BASE_URL}/coordinadores/create`;
-const urlManager = `${process.env.REACT_APP_BASE_URL}/manager/register`;
-
-const postAsesor = async (newAsesor: AsesorData, type: string) => {
-
-    let newUrl = "";
-
-    type === "asesor" ? newUrl = urlAsesor : type === "coordinador" ? newUrl = urlCoordinador : newUrl = urlManager
-
-    console.log(newAsesor, type, newUrl);
-    
+    let newUrl = `${process.env.REACT_APP_BASE_URL}/liquidation/send-email-mony`;    
 
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newAsesor)
+        body: JSON.stringify(data)
     };
 
     try {
@@ -37,4 +26,4 @@ const postAsesor = async (newAsesor: AsesorData, type: string) => {
     }
 }
 
-export default postAsesor;
+export default sendEmails;

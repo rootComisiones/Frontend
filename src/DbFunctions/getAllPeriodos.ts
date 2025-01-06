@@ -1,7 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
-import { AsesorData } from "../Types/Types";
-
-const getAllPeriodos = async (/*setAllAsesores: Dispatch<SetStateAction<AsesorData[]>>*/companyId: number) => {
+const getAllPeriodos = async (companyId: number) => {
 
     let url = `${process.env.REACT_APP_BASE_URL}/period/company/${companyId}`;
 

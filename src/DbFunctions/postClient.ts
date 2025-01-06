@@ -20,10 +20,11 @@ const postClient = async ( newClient: ClientData ) => {
         }
         const data = await response.json();
         console.log('Respuesta del servidor:', data);
+        return true
     } catch (error) {
         console.error('Error en la solicitud:', error);
+        return false
     }
 }
 
 export default postClient;
-

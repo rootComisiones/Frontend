@@ -16,6 +16,7 @@ const getCoordinadores = async (id: number) => {
         console.log('Respuesta del servidor:', data);
         return data
     } catch (error) {
+        return null
         console.log('Error en la solicitud:', error);
     }
 }

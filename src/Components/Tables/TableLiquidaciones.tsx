@@ -10,17 +10,7 @@ interface TableLiquidacionesProps {
 
 const TableLiquidaciones: FC<TableLiquidacionesProps> = ({ periodo_id, liquiData }) => {
 
-
-    // const [periodos, setPeriodos] = useState([]);
     const { liquidationState } = useContext(UserContext);
-
-
-    // const handleGetPeriodos = async () => {
-    //     setLoaderOn(true)
-    //     const allPeriodos = await getAllPeriodos(company.id)
-    //     setPeriodos(allPeriodos)
-    //     setLoaderOn(false)
-    // }
 
     return (
         <table className="table marginYBox">
@@ -28,8 +18,6 @@ const TableLiquidaciones: FC<TableLiquidacionesProps> = ({ periodo_id, liquiData
                 <tr>
                     <th>Período</th>
                     <th>Productor</th>
-                    <th>Estado</th>
-                    <th>Fecha de Pago</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -44,8 +32,6 @@ const TableLiquidaciones: FC<TableLiquidacionesProps> = ({ periodo_id, liquiData
                             return <tr key={liquidacion[`${role}_id`]}>
                                 <td>{date}</td>
                                 <td>{liquidacion[role].username}</td>
-                                <td>{liquidacion.estado !== null? liquidacion.estado : "-"}</td>
-                                <td>{liquidacion.fecha_pago !== null? liquidacion.fecha_pago : "-"}</td>
                                 <td className='tdContainer'>
                                     <span>
                                         <Link to={`/liquidaciones/${liquidationState.id}/${periodo_id}-${date}/${liquidacion[`${role}_id`]}-${liquidacion[role].username}/${role}`}>

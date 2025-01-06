@@ -1,6 +1,7 @@
 const getMyLiquidation = async (idPeriodo: any, rol:any, userId:any) => {
 
-    let url = `${process.env.REACT_APP_BASE_URL}/liquidation/myperiod/${idPeriodo}/${rol}/${userId}`;
+    // let url = `${process.env.REACT_APP_BASE_URL}/liquidation/myperiod/${idPeriodo}/${rol}/${userId}`;
+    let url = `${process.env.REACT_APP_BASE_URL}/liquidation/pershing/${idPeriodo}/${userId}/${rol}`;
 
     try {
         const response = await fetch(url);

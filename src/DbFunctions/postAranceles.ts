@@ -1,6 +1,6 @@
 const url = process.env.REACT_APP_BASE_URL;
 
-const postAranceles = async ( file: File, idPeriodo: string ) => {    
+const postAranceles = async ( file: File, idPeriodo: string, setFileSelected: any ) => {    
 
     const formData = new FormData();
     
@@ -23,20 +23,22 @@ const postAranceles = async ( file: File, idPeriodo: string ) => {
     
 
     try {
-        const response = await fetch(`${url}/liquidation/upload/arancel`, {
+        const response = await fetch(`${url}/liquidation/upload/persh`, {
             method: 'POST',
             body: formData,
         });
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Archivo e ID enviados correctamente:', data);
+            alert('Archivo importado correctamente.');
+            setFileSelected(null)
         } else {
             const errorData = await response.json();
-            console.error('Error al enviar el archivo o el ID:', errorData);
+            alert(`Error al enviar el archivo o el ID: ${errorData}`);
+            setFileSelected(null)
         }
     } catch (error) {
-        console.error('Error en la solicitud:', error);
+        alert(`Error en la solicitud:' ${error}`);
     }
 }
 

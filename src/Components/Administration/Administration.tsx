@@ -11,7 +11,7 @@ import dotLogo from '../../Assets/iconoLogoBlanco.png';
 import Page404 from "../Page404/Page404";
 
 const Administration = () => {
-    const { setAdminState, adminState, userData } = useContext(UserContext);
+    const { setAdminState, userData } = useContext(UserContext);
 
     useEffect(() => {
         setAdminState('Usuarios')

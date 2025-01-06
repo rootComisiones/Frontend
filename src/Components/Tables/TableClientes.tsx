@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import '../../Styles/Reutilized.css'
 import { UserContext } from "../../Context/UserContext";
-import { deleteUser } from "../../DbFunctions/deleteUser";
 import { useNavigate } from "react-router-dom";
 
 
-const TableClientes = ({ setDetalleCliente, setIsDetalleOn } : { setDetalleCliente: any, setIsDetalleOn: any})  => {
+const TableClientes = ({ setDetalleCliente, setIsDetalleOn, refreshData } : { setDetalleCliente: any, setIsDetalleOn: any, refreshData: ()=> void})  => {
 
-    const { allClientes, setEdicion } = useContext(UserContext)
+    const { allClientes, setEdicion, setPopupData } = useContext(UserContext)
     const navigate = useNavigate();
 
     const handleDetalle = ( cliente: any ) =>{
@@ -43,7 +42,12 @@ const TableClientes = ({ setDetalleCliente, setIsDetalleOn } : { setDetalleClien
                             <td className="tdContainer">
                                 <p onClick={()=>handleDetalle(cliente)}>Detalle</p>
                                 <p onClick={()=>handleEdit(cliente)}>Editar</p>
-                                <p onClick={()=>deleteUser(cliente.id, 'cliente')}>Eliminar</p>
+                                <p onClick={()=>setPopupData({
+                                    text: `Desea eliminar el cliente ${cliente.nombre} ${cliente.apellido}?`,
+                                    action: 'cliente',
+                                    asesorId: cliente.id,
+                                    refreshData: refreshData
+                                })}>Eliminar</p>
                             </td>
                         </tr>
                     })

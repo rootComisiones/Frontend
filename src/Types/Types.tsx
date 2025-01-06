@@ -69,6 +69,22 @@ export interface UserContextType {
     }>>;
     edicion: any;
     setEdicion:any;
+    popupData: {
+        text: string,
+        action: string,
+        asesorId: number,
+        refreshData?: ()=>void
+    };
+    setPopupData: Dispatch<SetStateAction<{
+        text: string,
+        action: string,
+        asesorId: number,
+        refreshData?: () => void
+    }>>;
+    dataFetched: boolean;
+    setDataFetched: Dispatch<SetStateAction<boolean>>;
+    periodos: any;
+    setPeriodos: any;
 }
 
 interface Company {
@@ -192,7 +208,9 @@ export interface LoginModalProps {
 /* TABLE */
 
 export interface TableProps {
-    headers: string[]
+    headers: string[];
+    tableData: any;
+    empresa: any;
 }
 
 

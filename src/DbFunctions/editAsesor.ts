@@ -1,21 +1,28 @@
-const editAsesor = async (asesor: any, asesorId: any) => {
+const editAsesor = async (asesor: any, asesorId: any, rol: any) => {
 
-    let url = `${process.env.REACT_APP_BASE_URL}/asesor/update/${asesorId}`;
+    const rolUrl = rol === 'coordinador' ? 'coordinadores' : rol === 'asesor' ? 'asesor' : 'manager'
+
+    let url = `${process.env.REACT_APP_BASE_URL}/${rolUrl}/update/${asesorId}`;    
 
     try {
         const response = await fetch(url, {
-            method: 'POST',
-            body: asesor,
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(asesor),
         });
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error('Error en la solicitud: ' + errorData.message);
+            console.log('Error en la solicitud: ' + errorData.message);
+            return false
         }
         const data = await response.json();
-
         console.log('Respuesta del servidor:', data);
+        return true
     } catch (error) {
         console.error('Error en la solicitud:', error);
+        return false
     }
 }
 

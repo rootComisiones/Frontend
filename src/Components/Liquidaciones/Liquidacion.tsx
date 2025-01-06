@@ -5,13 +5,21 @@ import { UserContext } from "../../Context/UserContext";
 import getPeriodoAsesorLiqui from "../../DbFunctions/getPeriodoAsesorLiqui";
 import TableAranceles from "../Tables/TableAranceles";
 import TableProductores from "../Tables/TableProductores";
+import getResults from "../../DbFunctions/getResults";
+import Page404 from "../Page404/Page404";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleDown } from "@fortawesome/free-solid-svg-icons";
 
 const Liquidacion = () => {
 
-    const { setLoaderOn } = useContext(UserContext);
-    const [selectedFile, setSelectedFile] = useState('archivo1');
+    const { setLoaderOn, userData } = useContext(UserContext);
+    const [selectedFile, setSelectedFile] = useState('pershing');
     const [liquiData, setLiquiData] = useState<any>([]);
+    const [resultsData, setResultsData] = useState<any>(null)
     const [totalLiquiData, setTotalLiquiData] = useState<any>(0);
+    const [dataAsesorACargo, setDataAsesorACargo] = useState<any>([])
 
     const pathname = window.location.pathname;
     const pathParts = pathname.split('/');
@@ -29,12 +37,41 @@ const Liquidacion = () => {
 
     const role = pathParts[5]
 
+    const exportarExcel = () => {
+        // 1. Transforma el objeto en un array de arrays sin encabezados
+        const dataParaExcel = Object.entries(resultsData);
 
-    const handleLiquiData = async() => {
+        // 2. Crea un nuevo libro de Excel
+        const libro = XLSX.utils.book_new();
+
+        // 3. Crea la hoja de trabajo (worksheet) con la matriz de datos
+        const hoja = XLSX.utils.aoa_to_sheet(dataParaExcel);
+
+        // 4. Agrega la hoja de trabajo al libro de Excel
+        XLSX.utils.book_append_sheet(libro, hoja, `Tabla Liquidacion ${periodo[2]}-${periodo[1]}`);
+
+        // 5. Escribe el archivo Excel y descarga
+        const excelBuffer = XLSX.write(libro, { bookType: 'xlsx', type: 'array' });
+        const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+        // 6. Descarga el archivo
+        saveAs(dataBlob, `liquidacion-${date}.xlsx`);
+    }
+
+
+    const handleLiquiData = async () => {
         setLoaderOn(true)
-        const data = await getPeriodoAsesorLiqui(periodo_id, productor_id, role)
-        setLiquiData(data.data)
-        setTotalLiquiData(data.total)
+        const empresa = selectedFile;
+        console.log('prporporoppor', empresa);
+        const { asesorACargo, beneficiario, total } = await getPeriodoAsesorLiqui(periodo_id, productor_id, role, empresa)
+        setDataAsesorACargo(asesorACargo)
+        console.log('ASESORESACARGO', asesorACargo);
+        setLiquiData(beneficiario)
+
+        setTotalLiquiData(total)
+
+        const results = await getResults(periodo_id, productor_id, role)
+        setResultsData(results)
         setLoaderOn(false)
     }
 
@@ -46,31 +83,36 @@ const Liquidacion = () => {
     }, [selectedFile])
 
     return (
-        <Background>
-            <section className="container">
-                <h1 className="title2 marginYTitle">Liquidación del productor {productorUsername.toUpperCase()} - {companyName} - {date}</h1>
-                <div className="btnsContainer marginYTitle">
-                    <button
-                        onClick={() => setSelectedFile("archivo1")}
-                        className={`btn btnWhite marginXBtn ${selectedFile === "archivo1" && "active"}`}>
-                        Archivo 1</button>
-                    <button
-                        onClick={() => setSelectedFile("archivo2")}
-                        className={`btn btnWhite marginXBtn ${selectedFile === "archivo2" && "active"}`}>
-                        Archivo 2</button>
-                    <button
-                        onClick={() => setSelectedFile("archivo3")}
-                        className={`btn btnWhite marginXBtn ${selectedFile === "archivo3" && "active"}`}>
-                        Archivo 3</button>
-                </div>
+        <>
+            {
+                userData.role !== '' ?
+                    <Background>
+                        <section className="container">
+                            <h1 className="title2 marginYTitle">Liquidación del productor {productorUsername.toUpperCase()} - {companyName} - {date}</h1>
 
-                <TableAranceles liquiData={liquiData} totalLiquiData={totalLiquiData} />
+                            {
+                                liquiData.length ?
+                                    <TableAranceles liquiData={liquiData} totalLiquiData={totalLiquiData} />
+                                    :
+                                    <h3 className="title2 marginYTitle" style={{ fontSize: 18, color: '#8dbaaa' }}>NO TIENE LIQUIDACIONES PROPIAS EN ESTE PERIODO.</h3>
+                            }
 
-                <h1 className="title2 marginYTitle">Liquidación de productores a cargo de {productorUsername.toUpperCase()} - {companyName} - {date}</h1>
-                <TableProductores />
+                            <h1 className="title2 marginYTitle">Liquidación de productores a cargo de {productorUsername.toUpperCase()} - {companyName} - {date}</h1>
+                            <TableAranceles liquiData={dataAsesorACargo} />
+                            <TableProductores resultsData={resultsData} />
+                            <div>
+                                <div className="btnNoBg" onClick={exportarExcel}>
+                                    <FontAwesomeIcon icon={faArrowAltCircleDown} className='plus' />
+                                    Exportar Tabla de Resultados
+                                </div>
+                            </div>
 
-            </section>
-        </Background>
+                        </section>
+                    </Background>
+                    :
+                    <Page404 />
+            }
+        </>
     )
 }
 

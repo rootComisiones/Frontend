@@ -1,5 +1,7 @@
 
 export const deleteUser = async (id: any, rol: string) => {
+    console.log('id a eliminar',id);
+    
     try {
         const response = await fetch(`${process.env.REACT_APP_BASE_URL}/asesor/delete/${id}/${rol}`, {
             method: 'DELETE',

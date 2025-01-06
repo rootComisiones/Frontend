@@ -19,10 +19,6 @@ export const LoginModal: FC<LoginModalProps> = ({ onVisible, closeModal }) => {
 
     const { userData, setUserData } = useContext(UserContext);
 
-    const empresas = [
-        "Loyal Investments",
-    ]
-
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };

@@ -14,6 +14,7 @@ import TableClientes from "../Tables/TableClientes";
 import DetalleAsesor from "./Crear/Asesor/DetalleAsesor";
 import DetalleCliente from "./Crear/Cliente/DetalleCliente";
 import DetalleEquipo from "./DetalleEquipo";
+import postExcelClients from "../../DbFunctions/postExcelClients";
 
 const AdminUsers = () => {
 
@@ -22,16 +23,34 @@ const AdminUsers = () => {
     const [detalleAsesor, setDetalleAsesor] = useState(null)
     const [detalleCliente, setDetalleCliente] = useState(null)
     const [detalleEquipo, setDetalleEquipo] = useState(null)
+    const [fileSelected, setFileSelected] = useState<any>(null)
 
-    const { adminUsersState, setAdminUsersState, setAllAsesores, setLoaderOn, setAllTeams, setAllClientes, userData } = useContext(UserContext)
+    const { adminUsersState, setAdminUsersState, setAllAsesores, setLoaderOn, setAllTeams, setAllClientes, userData, setEdicion } = useContext(UserContext)
 
     const handleGetData = async () => {
         setLoaderOn(true);
         await getAllAsesores(setAllAsesores)
         await getTeams(setAllTeams)
         const clientes = await getAllClientes()
-        console.log(clientes);
+        setAllClientes(clientes)
+        setLoaderOn(false)
+    }
 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            setFileSelected(file)
+            console.log('Archivo seleccionado:', file.name);
+        } else {
+            console.log('No se seleccionó ningún archivo');
+        }
+    };
+
+    const handleSubmitFile = async () => {
+        setLoaderOn(true)
+        await postExcelClients(fileSelected)
+        const clientes = await getAllClientes()
         setAllClientes(clientes)
         setLoaderOn(false)
     }
@@ -50,19 +69,13 @@ const AdminUsers = () => {
     }, [])
 
     useEffect(() => {
-        handleGetData()
-    }, [])
-
-    useEffect(() => {
-        console.log(userData);
-
+        setEdicion(null)
     }, [userData])
 
 
     return (
         <>
             <div className="filterContainer marginYTitle">
-                {/* <button onClick={()=>console.log(userData)}>VER DATA</button> */}
                 <p className="subtitle marginYTitle">Seleccione un tipo de usuario:</p>
                 <div className="btnsContainer marginYBtn">
                     <button
@@ -105,29 +118,44 @@ const AdminUsers = () => {
             {
                 adminUsersState.state === "Cliente" &&
                 <div className="flexStart">
-                    <Link to={`${createPath}/crear`} className="btnNoBg">
+                    <label htmlFor="fileInput" className="btnNoBg flexStart">
                         <FontAwesomeIcon icon={faPlus} className='plus' />
                         Importar {adminUsersState.state}s via EXCEL
-                    </Link>
+                    </label>
+                    <input
+                        id="fileInput"
+                        type="file"
+                        accept=".xls, .xlsx"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                    />
                 </div>
+
+            }
+            {
+                fileSelected !== null && adminUsersState.state === 'Cliente' &&
+                <>
+                    <p className="ordinaryText marginY">Has seleccionado el archivo: {fileSelected.name}</p>
+                    <button onClick={() => handleSubmitFile()} className="btn small btnDarkGreen flexStart marginYSmall">Aceptar</button>
+                </>
             }
             {
                 adminUsersState.state === "Equipo" ?
                     <TableEquipos setDetalleEquipo={setDetalleEquipo} setIsDetalleOn={setIsDetalleOn} />
                     :
                     adminUsersState.state === "Asesor" ?
-                        <TableAsesores setDetalleAsesor={setDetalleAsesor} setIsDetalleOn={setIsDetalleOn} />
+                        <TableAsesores setDetalleAsesor={setDetalleAsesor} setIsDetalleOn={setIsDetalleOn} refreshData={handleGetData} />
                         :
-                        <TableClientes setDetalleCliente={setDetalleCliente} setIsDetalleOn={setIsDetalleOn} />
+                        <TableClientes setDetalleCliente={setDetalleCliente} setIsDetalleOn={setIsDetalleOn} refreshData={handleGetData} />
             }
 
             {
                 isDetalleOn && detalleAsesor !== null ?
-                <DetalleAsesor detalle={detalleAsesor} setIsDetalleOn={setIsDetalleOn} setDetalleAsesor={setDetalleAsesor} />
-                :  isDetalleOn && detalleCliente !== null ?
-                <DetalleCliente detalle={detalleCliente} setIsDetalleOn={setIsDetalleOn} setDetalleCliente={setDetalleCliente} />
-                : isDetalleOn && detalleEquipo !== null && 
-                <DetalleEquipo detalleManager={detalleEquipo} setIsDetalleOn={setIsDetalleOn} />
+                    <DetalleAsesor detalle={detalleAsesor} setIsDetalleOn={setIsDetalleOn} setDetalleAsesor={setDetalleAsesor} />
+                    : isDetalleOn && detalleCliente !== null ?
+                        <DetalleCliente detalle={detalleCliente} setIsDetalleOn={setIsDetalleOn} setDetalleCliente={setDetalleCliente} />
+                        : isDetalleOn && detalleEquipo !== null &&
+                        <DetalleEquipo detalleManager={detalleEquipo} setIsDetalleOn={setIsDetalleOn} />
             }
         </>
     )

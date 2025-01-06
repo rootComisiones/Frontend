@@ -10,9 +10,11 @@ import bgLoyalty from '../../Assets/iconoLogoBlanco.png';
 import dotLogo from '../../Assets/iconoLogoBlanco.png';
 
 import Page404 from "../Page404/Page404";
+import getAllPeriodos from "../../DbFunctions/getAllPeriodos";
 
 const Periodos = () => {
-    const { periodState, setPeriodState, userData } = useContext(UserContext);
+    const { periodState, setPeriodState, userData, setEdicion, setLoaderOn, periodos, setPeriodos } = useContext(UserContext);
+
     const [modalVisible, setModalVisible] = useState(false);
     const [newPeriod, setNewPeriod] = useState(false);
 
@@ -27,11 +29,25 @@ const Periodos = () => {
         setModalVisible(true)
     }
 
+    const handleGetPeriodos = async () => {
+        setLoaderOn(true)
+        const allPeriodos = await getAllPeriodos(periodState.id)
+        setPeriodos(allPeriodos)
+        setLoaderOn(false)
+    }
+
     useEffect(() => {
+        setEdicion(null)
+
         window.scrollTo({
             top: 0,
         });
     }, [])
+
+    useEffect(() => {
+        handleGetPeriodos()
+        console.log("actualizando periodos", periodState);
+    }, [newPeriod, periodState])
 
     return (
         <>
@@ -60,7 +76,7 @@ const Periodos = () => {
                                 Crear nuevo período
                             </div>
 
-                            <TablePeriodos company={periodState} newPeriod={newPeriod} />
+                            <TablePeriodos company={periodState} periodos={periodos} />
 
                         </section>
 

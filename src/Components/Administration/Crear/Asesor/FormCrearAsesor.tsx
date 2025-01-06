@@ -1,7 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { Coordinador, FormCrearAsesorProps } from "../../../../Types/Types";
-import { handleSubmit } from "../../../../Utils/handleSubmit";
-import { handleInputChange } from "../../../../Utils/handleInputChange";
+import { Coordinador } from "../../../../Types/Types";
 import '../../Administration.css'
 import getCoordinadores from "../../../../DbFunctions/getCoordinadores";
 import { UserContext } from "../../../../Context/UserContext";
@@ -9,6 +7,9 @@ import FormCrear from "../FormCrear";
 import postAsesor from "../../../../DbFunctions/postAsesor";
 import { validateFormFields } from "../../../../Utils/handleValidateEmptyForm";
 import editAsesor from "../../../../DbFunctions/editAsesor";
+import { useNavigate } from "react-router-dom";
+import getAllAsesores from "../../../../DbFunctions/getAllAsesores";
+import getTeams from "../../../../DbFunctions/getTeams";
 
 interface Company {
     name: String;
@@ -16,7 +17,7 @@ interface Company {
 }
 
 const FormCrearAsesor = () => {
-    const { allTeams, setLoaderOn, edicion } = useContext(UserContext);
+    const { allTeams, setLoaderOn, edicion,setAllTeams, setAllAsesores } = useContext(UserContext);
     const [selectedAsesor, setSelectedAsesor] = useState({
         role: "",
         manager_id: 0,
@@ -26,10 +27,20 @@ const FormCrearAsesor = () => {
 
     const [coordinadores, setCoordinadores] = useState<Coordinador[]>([]);
 
-    const handleSelectedCompanies = (e: any) => {
-        const value = e.target.value;
-        const number = value === "AR Partners" ? "1" : value === "Inviu" ? "2" : "3";
+    const navigate = useNavigate();
+
+    const handleGetData = async () => {
+        setLoaderOn(true);
+        await getAllAsesores(setAllAsesores)
+        await getTeams(setAllTeams)
+        setLoaderOn(false)
+    }
+
+    const handleSelectedCompanies = (value : any) => {
+        const number = value === "Grupo IEB" ? "1" : "2";
         let companies = selectedCompanies;
+        console.log(9999999999, companies);
+        
         if (!companies.some(company => company.name === value)) {
             setSelectedCompanies([...companies, { name: value, number }]);
         } else {
@@ -45,33 +56,58 @@ const FormCrearAsesor = () => {
     };
 
     const renderComisiones = (company: Company) => {
-        return (
-            <>
-                <p>Comisiones para {company.name}</p>
-                <div className="comsContainer">
-                    {selectedAsesor.role === "coordinador" ? (
-                        <>
-                            <FormCrear label="Comisión Manager(%)" name={`comisionManager${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
-                            <FormCrear label="Comisión Coordinador(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
-                        </>
-                    ) : selectedAsesor.role === "manager" ? (
-                        <FormCrear label="Comisión Manager(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
-                    ) : (
-                        <>
-                            <FormCrear label="Comisión Manager(%)" name={`comisionManager${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
-                            <FormCrear label="Comisión Coordinador(%)" name={`comisionCoordinador${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
-                            <FormCrear label="Comisión Asesor(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
-                        </>
-                    )}
-                </div>
-            </>
-        );
+        if (edicion === null) {
+            return (
+                <>
+                    <p>Comisiones para {company.name}</p>
+                    <div className="comsContainer">
+                        {selectedAsesor.role === "coordinador" ? (
+                            <>
+                                <FormCrear label="Comisión Manager(%)" name={`comisionManager${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                                <FormCrear label="Comisión Coordinador(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                            </>
+                        ) : selectedAsesor.role === "manager" ? (
+                            <FormCrear label="Comisión Manager(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                        ) : (
+                            <>
+                                <FormCrear label="Comisión Manager(%)" name={`comisionManager${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                                <FormCrear label="Comisión Coordinador(%)" name={`comisionCoordinador${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                                <FormCrear label="Comisión Asesor(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                            </>
+                        )}
+                    </div>
+                </>
+            );
+        } else {
+            return (
+                <>
+                    <p>Comisiones para {company.name}</p>
+                    <div className="comsContainer">
+                        {edicion.rol === "coordinador" ? (
+                            <>
+                                <FormCrear label="Comisión Manager(%)" name={`comisionManager${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                                <FormCrear label="Comisión Coordinador(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                            </>
+                        ) : edicion.rol === "manager" ? (
+                            <FormCrear label="Comisión Manager(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                        ) : (
+                            <>
+                                <FormCrear label="Comisión Manager(%)" name={`comisionManager${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                                <FormCrear label="Comisión Coordinador(%)" name={`comisionCoordinador${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                                <FormCrear label="Comisión Asesor(%)" name={`comisionEmpresa${company.number}`} type="number" value={edicion !== null ? edicion : ''} />
+                            </>
+                        )}
+                    </div>
+                </>
+            );
+        }
     };
 
     const handleGetCoordinadores = async (manager_id: string) => {
         setLoaderOn(true);
         const equipo = await getCoordinadores(Number(manager_id));
-        setCoordinadores(equipo.coordinadores);
+        console.log(equipo, 'equipitooo');
+        equipo !== null ? setCoordinadores(equipo.coordinadores) : setCoordinadores([]);
         setLoaderOn(false);
     };
 
@@ -85,7 +121,7 @@ const FormCrearAsesor = () => {
 
         const formObject = postData.reduce((acc, [fieldName, value]) => {
             let newValue;
-            const comisiones = ["comisionEmpresa1", "comisionEmpresa2", "comisionEmpresa3", "comisionManager1", "comisionManager2", "comisionManager3", "comisionCoordinador1", "comisionCoordinador2", "comisionCoordinador3"];
+            const comisiones = ["comisionEmpresa1", "comisionEmpresa2","comisionManager1", "comisionManager2", "comisionCoordinador1", "comisionCoordinador2"];
             const ids = ["manager_id", "coordinador_id"];
 
             if (fieldName === "inscripto_iva" && value === "true") {
@@ -105,15 +141,42 @@ const FormCrearAsesor = () => {
         }, {} as any);
 
         const errores = validateFormFields(formObject);
+        
 
-        if (errores.length) {
+        if (errores.length ) {
             console.error('Faltan completar los siguientes campos: ' + errores.toString());
         } else {
             console.log(formObject);
             if (edicion !== null) {
-                await editAsesor(formObject, edicion.id)
+                console.log('ASESOR COMISIONES', formObject);
+                const { comisionEmpresa1, comisionEmpresa2 } = formObject;
+
+                const formAsesor = formObject;
+
+                if (comisionEmpresa1 === undefined) {
+
+                    formAsesor.comisionEmpresa1 = null;
+                }
+                if (comisionEmpresa2 === undefined) {
+
+                    formAsesor.comisionEmpresa2 = null;
+                }
+
+                const veredicto = await editAsesor(formAsesor, edicion.id, edicion.rol)
+                if (veredicto) {
+                    handleGetData()
+                    navigate('/administracion')
+                } else {
+                    alert('Hubo un error al editar el asesor!')
+                }
             } else {
-                await postAsesor(formObject, formObject.role);
+                const veredicto = await postAsesor(formObject, formObject.role);
+                if (veredicto) {
+                    handleGetData()
+                    navigate('/administracion')
+                } else {
+                    alert('Hubo un error al crear el asesor!')
+                }
             }
         }
 
@@ -124,8 +187,8 @@ const FormCrearAsesor = () => {
         let companias = [];
 
 
-        edicion !== null && edicion?.comisionEmpresa2 !== null && companias.push({ name: 'Inviu', number: '1' })
-        edicion !== null && edicion?.comisionEmpresa3 !== null && companias.push({ name: 'Grupo IEB', number: '2' })
+        edicion !== null && edicion?.comisionEmpresa1 !== null && companias.push({ name: 'Grupo IEB', number: '1' })
+        edicion !== null && edicion?.comisionEmpresa2 !== null && companias.push({ name: 'Inviu', number: '2' })
 
         console.log("compamoas:", companias);
         console.log("edicion:", edicion);
@@ -168,18 +231,20 @@ const FormCrearAsesor = () => {
 
             {
                 edicion === null &&
-                <FormCrear label="Contraseña" name="contrasena" type="text" value={edicion !== null ? edicion : ''} />
-            }
+                <>
+                    <FormCrear label="Contraseña" name="contrasena" type="text" value={edicion !== null ? edicion : ''} />
 
-            <div className="inputContainer">
-                <label className="label" htmlFor="role">Rol</label>
-                <select onChange={handleRole} className="input" name="role" defaultValue={edicion !== null ? edicion.rol || '' : ''}>
-                    <option value="">Seleccione un rol</option>
-                    <option value="asesor">Asesor</option>
-                    <option value="coordinador">Coordinador</option>
-                    <option value="manager">Manager</option>
-                </select>
-            </div>
+                    <div className="inputContainer">
+                        <label className="label" htmlFor="role">Rol</label>
+                        <select onChange={handleRole} className="input" name="role" defaultValue={edicion !== null ? edicion.rol || '' : ''}>
+                            <option value="">Seleccione un rol</option>
+                            <option value="asesor">Asesor</option>
+                            <option value="coordinador">Coordinador</option>
+                            <option value="manager">Manager</option>
+                        </select>
+                    </div>
+                </>
+            }
 
             {selectedAsesor.role === "coordinador" ? (
                 <div className="inputContainer">
@@ -223,13 +288,13 @@ const FormCrearAsesor = () => {
             <div className="comsContainer marginYRegular">
                 <div className="inputContainer">
                     <label className="label" htmlFor="checkIeb">Grupo IEB</label>
-                    <input onChange={handleSelectedCompanies} className="checkbox" value={"Grupo IEB"} type="checkbox" name="checkIeb"
+                    <input onChange={(e)=>handleSelectedCompanies(e.target.value)} className="checkbox" value={"Grupo IEB"} type="checkbox" name="checkIeb"
                         defaultChecked={edicion === null ? false : edicion?.comisionEmpresa1 !== null ? true : false}
                     />
                 </div>
                 <div className="inputContainer">
                     <label className="label" htmlFor="checkInviu">Inviu</label>
-                    <input onChange={handleSelectedCompanies} className="checkbox" value={"Inviu"} type="checkbox" name="checkInviu"
+                    <input onChange={(e)=>handleSelectedCompanies(e.target.value)} className="checkbox" value={"Inviu"} type="checkbox" name="checkInviu"
                         defaultChecked={edicion === null ? false : edicion?.comisionEmpresa2 !== null ? true : false}
                     />
                 </div>

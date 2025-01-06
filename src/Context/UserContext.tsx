@@ -67,6 +67,16 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     setLoginModal(false)
   }
 
+  const [popupData, setPopupData] = useState({
+    text: '',
+    action: '',
+    asesorId: 0
+  });
+
+  const [dataFetched, setDataFetched] = useState(false);
+
+  const [periodos, setPeriodos] = useState([]);
+
   const contextValue: UserContextType = {
     adminState,
     setAdminState,
@@ -93,7 +103,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     userData,
     setUserData,
     edicion,
-    setEdicion
+    setEdicion,
+    popupData,
+    setPopupData, 
+    dataFetched,
+    setDataFetched,
+    periodos,
+    setPeriodos
   };
 
   return (

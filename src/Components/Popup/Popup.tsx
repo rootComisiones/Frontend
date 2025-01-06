@@ -1,0 +1,86 @@
+import React, { useContext } from 'react'
+import './Popup.css';
+import { deleteUser } from '../../DbFunctions/deleteUser';
+import { UserContext } from '../../Context/UserContext';
+import handleLogout from '../../DbFunctions/handleLogout';
+import getAllAsesores from '../../DbFunctions/getAllAsesores';
+import getTeams from '../../DbFunctions/getTeams';
+import getAllClientes from '../../DbFunctions/getAllClientes';
+import { deletePeriodo } from '../../DbFunctions/deletePeriodo';
+import getAllPeriodos from '../../DbFunctions/getAllPeriodos';
+
+const Popup = () => {
+    
+    const { popupData, setPopupData, setLoaderOn, setUserData, setAllAsesores, setAllClientes, setAllTeams, periodState, setPeriodos } = useContext(UserContext);
+
+    const handleGetClientes = async () => {
+        setLoaderOn(true);
+        const clientes = await getAllClientes()
+        setAllClientes(clientes)
+        setLoaderOn(false)
+    }
+
+    const handleGetAsesores = async() => {
+        setLoaderOn(true);
+        await getAllAsesores(setAllAsesores)
+        await getTeams(setAllTeams)
+        setLoaderOn(false)
+    }
+
+    const handleGetPeriodos = async () => {
+        setLoaderOn(true)
+        const allPeriodos = await getAllPeriodos(periodState.id)
+        setPeriodos(allPeriodos)
+        setLoaderOn(false)
+    }
+
+    const closePopUp = () => {
+        setPopupData({
+            text: '',
+            action: '',
+            asesorId: 0
+        })
+    }
+
+    const popupAction = async () => {
+        const action = popupData.action;
+        console.log(popupData);
+
+        setLoaderOn(true)
+        if (action === 'logout') {
+            await handleLogout(setUserData)
+        } else if (action === 'cliente') {
+            await deleteUser(popupData.asesorId, action)
+            handleGetClientes()
+        } else if(action === 'periodo'){
+            await deletePeriodo(popupData.asesorId)
+            await handleGetPeriodos()
+            handleGetAsesores()
+        }else{
+            await deleteUser(popupData.asesorId, action)
+            handleGetAsesores()
+        }
+        setLoaderOn(false)
+        closePopUp()
+    }
+
+    return (
+        <>
+            {
+                popupData.text !== '' &&
+                <div className='loginModalOverlay'>
+                    <div className='loginModalContainer'>
+                        <p className='label popup'>{popupData.text}</p>
+
+                        <div className='logRegisterBtns' style={{ 'marginTop': '20px' }}>
+                            <button className='btn btnDarkGreen marginXSmall' onClick={popupAction}>Si</button>
+                            <button className='btn btnDarkGreen marginXSmall' onClick={closePopUp}>No</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </>
+    )
+}
+
+export default Popup

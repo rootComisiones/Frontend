@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import '../../Styles/Reutilized.css'
 import { UserContext } from "../../Context/UserContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Background from "../Background/Background";
 import bgLoyalty from '../../Assets/iconoLogoBlanco.png';
 import dotLogo from '../../Assets/iconoLogoBlanco.png';
@@ -11,6 +9,11 @@ import TableLiquidaciones from "../Tables/TableLiquidaciones";
 import getAllPeriodos from "../../DbFunctions/getAllPeriodos";
 import getAllLiquidaciones from "../../DbFunctions/getAllLiquidaciones";
 import getMyLiquidation from "../../DbFunctions/getMyLiquidation";
+import { getUsersEmails } from "../../DbFunctions/getUserEmails";
+import sendEmails from "../../DbFunctions/sendEmails";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 interface Periodo {
     id: number,
@@ -19,10 +22,11 @@ interface Periodo {
 }
 
 const Liquidaciones = () => {
-    const { liquidationState, setLiquidationState, setLoaderOn, userData } = useContext(UserContext);
+    const { liquidationState, setLiquidationState, setLoaderOn, userData, setEdicion } = useContext(UserContext);
     const [periodos, setPeriodos] = useState<Periodo[]>([])
     const [periodo_id, setPeriodo_id] = useState(0);
     const [liquiData, setLiquiData] = useState([])
+    const [selectedDateValue, setSelectedDateValue] = useState('');
 
     const grupoIEB = { name: "grupoieb", id: 1 }
     const inviu = { name: "inviu", id: 2 }
@@ -40,13 +44,16 @@ const Liquidaciones = () => {
         setPeriodo_id(Number(id))
         setLoaderOn(true)
         if (userData.role === 'root') {
-            
+
             const arrayLiquidaciones = await getAllLiquidaciones(Number(id));
-            console.log('el usuario es root', arrayLiquidaciones[0]);
-            setLiquiData(arrayLiquidaciones)
+            if (arrayLiquidaciones[0]) {
+                const date = periodos?.length && arrayLiquidaciones[0]?.periodos?.fecha_creacion.slice(0, 7);
+                setSelectedDateValue(date)
+                setLiquiData(arrayLiquidaciones)
+            }
         }
         if (userData.role !== 'root' && userData.role !== "") {
-            
+
             const allLiquidations = await getMyLiquidation(Number(id), userData.role, userData.id)
             console.log('el usuario no es root ni esta vacio', allLiquidations[0]);
             setLiquiData(allLiquidations)
@@ -54,12 +61,20 @@ const Liquidaciones = () => {
         setLoaderOn(false)
     }
 
+    const sendNotificaciones = async () => {
+        const emails = await getUsersEmails(liquiData, selectedDateValue)
+        sendEmails(emails)
+    }
+
     useEffect(() => {
         if (userData.role !== "") {
             handleGetPeriodos()
             setLiquiData([])
-        }        
-    }, [liquidationState])
+        }
+
+        setEdicion(null)
+
+    }, [liquidationState, userData])
 
     useEffect(() => {
         window.scrollTo({
@@ -90,6 +105,7 @@ const Liquidaciones = () => {
                         <select className="input sm" onChange={handleTableData}>
                             <option value="0">Seleccione un período</option>
                             {
+                                periodos.length &&
                                 periodos.map((periodo) => {
                                     return <option key={periodo.id} value={periodo.id}>
                                         {periodo.fecha_creacion}
@@ -100,8 +116,19 @@ const Liquidaciones = () => {
                     </div>
                 </div>
                 {
-                    periodo_id !== 0 &&
-                    <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} />
+                    periodo_id !== 0 && userData.role === 'root' && liquiData.length ?
+                        <>
+                            <div className="flexStart" onClick={sendNotificaciones}>
+                                <Link to={`#`} className="btnNoBg">
+                                    <FontAwesomeIcon icon={faEnvelope} className='plus' />
+                                    Enviar Notificaciones
+                                </Link>
+                            </div>
+                            <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} />
+                        </>
+                        :
+                        periodo_id !== 0 &&
+                        <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} />
                 }
             </section>
         </Background>

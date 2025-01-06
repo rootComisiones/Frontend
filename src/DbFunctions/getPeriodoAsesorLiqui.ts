@@ -1,9 +1,11 @@
-const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role: string) => {
+const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role: string, selectedFile: any) => {
 
-    let url = `${process.env.REACT_APP_BASE_URL}/liquidation/aranceles/${periodo_id}/${asesor_id}/${role}`;
+    let url = `${process.env.REACT_APP_BASE_URL}/liquidation/${selectedFile}/${periodo_id}/${asesor_id}/${role}`;
 
     console.log(url);
-    
+
+    let asesorACargo;
+    let beneficiario;
 
     try {
         const response = await fetch(url);
@@ -13,17 +15,38 @@ const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role
         }
         const data = await response.json();
 
-        const total = data
+        // let allData = [];
+
+        // if (selectedFile === 'fondos') {
+        //     allData = [...data.fondosClientes, ...data.fondosComisiones]
+        // } else if(selectedFile === 'pershing'){
+        //     allData = [...data.pershingsClientes, ...data.pershingsComisiones];
+        // } else {
+        //     allData = [...data.arancelesClientes, ...data.arancelesComisiones]
+        // }
+
+        const allData = [...data.pershingsClientes, ...data.pershingsComisiones]
+
+        console.log(allData , 'DATA CON CAMBIOS');
+        
+
+
+        const total = allData
             .filter((item: any) => item !== null)
             .reduce((acc: any, curr: any) => {
                 return acc + Number(curr.total);
             }, 0);
 
-        console.log('Respuesta del servidor:', data);
-        return {data, total};
+        asesorACargo = allData.filter((data)=> data.isComision )
+
+        beneficiario = allData.filter((data)=> !data.isComision )
+
+
+        console.log('Respuesta del servidor datitaaaa:', allData);
+        return { asesorACargo, beneficiario, total };
     } catch (error) {
         console.error('Error en la solicitud:', error);
-        return {data: [], total: 0}
+        return { asesorACargo, beneficiario, total: 0 }
     }
 }
 

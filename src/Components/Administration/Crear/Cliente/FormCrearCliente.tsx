@@ -5,12 +5,23 @@ import getAllAsesores from "../../../../DbFunctions/getAllAsesores";
 import { validateFormFields } from "../../../../Utils/handleValidateEmptyForm";
 import postClient from "../../../../DbFunctions/postClient";
 import editCliente from "../../../../DbFunctions/editCliente";
+import { useNavigate } from "react-router-dom";
+import getAllClientes from "../../../../DbFunctions/getAllClientes";
 
 const FormCrearCliente = () => {
 
     const [numeroCompanias, setNumeroCompanias] = useState(1);
     const [rolAsesor, setRolAsesor] = useState('');
-    const { allAsesores, edicion, setLoaderOn } = useContext(UserContext);
+    const { allAsesores, edicion, setLoaderOn, setAllClientes } = useContext(UserContext);
+
+    const navigate = useNavigate();
+
+    const handleGetData = async () => {
+        setLoaderOn(true);
+        const clientes = await getAllClientes()
+        setAllClientes(clientes)
+        setLoaderOn(false)
+    }
 
     const handleNumeroCompanias = (e: any) => {
         const value = e.target.value;
@@ -79,9 +90,21 @@ const FormCrearCliente = () => {
         } else {
             console.log(formObject);
             if (edicion !== null) {
-                await editCliente(formObject, edicion.id)
+                const veredicto = await editCliente(formObject, edicion.id)
+                if (veredicto) {
+                    handleGetData()
+                    navigate('/administracion')
+                } else {
+                    alert('Hubo un error al editar el cliente!')
+                }
             } else {
-                await postClient(formObject);
+                const veredicto = await postClient(formObject);
+                if (veredicto) {
+                    handleGetData()
+                    navigate('/administracion')
+                } else {
+                    alert('Hubo un error al crear el cliente!')
+                }
             }
         }
 
@@ -102,7 +125,13 @@ const FormCrearCliente = () => {
             </div>
 
             <FormCrear label="CUIT" name="cuit" type="text" value={edicion !== null ? edicion : ''} />
-            <FormCrear label="Fecha de inicio de actividades" name="fecha_inicio_actividades" type="date" value={edicion !== null ? edicion : ''} />
+            
+            {
+                edicion === null &&
+
+                <FormCrear label="Fecha de inicio de actividades" name="fecha_inicio_actividades" type="date" value={edicion !== null ? edicion : ''} />
+            }
+
             <FormCrear label="Dirección" name="direccion" type="text" value={edicion !== null ? edicion : ''} />
             <FormCrear label="Código postal" name="codigo_postal" type="text" value={edicion !== null ? edicion : ''} />
             <FormCrear label="Provincia" name="provincia" type="text" value={edicion !== null ? edicion : ''} />
@@ -117,8 +146,6 @@ const FormCrearCliente = () => {
                     <select className="input" name="numero_cias" onChange={handleNumeroCompanias}>
                         <option value="1">1</option>
                         <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
                     </select>
                 </div>
             }

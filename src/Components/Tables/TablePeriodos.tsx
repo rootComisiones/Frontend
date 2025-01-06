@@ -9,26 +9,13 @@ interface TablePeriodosProps {
         id: number,
         name: string
     };
-    newPeriod: any;
+    periodos: any;
 }
 
-const TablePeriodos: FC<TablePeriodosProps> = ({ company, newPeriod }) => {
+const TablePeriodos: FC<TablePeriodosProps> = ({ company, periodos }) => {
 
-    const [periodos, setPeriodos] = useState([]);
-    const { setLoaderOn } = useContext(UserContext);
+    const { setPopupData } = useContext(UserContext);
 
-
-    const handleGetPeriodos = async () => {
-        setLoaderOn(true)
-        const allPeriodos = await getAllPeriodos(company.id)
-        setPeriodos(allPeriodos)
-        setLoaderOn(false)
-    }
-
-    useEffect(() => {
-        handleGetPeriodos()
-        console.log("actualizando periodos");
-    }, [newPeriod])
 
     return (
         <table className="table marginYBox">
@@ -36,11 +23,12 @@ const TablePeriodos: FC<TablePeriodosProps> = ({ company, newPeriod }) => {
                 <tr>
                     <th>Período</th>
                     <th>Archivos</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    periodos.length ?
+                    periodos?.length ?
                         periodos.map((periodo: { id: number, fecha_creacion: string, compa_ia_id: number }) => {
                             const dateUrl = periodo.fecha_creacion.replace("/", "")
 
@@ -48,21 +36,16 @@ const TablePeriodos: FC<TablePeriodosProps> = ({ company, newPeriod }) => {
                                 <td>{periodo.fecha_creacion}</td>
                                 <td className='tdContainer'>
                                     <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo1`}>
-                                            Archivo 1
-                                        </Link>
-                                    </span>
-                                    <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo2`}>
-                                            Archivo 2
-                                        </Link>
-                                    </span>
-                                    <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo3`}>
-                                            Archivo 3
+                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo`}>
+                                            Archivo de {company?.name.toUpperCase()}
                                         </Link>
                                     </span>
                                 </td>
+                                <td onClick={() => setPopupData({
+                                    action: 'periodo',
+                                    asesorId: periodo.id,
+                                    text: 'Esta seguro de querer eliminar este periodo?'
+                                })} style={{textAlign: 'center', color: '#29ce97', cursor: 'pointer'}}>Eliminar</td>
                             </tr>
                         }) :
                         <tr>

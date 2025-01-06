@@ -11,43 +11,113 @@ import Periodo from './Components/Periodos/Periodo';
 import Liquidaciones from './Components/Liquidaciones/Liquidaciones';
 import Page404 from './Components/Page404/Page404';
 import Liquidacion from "./Components/Liquidaciones/Liquidacion";
+import { useContext, useEffect } from "react";
+import getAllAsesores from "./DbFunctions/getAllAsesores";
+import getTeams from "./DbFunctions/getTeams";
+import getAllClientes from "./DbFunctions/getAllClientes";
 
+
+const ContextWrapper = ({ children }: { children: JSX.Element }) => {
+  const { setUserData, setLoaderOn, setAllAsesores, setAllTeams, setAllClientes, setDataFetched, dataFetched } = useContext(UserContext);
+
+  const handleGetData = async () => {
+    if (!dataFetched) {
+      setLoaderOn(true);
+      await getAllAsesores(setAllAsesores)
+      await getTeams(setAllTeams)
+      const clientes = await getAllClientes()
+      setAllClientes(clientes)
+      setDataFetched(true)
+      setLoaderOn(false)
+    }
+  }
+  
+  useEffect(() => {
+    handleGetData()
+  }, [])
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  return children;
+};
 
 function App() {
 
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Home />
+      element: (
+        <ContextWrapper>
+          <Home />
+        </ContextWrapper>
+      ),
     },
     {
       path: '/administracion',
-      element: <Administration />,
+      element: (
+        <ContextWrapper>
+          <Administration />
+        </ContextWrapper>
+      ),
     },
     {
       path: '/administracion/asesores/crear',
-      element: <CrearAsesor />,
-    }, {
+      element: (
+        <ContextWrapper>
+          <CrearAsesor />
+        </ContextWrapper>
+      ),
+    },
+    {
       path: '/administracion/clientes/crear',
-      element: <CrearCliente />,
-    }, {
+      element: (
+        <ContextWrapper>
+          <CrearCliente />
+        </ContextWrapper>
+      ),
+    },
+    {
       path: 'periodos',
-      element: <Periodos />
-    }, {
+      element: (
+        <ContextWrapper>
+          <Periodos />
+        </ContextWrapper>
+      ),
+    },
+    {
       path: 'liquidaciones',
-      element: <Liquidaciones />
-    }, {
+      element: (
+        <ContextWrapper>
+          <Liquidaciones />
+        </ContextWrapper>
+      ),
+    },
+    {
       path: 'periodos/:empresa/:periodo/:fechaId/:tipo_de_archivo',
-      element: <Periodo />
-    }, {
+      element: (
+        <ContextWrapper>
+          <Periodo />
+        </ContextWrapper>
+      ),
+    },
+    {
       path: 'liquidaciones/:empresa/:periodoId/:productorId/:rol',
-      element: <Liquidacion />
+      element: (
+        <ContextWrapper>
+          <Liquidacion />
+        </ContextWrapper>
+      ),
     },
     {
       path: '*',
-      element: <Page404 />
+      element: <Page404 />,
     },
-  ])
+  ]);
 
   return (
     <UserProvider>

@@ -1,9 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import '../../Styles/Reutilized.css'
 import { TableProps } from "../../Types/Types";
 
 
-const Table: FC<TableProps> = ({ headers }) => {
+const Table: FC<TableProps> = ({ headers, tableData, empresa }) => {
+
     return (
         <table className="table marginYBox">
             <thead>
@@ -17,25 +18,10 @@ const Table: FC<TableProps> = ({ headers }) => {
             </thead>
             <tbody>
                 <tr>
-                    {headers.map((header, index) => {
-                        return <td key={header + index}>{header}</td>
-                    })}
+                    <td key={tableData.nombre_archivo}>{tableData.nombre_archivo}</td>
+                    <td key={tableData.tipo}>{empresa}</td>
+                    <td key={tableData.total_de_prima}>${tableData.total_de_prima}</td>
                 </tr>
-                {/* <tr>
-                    {headers.map((header, index) => {
-                        return <td key={header + index}>{header}</td>
-                    })}
-                </tr>
-                <tr>
-                    {headers.map((header, index) => {
-                        return <td key={header + index}>{header}</td>
-                    })}
-                </tr>
-                <tr>
-                    {headers.map((header, index) => {
-                        return <td key={header + index}>{header}</td>
-                    })}
-                </tr> */}
             </tbody>
         </table>
     )

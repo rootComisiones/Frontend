@@ -26,16 +26,20 @@ const handleLogin = async (email: string, contrasena: string, setUserData: any) 
             email: data.email,
             id: data.id,
             role: data.role,
-        }
+        };
 
-        setUserData(user)
+        // Guardar en localStorage
+        localStorage.setItem('userData', JSON.stringify(user));
+
+        // Actualizar estado
+        setUserData(user);
+
         console.log('Respuesta del servidor:', user);
-        return data;
+        return true;
     } catch (error) {
         console.error('Error en la solicitud:', error);
-        return [];
+        return error;
     }
-}
+};
 
 export default handleLogin;
-

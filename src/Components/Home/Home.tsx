@@ -9,7 +9,7 @@ import dotImage from '../../Assets/iconoLogoBlanco.png'
 const Home = () => {
 
     const goToMainSite = () => {
-        window.open('https://loyalty.investments/', '_blank');
+        window.open('https://rootpartners.com.ar/', '_blank');
     }
 
     useEffect(() => {
