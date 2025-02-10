@@ -71,7 +71,9 @@ const FormCrearCliente = () => {
         const formObject = postData.reduce((acc, [fieldName, value]) => {
             let newValue;
 
-            if (fieldName === "asesor_id" || fieldName === "coordinador_id" || fieldName === "manager_id") {
+            if (fieldName === 'repheral') {
+                newValue = value == 'si' ? true : false;
+            } else if (fieldName === "asesor_id" || fieldName === "coordinador_id" || fieldName === "manager_id") {
                 newValue = value === "" ? null : Number(value);
             } else if (fieldName.includes("numero_cuenta")) {
                 newValue = Number(value);
@@ -88,7 +90,6 @@ const FormCrearCliente = () => {
         if (errores.length) {
             console.error('Faltan completar los siguientes campos: ' + errores.toString());
         } else {
-            console.log(formObject);
             if (edicion !== null) {
                 const veredicto = await editCliente(formObject, edicion.id)
                 if (veredicto) {
@@ -125,7 +126,7 @@ const FormCrearCliente = () => {
             </div>
 
             <FormCrear label="CUIT" name="cuit" type="text" value={edicion !== null ? edicion : ''} />
-            
+
             {
                 edicion === null &&
 
@@ -138,17 +139,21 @@ const FormCrearCliente = () => {
             <FormCrear label="Localidad" name="localidad" type="text" value={edicion !== null ? edicion : ''} />
             <FormCrear label="Teléfono" name="telefono" type="text" value={edicion !== null ? edicion : ''} />
             <FormCrear label="Email" name="email" type="text" value={edicion !== null ? edicion : ''} />
+            <div className="inputContainer">
+                <label className="label" htmlFor="repheral">Es Referral?</label>
+                <select className="input" name="repheral">
+                    <option value="no">No</option>
+                    <option value="si">Si</option>
+                </select>
+            </div>
 
-            {
-                edicion === null &&
-                <div className="inputContainer">
-                    <label className="label" htmlFor="numero_cias">Nº Compañías</label>
-                    <select className="input" name="numero_cias" onChange={handleNumeroCompanias}>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-            }
+            <div className="inputContainer">
+                <label className="label" htmlFor="numero_cias">Nº Compañías</label>
+                <select className="input" name="numero_cias" onChange={handleNumeroCompanias}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
 
             {handleCompanias()}
 
