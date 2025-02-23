@@ -49,10 +49,26 @@ const FormCrearCliente = () => {
                         </select>
                     </div>
                     <div className="inputContainer">
-                        <label className="label" htmlFor={`numero_cuenta_${index + 1}`}>Número de cuenta</label>
+                        <label className="label" htmlFor={`numero_cuenta_${index + 1}`}>Número de cuenta (Compañía {index + 1})</label>
                         <input className="input" type="text" name={`numero_cuenta_${index + 1}`} id={`numero_cuenta_${index + 1}`}
                             defaultValue={edicion !== null ? edicion[`numero_cuenta`] : ''}
                         />
+                    </div>
+                    <div className="inputContainer">
+                        <label className="label" htmlFor={`repheral_${index + 1}`}>Es Referral? (Compañía {index + 1})</label>
+                        <select className="input" name={`repheral_${index + 1}`}>
+                            <option value="no">No</option>
+                            <option value="si">Si</option>
+                        </select>
+                    </div>
+                    <div className="inputContainer">
+                        <label className="label" htmlFor={`perfil_riesgo_${index + 1}`}>Perfil de Riesgo (Compañía {index + 1}) </label>
+                        <select className="input" name={`perfil_riesgo_${index + 1}`}>
+                            <option value="">Seleccione un perfil de riesgo</option>
+                            <option value="conservador">Conservador</option>
+                            <option value="moderado">Moderado</option>
+                            <option value="de riesgo">De Riesgo</option>
+                        </select>
                     </div>
                 </div>
             );
@@ -71,7 +87,9 @@ const FormCrearCliente = () => {
         const formObject = postData.reduce((acc, [fieldName, value]) => {
             let newValue;
 
-            if (fieldName === 'repheral') {
+            if (fieldName.includes('perfil_riesgo')) {
+                newValue = value === '' ? null : value;
+            } else if (fieldName.includes('repheral')) {
                 newValue = value == 'si' ? true : false;
             } else if (fieldName === "asesor_id" || fieldName === "coordinador_id" || fieldName === "manager_id") {
                 newValue = value === "" ? null : Number(value);
@@ -139,13 +157,6 @@ const FormCrearCliente = () => {
             <FormCrear label="Localidad" name="localidad" type="text" value={edicion !== null ? edicion : ''} />
             <FormCrear label="Teléfono" name="telefono" type="text" value={edicion !== null ? edicion : ''} />
             <FormCrear label="Email" name="email" type="text" value={edicion !== null ? edicion : ''} />
-            <div className="inputContainer">
-                <label className="label" htmlFor="repheral">Es Referral?</label>
-                <select className="input" name="repheral">
-                    <option value="no">No</option>
-                    <option value="si">Si</option>
-                </select>
-            </div>
 
             <div className="inputContainer">
                 <label className="label" htmlFor="numero_cias">Nº Compañías</label>
