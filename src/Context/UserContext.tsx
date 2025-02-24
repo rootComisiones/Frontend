@@ -54,7 +54,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     username: '',
     email: '',
     id: '',
-    role: 'root',
+    role: '',
   })
 
   const [loaderOn, setLoaderOn] = useState(false);
