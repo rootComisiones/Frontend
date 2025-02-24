@@ -44,6 +44,7 @@ export interface UserContextType {
     handleLoginOn: () => void,
     handleLoginOff: () => void,
     loginModal: boolean,
+    setLoginModal: Dispatch<SetStateAction<boolean>>,
     allAsesores: AsesorData[],
     setAllAsesores: Dispatch<SetStateAction<AsesorData[]>>,
     companies: Company[];
@@ -203,6 +204,7 @@ export interface NavbarProps {
 export interface LoginModalProps {
     onVisible: boolean;
     closeModal: () => void;
+    setOnVisible: any;
 }
 
 /* TABLE */

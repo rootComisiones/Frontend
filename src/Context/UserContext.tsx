@@ -93,6 +93,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     handleLoginOff,
     handleLoginOn,
     loginModal,
+    setLoginModal,
     allAsesores,
     setAllAsesores,
     companies,

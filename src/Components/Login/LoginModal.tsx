@@ -10,21 +10,24 @@ import handleLogin from '../../DbFunctions/handleLogin';
 import { UserContext } from '../../Context/UserContext';
 
 
-export const LoginModal: FC<LoginModalProps> = ({ onVisible, closeModal }) => {
+export const LoginModal: FC<LoginModalProps> = ({ onVisible, closeModal, setOnVisible }) => {
 
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [modalStatus, setModalStatus] = useState('login');
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData, setUserData, setLoaderOn } = useContext(UserContext);
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
 
-    const handleLoginAction = () =>{
-        handleLogin(email, password, setUserData)
+    const handleLoginAction = async() =>{
+        setLoaderOn(true)
+        await handleLogin(email, password, setUserData)
+        setLoaderOn(false)
+        setOnVisible(false)
     }
 
     const handlePassword = (e: any) =>{

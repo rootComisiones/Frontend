@@ -12,13 +12,13 @@ interface BackgroundProps {
 
 const Background: FC<BackgroundProps> = ({ children }) => {
 
-    const { handleLoginOff, loginModal, handleLoginOn } = useContext(UserContext)
+    const { handleLoginOff, loginModal, handleLoginOn, setLoginModal } = useContext(UserContext)
 
     return (
         <>
             <Header setLoginOn={handleLoginOn} />
             <Popup />
-            <LoginModal onVisible={loginModal} closeModal={handleLoginOff} />
+            <LoginModal onVisible={loginModal} closeModal={handleLoginOff} setOnVisible={setLoginModal} />
             {children}
             <Loader />
             <Footer />
