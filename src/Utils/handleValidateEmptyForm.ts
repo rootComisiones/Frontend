@@ -3,15 +3,17 @@ interface FormFields {
 }
 
 
-export const validateFormFields = (fields: FormFields) => {
+export const validateFormFields = (fields: FormFields, type: string) => {
   let errores = [];
   let noComisiones = true;
 
   for (const [key, value] of Object.entries(fields)) {
     // Validar si el campo está vacío
     if (value === '' || value === null || value === undefined) {
-      errores.push(key)
-      console.log(`Error: El campo '${key}' no puede estar vacío.`);
+      if (!key.includes('perfil_riesgo')) {
+        errores.push(key)
+        console.log(`Error: El campo '${key}' no puede estar vacío.`);
+      }
     }
 
     // Validar si las claves que terminan en "_id" no tienen valor 0
@@ -27,7 +29,9 @@ export const validateFormFields = (fields: FormFields) => {
   }
 
   console.log(noComisiones);
-  noComisiones && errores.push('noComisiones')
+  if (type === 'asesor') {
+    noComisiones && errores.push('noComisiones')
+  }
 
 
   let finalErrores = errores.filter(error => error !== 'observacion' && error !== 'coordinador_id');

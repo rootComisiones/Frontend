@@ -103,7 +103,7 @@ const FormCrearCliente = () => {
             return acc;
         }, {} as any);
 
-        const errores = validateFormFields(formObject);
+        const errores = validateFormFields(formObject, 'cliente');
 
         if (errores.length) {
             console.error('Faltan completar los siguientes campos: ' + errores.toString());

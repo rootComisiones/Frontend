@@ -140,7 +140,7 @@ const FormCrearAsesor = () => {
             return acc;
         }, {} as any);
 
-        const errores = validateFormFields(formObject);
+        const errores = validateFormFields(formObject, 'asesor');
         
 
         if (errores.length ) {
