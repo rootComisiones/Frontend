@@ -91,8 +91,15 @@ const FormCrearCliente = () => {
                 newValue = value === '' ? null : value;
             } else if (fieldName.includes('repheral')) {
                 newValue = value == 'si' ? true : false;
-            } else if (fieldName === "asesor_id" || fieldName === "coordinador_id" || fieldName === "manager_id") {
+            } else  if (["asesor_", "coordinador_", "manager_"].some(prefix => fieldName.includes(prefix))) {
                 newValue = value === "" ? null : Number(value);
+                if (fieldName.startsWith("asesor_")) {
+                    fieldName = "asesor_id";
+                } else if (fieldName.startsWith("coordinador_")) {
+                    fieldName = "coordinador_id";
+                } else if (fieldName.startsWith("manager_")) {
+                    fieldName = "manager_id";
+                }
             } else if (fieldName.includes("numero_cuenta")) {
                 newValue = Number(value);
             } else {
@@ -175,7 +182,7 @@ const FormCrearCliente = () => {
                     <select className="input" name={rolAsesor} onChange={handleGetKey}>
                         <option value="">Selecciona un asesor</option>
                         {allAsesores.length && allAsesores.map((asesor) => (
-                            <option key={`${asesor.rol}_id`} data-key={`${asesor.rol}_id`} value={asesor.id}>
+                            <option key={`${asesor.rol}_${asesor.id}`} data-key={`${asesor.rol}_id`} value={asesor.id}>
                                 {asesor.username}
                             </option>
                         ))}
