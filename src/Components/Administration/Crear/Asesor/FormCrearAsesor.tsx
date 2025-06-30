@@ -256,7 +256,7 @@ const FormCrearAsesor = () => {
                         <option value="0">Seleccione una Sub Agencia</option>
                         {allSagencias.map((sagencia) => (
                             <option key={sagencia.username} value={sagencia.id}>
-                                {sagencia.username}
+                                {sagencia.nombre_agencia}
                             </option>
                         ))}
                     </select>

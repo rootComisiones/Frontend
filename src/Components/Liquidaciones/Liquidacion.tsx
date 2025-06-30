@@ -79,7 +79,7 @@ const Liquidacion = () => {
     useEffect(() => {
         handleLiquiData()
         const selectedFileName = pathParts[6];
-        selectedFileName === 'grupoieb' ? setCompanyFiles(['aranceles']) :
+        selectedFileName === 'inviu' ? setCompanyFiles(['aranceles']) :
             setCompanyFiles(['aranceles', 'aranceles-pu']);
         console.log('selectedFileName', selectedFileName);
 
@@ -100,12 +100,12 @@ const Liquidacion = () => {
                                 <button
                                     onClick={() => setSelectedFile('aranceles')}
                                     className={`btn btnWhite marginXBtn ${selectedFile === "aranceles" && "active"}`}>
-                                    Aranceles ($ARS)
+                                    Aranceles ($USD)
                                 </button>
                                 <button
                                     onClick={() => setSelectedFile('aranceles-pu')}
                                     className={`btn btnWhite marginXBtn ${selectedFile === "aranceles-pu" && "active"}`}>
-                                    Aranceles Publicos ($USD)
+                                    Aranceles Publicos ($ARS)
                                 </button>
                             </div>
                         }
