@@ -22,7 +22,7 @@ const TablePeriodos: FC<TablePeriodosProps> = ({ company, periodos }) => {
             <thead>
                 <tr>
                     <th>Período</th>
-                    <th>Archivos</th>
+                    <th>Archivos($ARS)</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -34,18 +34,38 @@ const TablePeriodos: FC<TablePeriodosProps> = ({ company, periodos }) => {
 
                             return <tr key={periodo.id}>
                                 <td>{periodo.fecha_creacion}</td>
-                                <td className='tdContainer'>
-                                    <span>
-                                        <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo`}>
-                                            Archivo de {company?.name.toUpperCase()}
-                                        </Link>
-                                    </span>
-                                </td>
+                                {
+                                    company.name === 'grupoieb' ?
+                                        <>
+                                            <td className='tdContainer'>
+                                                <span>
+                                                    <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo/ars`}>
+                                                        Archivo de {company?.name.toUpperCase()} ($ARS)
+                                                    </Link>
+                                                </span>
+                                            </td>
+                                            <td className='tdContainer'>
+                                                <span>
+                                                    <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo/usd`}>
+                                                        Archivo de {company?.name.toUpperCase()} ($USD)
+                                                    </Link>
+                                                </span>
+                                            </td>
+                                        </>
+                                        :
+                                        <td className='tdContainer'>
+                                            <span>
+                                                <Link to={`/periodos/${company.name}/${dateUrl}/${periodo.id}/archivo/inviu`}>
+                                                    Archivo de {company?.name.toUpperCase()}
+                                                </Link>
+                                            </span>
+                                        </td>
+                                }
                                 <td onClick={() => setPopupData({
                                     action: 'periodo',
                                     asesorId: periodo.id,
                                     text: 'Esta seguro de querer eliminar este periodo?'
-                                })} style={{textAlign: 'center', color: '#29ce97', cursor: 'pointer'}}>Eliminar</td>
+                                })} style={{ textAlign: 'center', color: '#29ce97', cursor: 'pointer' }}>Eliminar</td>
                             </tr>
                         }) :
                         <tr>

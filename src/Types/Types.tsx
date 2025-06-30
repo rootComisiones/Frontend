@@ -39,6 +39,8 @@ export interface UserContextType {
         equipo: string,
         vendedor: string,
     }>>;
+    allSagencias: Sagencia[],
+    setAllSagencias: Dispatch<SetStateAction<Sagencia[]>>,
     allTeams: Equipo[],
     setAllTeams: Dispatch<SetStateAction<Equipo[]>>,
     handleLoginOn: () => void,
@@ -149,6 +151,16 @@ export interface AsesorData {
 export interface FormCrearAsesorProps {
     newAsesor: AsesorData;
     setNewAsesor: React.Dispatch<React.SetStateAction<AsesorData>>;
+}
+
+export interface Sagencia {
+    id: number,
+    username: string,
+    rol?: string;
+    contrasena: string,
+    email: string,
+    nombre_agencia: string,
+    porcentaje_neto: number,
 }
 
 export interface Equipo {

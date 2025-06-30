@@ -28,8 +28,8 @@ const Liquidaciones = () => {
     const [liquiData, setLiquiData] = useState([])
     const [selectedDateValue, setSelectedDateValue] = useState('');
 
-    const grupoIEB = { name: "grupoieb", id: 1 }
-    const inviu = { name: "inviu", id: 2 }
+    const grupoIEB = { name: "grupoieb", id: 2 }
+    const inviu = { name: "inviu", id: 1 }
 
     const handleGetPeriodos = async () => {
         setLoaderOn(true)
@@ -41,24 +41,25 @@ const Liquidaciones = () => {
     const handleTableData = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const id = e.target.value;
 
-        setPeriodo_id(Number(id))
-        setLoaderOn(true)
-        if (userData.role === 'root') {
+        setPeriodo_id(Number(id));
+        setLiquiData([]); // <-- Limpia antes de cargar nuevos datos
+        setLoaderOn(true);
 
+        if (userData.role === 'root') {
             const arrayLiquidaciones = await getAllLiquidaciones(Number(id));
             if (arrayLiquidaciones[0]) {
                 const date = periodos?.length && arrayLiquidaciones[0]?.periodos?.fecha_creacion.slice(0, 7);
-                setSelectedDateValue(date)
-                setLiquiData(arrayLiquidaciones)
+                setSelectedDateValue(date);
+                setLiquiData(arrayLiquidaciones);
+            } else {
+                setLiquiData([]); // <-- Limpia si no hay datos
             }
         }
         if (userData.role !== 'root' && userData.role !== "") {
-
-            const allLiquidations = await getMyLiquidation(Number(id), userData.role, userData.id)
-            console.log('el usuario no es root ni esta vacio', allLiquidations[0]);
-            setLiquiData(allLiquidations)
+            const allLiquidations = await getMyLiquidation(Number(id), userData.role, userData.id);
+            setLiquiData(allLiquidations || []); // <-- Asegura array vacío si no hay datos
         }
-        setLoaderOn(false)
+        setLoaderOn(false);
     }
 
     const sendNotificaciones = async () => {
@@ -124,11 +125,11 @@ const Liquidaciones = () => {
                                     Enviar Notificaciones
                                 </Link>
                             </div>
-                            <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} />
+                            <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} empresa={liquidationState.name} />
                         </>
                         :
                         periodo_id !== 0 &&
-                        <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} />
+                        <TableLiquidaciones periodo_id={periodo_id} liquiData={liquiData} empresa={liquidationState.name} />
                 }
             </section>
         </Background>

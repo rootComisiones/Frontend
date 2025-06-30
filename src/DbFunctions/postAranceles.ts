@@ -1,16 +1,16 @@
 const url = process.env.REACT_APP_BASE_URL;
 
-const postAranceles = async ( file: File, idPeriodo: string, setFileSelected: any ) => {    
+const postAranceles = async (file: File, idPeriodo: string, setFileSelected: any, moneda: string) => {
 
     const formData = new FormData();
-    
+
     formData.append('excelFile', file);
-    
+
     formData.append('periodo_id', idPeriodo);
 
     for (let pair of formData.entries()) {
         console.log(`${pair[0]}:`);
-        
+
         const value = pair[1];
         if (value instanceof File) {
             console.log(`  Name: ${value.name}`);
@@ -19,11 +19,15 @@ const postAranceles = async ( file: File, idPeriodo: string, setFileSelected: an
         } else {
             console.log(`  Value: ${value}`);
         }
-    }   
-    
+    }
 
+    const endpoint = moneda === 'ars'
+        ? `${url}/liquidation/upload/arancel-pu`
+        : `${url}/liquidation/upload/arancel`;
+    console.log(endpoint, 'endpoint aranceles');
+    //arancel usd y arance-pu arse
     try {
-        const response = await fetch(`${url}/liquidation/upload/persh`, {
+        const response = await fetch(`${endpoint}`, {
             method: 'POST',
             body: formData,
         });

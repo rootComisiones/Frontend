@@ -26,67 +26,84 @@ const TableAranceles: FC<TableArancelesProps> = ({ liquiData, totalLiquiData }) 
     }
 
     return (
-        <table className="table marginYBox marginYTitle">
-            <thead>
-                <tr>
-                    <th>Nº de Cuenta</th>
-                    <th>Cliente</th>
-                    <th>Prima</th>
-                    {
-                        liquiData[0]?.isComision &&
-                        <th>% Comisión asesor a cargo</th>
-                    }
-                    <th>% Comision</th>
-                    <th>Prima Comisionable c/ desc</th>
-                    {
-                        liquiData[0]?.isComision &&
-                        <th>Asesor a cargo</th>
-                    }
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    liquiData.length &&
-                    liquiData.map((liquidacion: any) => {
-                        return (
-                            liquidacion !== null &&
-                            <tr key={liquidacion.id}>
-                                <td>{liquidacion.numero_cuenta}</td>
-                                <td>{liquidacion.cliente}</td>
-                                <td>{liquidacion.prima}</td>
-                                <td>{liquidacion.porcentaje_comi}</td>
-                                {
-                                    liquiData[0]?.isComision &&
-                                    <td>{porcentajeComisionACargo(liquidacion)}</td>
-                                }
-                                <td>{liquidacion.prima_desc}</td>
-                                {
-                                    liquiData[0]?.isComision &&
-                                    <td>{liquidacion.beneficiarioNombre}</td>
-                                }
-                                <td>{liquidacion.total}</td>
-                            </tr>
-                        )
-                    })
-                }
-            </tbody>
-            {
-                totalLiquiData !== undefined ?
+        <div style={{ overflowX: 'auto', width: '100%' }}>
+            <table className="table marginYBox marginYTitle">
+                <thead>
+                    <tr>
+                        <th>Nº de Comitente</th>
+                        <th>Comitente</th>
+                        <th>Base de calculo</th>
+                        {/* <th>Prima comisionable c/desc.</th> */}
+                        <th>Condicion</th>
+                        <th>Broker</th>
+                        <th>Productor</th>
+                        <th>Sit. Impositiva</th>
+                        <th>% Comision</th>
+                        <th>Comision Asesor</th>
+                        <th>Plus Coordinador</th>
+                        <th>Plus Team Leader</th>
+                        <th>Plus Referral</th>
+                        <th>Equipo</th>
+                        <th>Coordinador</th>
+                        <th>Team Leader</th>
+                        <th>Rentabilidad Subagencia</th>
+                        <th>Rentabilidad Root</th>
 
-                    <tfoot>
-                        <tr>
-                            <td className='tdImportant' style={{ textAlign: "end" }} colSpan={7}>TOTAL liquidacion: ${parseFloat(totalLiquiData.toFixed(2))}</td>
-                        </tr>
-                    </tfoot>
-                    :
-                    <tfoot>
-                        <tr>
-                            <td className='tdImportant' style={{ textAlign: "end" }} colSpan={9}>TOTAL por Asesores a cargo de: ${totalBeneficiario(liquiData)}</td>
-                        </tr>
-                    </tfoot>
-            }
-        </table>
+                        {/* // Asesor ve hasta comision asesor + equipo + pf/pj
+                    // Coordinador ve hasta plus coordinador +equipo + pf/pj + Coordinador
+                    // Manager ve todo menos Rentabilidades
+                    // Subagencia ve todo menos Rentabilidad Root */}
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        liquiData.length &&
+                        liquiData.map((liquidacion: any) => {
+                            return (
+                                liquidacion !== null &&
+                                <tr key={liquidacion.id}>
+                                    <td>{liquidacion.numero_cuenta}</td>
+                                    <td>{liquidacion.cliente}</td>
+                                    <td>{liquidacion.base_de_calculo}</td>
+                                    {/* <td>{liquidacion.prima_desc}</td> */}
+                                    <td>{liquidacion.condicion}</td>
+                                    <td>{liquidacion.compania_nombre}</td>
+                                    <td>{liquidacion.productor_nombre}</td>
+                                    <td>{liquidacion.situacion_impositiva}</td>
+                                    <td>{liquidacion.porcentaje_comi}</td>
+                                    <td>{liquidacion.comision_asesor}</td>
+                                    <td>{liquidacion.plus_coordinador}</td>
+                                    <td>{liquidacion.plus_teamleader}</td>
+                                    <td>{liquidacion.plus_referral}</td>
+                                    <td>{liquidacion.cabeza_agencia_nombre}</td>
+                                    <td>{liquidacion.coordinador_name}</td>
+                                    <td>{liquidacion.teamleader_name}</td>
+                                    <td>{liquidacion.rentabilidad_sub_agencia}</td>
+                                    <td>{liquidacion.rentabilidad_root}</td>
+
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+                {/* {
+                    totalLiquiData !== undefined ?
+
+                        <tfoot>
+                            <tr>
+                                <td className='tdImportant' style={{ textAlign: "end" }} colSpan={17}>TOTAL liquidacion: ${parseFloat(totalLiquiData.toFixed(2))}</td>
+                            </tr>
+                        </tfoot>
+                        :
+                        <tfoot>
+                            <tr>
+                                <td className='tdImportant' style={{ textAlign: "end" }} colSpan={17}>TOTAL por Asesores a cargo de: ${totalBeneficiario(liquiData)}</td>
+                            </tr>
+                        </tfoot>
+                } */}
+            </table>
+        </div>
     )
 }
 

@@ -22,7 +22,7 @@ const CrearAsesor = () => {
                 userData.role === 'root' ?
                     <Background>
                         <section className="container">
-                            <h1 className="title2 marginYTitle">Nuevo asesor</h1>
+                            <h1 className="title2 marginYTitle">Usuario</h1>
                             <FormCrearAsesor />
                         </section>
                     </Background>

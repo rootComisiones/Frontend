@@ -6,9 +6,10 @@ import { UserContext } from '../../Context/UserContext';
 interface TableLiquidacionesProps {
     periodo_id: number;
     liquiData: any;
+    empresa: string;
 }
 
-const TableLiquidaciones: FC<TableLiquidacionesProps> = ({ periodo_id, liquiData }) => {
+const TableLiquidaciones: FC<TableLiquidacionesProps> = ({ periodo_id, liquiData, empresa }) => {
 
     const { liquidationState } = useContext(UserContext);
 
@@ -34,7 +35,7 @@ const TableLiquidaciones: FC<TableLiquidacionesProps> = ({ periodo_id, liquiData
                                 <td>{liquidacion[role].username}</td>
                                 <td className='tdContainer'>
                                     <span>
-                                        <Link to={`/liquidaciones/${liquidationState.id}/${periodo_id}-${date}/${liquidacion[`${role}_id`]}-${liquidacion[role].username}/${role}`}>
+                                        <Link to={`/liquidaciones/${liquidationState.id}/${periodo_id}-${date}/${liquidacion[`${role}_id`]}-${liquidacion[role].username}/${role}/${empresa}`}>
                                             Ver Liquidación
                                         </Link>
                                     </span>

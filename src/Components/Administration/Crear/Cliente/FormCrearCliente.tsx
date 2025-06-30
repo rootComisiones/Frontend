@@ -44,8 +44,8 @@ const FormCrearCliente = () => {
                             defaultValue={edicion !== null ? edicion.compania_id : ''}
                         >
                             <option value="">Seleccione una compañía</option>
-                            <option value="1">Grupo IEB</option>
-                            <option value="2">Inviu</option>
+                            <option value="2">Grupo IEB</option>
+                            <option value="1">Inviu</option>
                         </select>
                     </div>
                     <div className="inputContainer">
@@ -70,6 +70,14 @@ const FormCrearCliente = () => {
                             <option value="de riesgo">De Riesgo</option>
                         </select>
                     </div>
+                    <div className="inputContainer">
+                        <label className="label" htmlFor={`presentador_${index + 1}`}>Es Presentador? (Compañía {index + 1}) </label>
+                        <select className="input" name={`presentador_${index + 1}`}>
+                            <option value="">No</option>
+                            <option value="presentador_dk">Presentador DK</option>
+                            <option value="presentador_pd">Presentador PD</option>
+                        </select>
+                    </div>
                 </div>
             );
         }
@@ -87,11 +95,29 @@ const FormCrearCliente = () => {
         const formObject = postData.reduce((acc, [fieldName, value]) => {
             let newValue;
 
-            if (fieldName.includes('perfil_riesgo')) {
+            if (fieldName.includes('presentador')) {
+                let compania_id = fieldName.split('_')[1];
+                let presentadorDK = `presentador_dk_${compania_id}`;
+                let presentadorPD = `presentador_pd_${compania_id}`;
+
+                if (value === 'presentador_dk') {
+                    acc[presentadorDK] = true;
+                    acc[presentadorPD] = false;
+                } else if (value === 'presentador_pd') {
+                    acc[presentadorDK] = false;
+                    acc[presentadorPD] = true;
+                }else {
+                    acc[presentadorDK] = false;
+                    acc[presentadorPD] = false;
+                }
+
+                return acc;
+
+            } else if (fieldName.includes('perfil_riesgo')) {
                 newValue = value === '' ? null : value;
             } else if (fieldName.includes('repheral')) {
                 newValue = value == 'si' ? true : false;
-            } else  if (["asesor_", "coordinador_", "manager_"].some(prefix => fieldName.includes(prefix))) {
+            } else if (["asesor_", "coordinador_", "manager_"].some(prefix => fieldName.includes(prefix))) {
                 newValue = value === "" ? null : Number(value);
                 if (fieldName.startsWith("asesor_")) {
                     fieldName = "asesor_id";
@@ -102,6 +128,8 @@ const FormCrearCliente = () => {
                 }
             } else if (fieldName.includes("numero_cuenta")) {
                 newValue = Number(value);
+            } else if (fieldName.startsWith("tipo_persona")) {
+                newValue = value === 'Juridica' ? true : false;
             } else {
                 newValue = value;
             }
@@ -109,6 +137,9 @@ const FormCrearCliente = () => {
             acc[fieldName] = newValue;
             return acc;
         }, {} as any);
+
+        console.log('formObject', formObject);
+        
 
         const errores = validateFormFields(formObject, 'cliente');
 

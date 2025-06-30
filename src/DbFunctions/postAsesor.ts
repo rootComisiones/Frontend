@@ -3,12 +3,13 @@ import { AsesorData } from "../Types/Types";
 const urlAsesor = `${process.env.REACT_APP_BASE_URL}/asesor/register`;
 const urlCoordinador = `${process.env.REACT_APP_BASE_URL}/coordinadores/create`;
 const urlManager = `${process.env.REACT_APP_BASE_URL}/manager/register`;
+const urlSagencia =  `${process.env.REACT_APP_BASE_URL}/sagencia/register`;
 
 const postAsesor = async (newAsesor: AsesorData, type: string) => {
 
     let newUrl = "";
 
-    type === "asesor" ? newUrl = urlAsesor : type === "coordinador" ? newUrl = urlCoordinador : newUrl = urlManager
+    type === "asesor" ? newUrl = urlAsesor : type === "coordinador" ? newUrl = urlCoordinador : type === 'sagencia' ? newUrl = urlSagencia : newUrl = urlManager;
 
     console.log(newAsesor, type, newUrl);
     

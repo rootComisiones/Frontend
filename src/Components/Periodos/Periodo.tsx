@@ -21,7 +21,9 @@ const Periodo = () => {
     const pathParts = pathname.split('/');
     const company = pathParts[2];
     const date = pathParts[3];
-    const periodoId = pathParts[4]
+    const periodoId = pathParts[4];
+    const moneda = pathParts[6];
+    
 
     const periodoData = handlePeriodoData(company, date, periodoId)
 
@@ -40,7 +42,7 @@ const Periodo = () => {
         setLoaderOn(true)
         console.log(periodoData, fileSelected, 'LOCOOO');
 
-        await postAranceles(fileSelected, periodoData.newId, setFileSelected)
+        await postAranceles(fileSelected, periodoData.newId, setFileSelected, moneda)
         setLoaderOn(false)
         setRefresh(prev => !prev)
     }
@@ -68,7 +70,7 @@ const Periodo = () => {
                 userData.role === 'root' ?
                     <Background>
                         <section className="container">
-                            <h1 className="title2 marginYTitle">{periodoData.newCompany} - {periodoData.newDate}  </h1>
+                            <h1 className="title2 marginYTitle">{periodoData.newCompany}{" "+`${moneda !== 'inviu' ? "($"+moneda.toUpperCase()+")": ""}`} - {periodoData.newDate}  </h1>
                             <label htmlFor="fileInput" className="btnNoBg flexStart">
                                 <FontAwesomeIcon icon={faPlus} className='plus' />
                                 Importar archivo de {periodoData.newCompany}

@@ -23,12 +23,11 @@ export const validateFormFields = (fields: FormFields, type: string) => {
     }
 
 
-    if (key === 'comisionEmpresa1' || key === 'comisionEmpresa2') {
+    if (key === 'comisionEmpresa1' || key === 'comisionEmpresa2' || key === 'porcentaje_neto') {
       noComisiones = false;
     }
   }
 
-  console.log(noComisiones);
   if (type === 'asesor') {
     noComisiones && errores.push('noComisiones')
   }

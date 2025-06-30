@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Home from './Components/Home/Home';
 import Administration from './Components/Administration/Administration';
@@ -15,23 +15,26 @@ import { useContext, useEffect } from "react";
 import getAllAsesores from "./DbFunctions/getAllAsesores";
 import getTeams from "./DbFunctions/getTeams";
 import getAllClientes from "./DbFunctions/getAllClientes";
+import getAllSagencias from "./DbFunctions/getAllSagencias";
 
 
 const ContextWrapper = ({ children }: { children: JSX.Element }) => {
-  const { setUserData, setLoaderOn, setAllAsesores, setAllTeams, setAllClientes, setDataFetched, dataFetched } = useContext(UserContext);
+  const { setUserData, setLoaderOn, setAllAsesores, setAllTeams, setAllClientes, setDataFetched, dataFetched, setAllSagencias } = useContext(UserContext);
 
   const handleGetData = async () => {
     if (!dataFetched) {
       setLoaderOn(true);
       await getAllAsesores(setAllAsesores)
       await getTeams(setAllTeams)
+      const sagencias = await getAllSagencias();
+      setAllSagencias(sagencias)
       const clientes = await getAllClientes()
       setAllClientes(clientes)
       setDataFetched(true)
       setLoaderOn(false)
     }
   }
-  
+
   useEffect(() => {
     handleGetData()
   }, [])
@@ -98,7 +101,7 @@ function App() {
       ),
     },
     {
-      path: 'periodos/:empresa/:periodo/:fechaId/:tipo_de_archivo',
+      path: 'periodos/:empresa/:periodo/:fechaId/:tipo_de_archivo/:moneda',
       element: (
         <ContextWrapper>
           <Periodo />
@@ -106,7 +109,7 @@ function App() {
       ),
     },
     {
-      path: 'liquidaciones/:empresa/:periodoId/:productorId/:rol',
+      path: 'liquidaciones/:empresa/:periodoId/:productorId/:rol/:empresaName',
       element: (
         <ContextWrapper>
           <Liquidacion />

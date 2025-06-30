@@ -15,6 +15,8 @@ import DetalleAsesor from "./Crear/Asesor/DetalleAsesor";
 import DetalleCliente from "./Crear/Cliente/DetalleCliente";
 import DetalleEquipo from "./DetalleEquipo";
 import postExcelClients from "../../DbFunctions/postExcelClients";
+import getAllSagencias from "../../DbFunctions/getAllSagencias";
+import TableSubAgencias from "../Tables/TableSubAgencias";
 
 const AdminUsers = () => {
 
@@ -25,14 +27,17 @@ const AdminUsers = () => {
     const [detalleEquipo, setDetalleEquipo] = useState(null)
     const [fileSelected, setFileSelected] = useState<any>(null)
 
-    const { adminUsersState, setAdminUsersState, setAllAsesores, setLoaderOn, setAllTeams, setAllClientes, userData, setEdicion } = useContext(UserContext)
+    const { adminUsersState, setAdminUsersState, setAllAsesores, setLoaderOn, setAllTeams, setAllClientes, userData, setEdicion, setAllSagencias } = useContext(UserContext)
 
     const handleGetData = async () => {
         setLoaderOn(true);
         await getAllAsesores(setAllAsesores)
         await getTeams(setAllTeams)
+        const sagencias = await getAllSagencias()
+        setAllSagencias(sagencias);
         const clientes = await getAllClientes()
         setAllClientes(clientes)
+        
         setLoaderOn(false)
     }
 
@@ -56,14 +61,14 @@ const AdminUsers = () => {
     }
 
     useEffect(() => {
-        let newPath = adminUsersState.state === "Asesor" ?
-            "asesores" : adminUsersState.state === "Equipo" ? "equipos" : "clientes"
+        let newPath = adminUsersState.state === "Cliente" ?
+            "clientes" : "asesores"
         setCreatePath(newPath)
     }, [adminUsersState])
 
     useEffect(() => {
         setAdminUsersState({
-            state: "Asesor",
+            state: "Usuario",
             compañía: "none"
         })
     }, [])
@@ -80,11 +85,19 @@ const AdminUsers = () => {
                 <div className="btnsContainer marginYBtn">
                     <button
                         onClick={() => setAdminUsersState({
-                            state: "Asesor",
+                            state: "Usuario",
                             compañía: "none"
                         })}
-                        className={`btn xl btnWhite marginXBtn ${adminUsersState.state === "Asesor" && "active"}`}>
-                        Asesores
+                        className={`btn xl btnWhite marginXBtn ${adminUsersState.state === "Usuario" && "active"}`}>
+                        Usuarios
+                    </button>
+                    <button
+                        onClick={() => setAdminUsersState({
+                            state: "Sagencia",
+                            compañía: "none"
+                        })}
+                        className={`btn xl btnWhite marginXBtn ${adminUsersState.state === "Sagencia" && "active"}`}>
+                        Sub Agencias
                     </button>
                     <button
                         onClick={() => setAdminUsersState({
@@ -111,7 +124,7 @@ const AdminUsers = () => {
                 <div className="flexStart">
                     <Link to={`${createPath}/crear`} className="btnNoBg">
                         <FontAwesomeIcon icon={faPlus} className='plus' />
-                        Crear nuevo {adminUsersState.state}
+                        Crear {adminUsersState.state === 'Sagencia' ? 'Sub Agencia' : adminUsersState.state}
                     </Link>
                 </div>
             }
@@ -143,10 +156,12 @@ const AdminUsers = () => {
                 adminUsersState.state === "Equipo" ?
                     <TableEquipos setDetalleEquipo={setDetalleEquipo} setIsDetalleOn={setIsDetalleOn} />
                     :
-                    adminUsersState.state === "Asesor" ?
+                    adminUsersState.state === "Usuario" ?
                         <TableAsesores setDetalleAsesor={setDetalleAsesor} setIsDetalleOn={setIsDetalleOn} refreshData={handleGetData} />
-                        :
-                        <TableClientes setDetalleCliente={setDetalleCliente} setIsDetalleOn={setIsDetalleOn} refreshData={handleGetData} />
+                        : adminUsersState.state === 'Cliente' ?
+                            <TableClientes setDetalleCliente={setDetalleCliente} setIsDetalleOn={setIsDetalleOn} refreshData={handleGetData} />
+                            :
+                            <TableSubAgencias refreshData={handleGetData} />
             }
 
             {

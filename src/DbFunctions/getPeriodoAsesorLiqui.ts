@@ -14,6 +14,8 @@ const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role
             throw new Error('Error en la solicitud: ' + errorData.message);
         }
         const data = await response.json();
+        console.log(data, 'DATA SIN CAMBIOS');
+
 
         // let allData = [];
 
@@ -25,25 +27,25 @@ const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role
         //     allData = [...data.arancelesClientes, ...data.arancelesComisiones]
         // }
 
-        const allData = [...data.pershingsClientes, ...data.pershingsComisiones]
+        const allData = [...data.arancelesClientes, ...data.arancelesComisiones]
 
-        console.log(allData , 'DATA CON CAMBIOS');
-        
+        console.log(allData, 'DATA CON CAMBIOS');
 
 
-        const total = allData
-            .filter((item: any) => item !== null)
-            .reduce((acc: any, curr: any) => {
-                return acc + Number(curr.total);
-            }, 0);
 
-        asesorACargo = allData.filter((data)=> data.isComision )
+        // const total = allData
+        //     .filter((item: any) => item !== null)
+        //     .reduce((acc: any, curr: any) => {
+        //         return acc + Number(curr.total);
+        //     }, 0);
 
-        beneficiario = allData.filter((data)=> !data.isComision )
+        asesorACargo = data.arancelesComisiones;
+
+        beneficiario = data.arancelesClientes;
 
 
         console.log('Respuesta del servidor datitaaaa:', allData);
-        return { asesorACargo, beneficiario, total };
+        return { asesorACargo, beneficiario };
     } catch (error) {
         console.error('Error en la solicitud:', error);
         return { asesorACargo, beneficiario, total: 0 }

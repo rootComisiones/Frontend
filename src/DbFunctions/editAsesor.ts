@@ -1,6 +1,6 @@
 const editAsesor = async (asesor: any, asesorId: any, rol: any) => {
 
-    const rolUrl = rol === 'coordinador' ? 'coordinadores' : rol === 'asesor' ? 'asesor' : 'manager'
+    const rolUrl =rol === 'sagencia' ? 'sagencia' : rol === 'coordinador' ? 'coordinadores' : rol === 'asesor' ? 'asesor' : 'manager'
 
     let url = `${process.env.REACT_APP_BASE_URL}/${rolUrl}/update/${asesorId}`;    
 

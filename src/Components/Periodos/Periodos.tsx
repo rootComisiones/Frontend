@@ -18,8 +18,8 @@ const Periodos = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [newPeriod, setNewPeriod] = useState(false);
 
-    const grupoIEB = { name: "grupoieb", id: 1 }
-    const inviu = { name: "inviu", id: 2 }
+    const grupoIEB = { name: "grupoieb", id: 2 }
+    const inviu = { name: "inviu", id: 1 }
 
     const handleCloseModal = () => {
         setModalVisible(false);

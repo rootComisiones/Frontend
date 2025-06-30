@@ -1,5 +1,5 @@
 import React, { FC, createContext, useState } from "react";
-import { AsesorData, ClientData, Equipo, UserContextType } from "../Types/Types";
+import { AsesorData, ClientData, Equipo, Sagencia, UserContextType } from "../Types/Types";
 
 
 interface UserProviderProps {
@@ -10,16 +10,16 @@ export const UserContext = createContext<UserContextType>({} as UserContextType)
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [adminUsersState, setAdminUsersState] = useState({
-    state: "Asesor",
+    state: "Usuario",
     compañía: "none"
   });
   const [periodState, setPeriodState] = useState({
     name: "grupoieb",
-    id: 1
+    id: 2
   });
   const [liquidationState, setLiquidationState] = useState({
     name: "grupoieb",
-    id: 1
+    id: 2
   });
   const [adminState, setAdminState] = useState('Usuarios');
   const [adminComState, setAdminComState] = useState({
@@ -27,6 +27,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     equipo: "",
     vendedor: "manager",
   })
+
+  const [allSagencias, setAllSagencias] = useState<Sagencia[]>([])
 
   const [allTeams, setAllTeams] = useState<Equipo[]>([])
   const [allClientes, setAllClientes] = useState<ClientData[]>([])
@@ -40,11 +42,11 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const companies = [
     {
       name: "Grupo IEB",
-      id: 1
+      id: 2
     },
     {
       name: "Inviu",
-      id: 2
+      id: 1
     }
   ];
 
@@ -88,6 +90,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     setAdminUsersState,
     adminComState,
     setAdminComState,
+    setAllSagencias,
+    allSagencias,
     setAllTeams,
     allTeams,
     handleLoginOff,

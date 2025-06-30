@@ -8,10 +8,11 @@ import getTeams from '../../DbFunctions/getTeams';
 import getAllClientes from '../../DbFunctions/getAllClientes';
 import { deletePeriodo } from '../../DbFunctions/deletePeriodo';
 import getAllPeriodos from '../../DbFunctions/getAllPeriodos';
+import getAllSagencias from '../../DbFunctions/getAllSagencias';
 
 const Popup = () => {
     
-    const { popupData, setPopupData, setLoaderOn, setUserData, setAllAsesores, setAllClientes, setAllTeams, periodState, setPeriodos } = useContext(UserContext);
+    const { popupData, setPopupData, setLoaderOn, setUserData, setAllAsesores, setAllClientes, setAllTeams, periodState, setPeriodos, setAllSagencias} = useContext(UserContext);
 
     const handleGetClientes = async () => {
         setLoaderOn(true);
@@ -24,6 +25,13 @@ const Popup = () => {
         setLoaderOn(true);
         await getAllAsesores(setAllAsesores)
         await getTeams(setAllTeams)
+        setLoaderOn(false)
+    }
+
+    const handleGetSagencias = async() =>{
+        setLoaderOn(true)
+        const sagencias = await getAllSagencias();
+        setAllSagencias(sagencias)
         setLoaderOn(false)
     }
 
@@ -56,6 +64,9 @@ const Popup = () => {
             await deletePeriodo(popupData.asesorId)
             await handleGetPeriodos()
             handleGetAsesores()
+        }else if(action === 'sagencia'){
+            await deleteUser(popupData.asesorId, action)
+            handleGetSagencias()
         }else{
             await deleteUser(popupData.asesorId, action)
             handleGetAsesores()
