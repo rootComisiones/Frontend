@@ -128,7 +128,7 @@ const AdminUsers = () => {
                     </Link>
                 </div>
             }
-            {
+            {/* {
                 adminUsersState.state === "Cliente" &&
                 <div className="flexStart">
                     <label htmlFor="fileInput" className="btnNoBg flexStart">
@@ -144,7 +144,7 @@ const AdminUsers = () => {
                     />
                 </div>
 
-            }
+            } */}
             {
                 fileSelected !== null && adminUsersState.state === 'Cliente' &&
                 <>
