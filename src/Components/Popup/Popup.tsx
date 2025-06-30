@@ -9,35 +9,43 @@ import getAllClientes from '../../DbFunctions/getAllClientes';
 import { deletePeriodo } from '../../DbFunctions/deletePeriodo';
 import getAllPeriodos from '../../DbFunctions/getAllPeriodos';
 import getAllSagencias from '../../DbFunctions/getAllSagencias';
+import { useNotification } from '../../Context/NotificationContext';
+
 
 const Popup = () => {
     
     const { popupData, setPopupData, setLoaderOn, setUserData, setAllAsesores, setAllClientes, setAllTeams, periodState, setPeriodos, setAllSagencias} = useContext(UserContext);
 
+    const { showNotification } = useNotification();
+
     const handleGetClientes = async () => {
         setLoaderOn(true);
-        const clientes = await getAllClientes()
+        const clientes = await getAllClientes(showNotification);
+        if (!clientes) {
+            setLoaderOn(false)
+            return
+        }
         setAllClientes(clientes)
         setLoaderOn(false)
     }
 
     const handleGetAsesores = async() => {
         setLoaderOn(true);
-        await getAllAsesores(setAllAsesores)
-        await getTeams(setAllTeams)
+        await getAllAsesores(setAllAsesores, showNotification);
+        await getTeams(setAllTeams, showNotification);
         setLoaderOn(false)
     }
 
     const handleGetSagencias = async() =>{
         setLoaderOn(true)
-        const sagencias = await getAllSagencias();
+        const sagencias = await getAllSagencias(showNotification);
         setAllSagencias(sagencias)
         setLoaderOn(false)
     }
 
     const handleGetPeriodos = async () => {
         setLoaderOn(true)
-        const allPeriodos = await getAllPeriodos(periodState.id)
+        const allPeriodos = await getAllPeriodos(periodState.id, showNotification)
         setPeriodos(allPeriodos)
         setLoaderOn(false)
     }
@@ -58,17 +66,17 @@ const Popup = () => {
         if (action === 'logout') {
             await handleLogout(setUserData)
         } else if (action === 'cliente') {
-            await deleteUser(popupData.asesorId, action)
+            await deleteUser(popupData.asesorId, action, showNotification)
             handleGetClientes()
         } else if(action === 'periodo'){
-            await deletePeriodo(popupData.asesorId)
+            await deletePeriodo(popupData.asesorId, showNotification)
             await handleGetPeriodos()
             handleGetAsesores()
         }else if(action === 'sagencia'){
-            await deleteUser(popupData.asesorId, action)
+            await deleteUser(popupData.asesorId, action, showNotification)
             handleGetSagencias()
         }else{
-            await deleteUser(popupData.asesorId, action)
+            await deleteUser(popupData.asesorId, action, showNotification)
             handleGetAsesores()
         }
         setLoaderOn(false)

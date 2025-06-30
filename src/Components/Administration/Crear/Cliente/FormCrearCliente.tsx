@@ -1,24 +1,25 @@
 import { useContext, useEffect, useState } from "react";
 import FormCrear from "../FormCrear";
 import { UserContext } from "../../../../Context/UserContext";
-import getAllAsesores from "../../../../DbFunctions/getAllAsesores";
 import { validateFormFields } from "../../../../Utils/handleValidateEmptyForm";
 import postClient from "../../../../DbFunctions/postClient";
 import editCliente from "../../../../DbFunctions/editCliente";
 import { useNavigate } from "react-router-dom";
 import getAllClientes from "../../../../DbFunctions/getAllClientes";
+import { useNotification } from "../../../../Context/NotificationContext";
 
 const FormCrearCliente = () => {
 
     const [numeroCompanias, setNumeroCompanias] = useState(1);
     const [rolAsesor, setRolAsesor] = useState('');
     const { allAsesores, edicion, setLoaderOn, setAllClientes } = useContext(UserContext);
+    const { showNotification } = useNotification();
 
     const navigate = useNavigate();
 
     const handleGetData = async () => {
         setLoaderOn(true);
-        const clientes = await getAllClientes()
+        const clientes = await getAllClientes(showNotification)
         setAllClientes(clientes)
         setLoaderOn(false)
     }
@@ -147,20 +148,18 @@ const FormCrearCliente = () => {
             console.error('Faltan completar los siguientes campos: ' + errores.toString());
         } else {
             if (edicion !== null) {
-                const veredicto = await editCliente(formObject, edicion.id)
+                const veredicto = await editCliente(formObject, edicion.id, showNotification)
                 if (veredicto) {
                     handleGetData()
                     navigate('/administracion')
                 } else {
-                    alert('Hubo un error al editar el cliente!')
+                    showNotification('Hubo un error al editar el cliente!')
                 }
             } else {
-                const veredicto = await postClient(formObject);
+                const veredicto = await postClient(formObject, showNotification);
                 if (veredicto) {
                     handleGetData()
                     navigate('/administracion')
-                } else {
-                    alert('Hubo un error al crear el cliente!')
                 }
             }
         }

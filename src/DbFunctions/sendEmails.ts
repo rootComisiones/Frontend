@@ -1,4 +1,4 @@
-const sendEmails = async (data: any) => {
+const sendEmails = async (data: any, showNotification: (msg: string) => void) => {
 
     let newUrl = `${process.env.REACT_APP_BASE_URL}/liquidation/send-email-mony`;    
 
@@ -20,8 +20,9 @@ const sendEmails = async (data: any) => {
         const data = await response.json();
         console.log('Respuesta del servidor:', data);
         return true
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
         return false
     }
 }

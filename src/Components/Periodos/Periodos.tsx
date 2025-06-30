@@ -11,9 +11,11 @@ import dotLogo from '../../Assets/iconoLogoBlanco.png';
 
 import Page404 from "../Page404/Page404";
 import getAllPeriodos from "../../DbFunctions/getAllPeriodos";
+import { useNotification } from "../../Context/NotificationContext";
 
 const Periodos = () => {
     const { periodState, setPeriodState, userData, setEdicion, setLoaderOn, periodos, setPeriodos } = useContext(UserContext);
+    const { showNotification } = useNotification();
 
     const [modalVisible, setModalVisible] = useState(false);
     const [newPeriod, setNewPeriod] = useState(false);
@@ -31,7 +33,7 @@ const Periodos = () => {
 
     const handleGetPeriodos = async () => {
         setLoaderOn(true)
-        const allPeriodos = await getAllPeriodos(periodState.id)
+        const allPeriodos = await getAllPeriodos(periodState.id, showNotification)
         setPeriodos(allPeriodos)
         setLoaderOn(false)
     }

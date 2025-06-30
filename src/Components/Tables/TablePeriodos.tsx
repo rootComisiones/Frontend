@@ -1,6 +1,5 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext } from 'react';
 import '../../Styles/Reutilized.css'
-import getAllPeriodos from '../../DbFunctions/getAllPeriodos';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
 

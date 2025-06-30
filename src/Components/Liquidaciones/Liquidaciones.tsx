@@ -14,6 +14,7 @@ import sendEmails from "../../DbFunctions/sendEmails";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { useNotification } from "../../Context/NotificationContext";
 
 interface Periodo {
     id: number,
@@ -23,6 +24,7 @@ interface Periodo {
 
 const Liquidaciones = () => {
     const { liquidationState, setLiquidationState, setLoaderOn, userData, setEdicion } = useContext(UserContext);
+    const { showNotification } = useNotification();
     const [periodos, setPeriodos] = useState<Periodo[]>([])
     const [periodo_id, setPeriodo_id] = useState(0);
     const [liquiData, setLiquiData] = useState([])
@@ -33,7 +35,7 @@ const Liquidaciones = () => {
 
     const handleGetPeriodos = async () => {
         setLoaderOn(true)
-        const allPeriodos = await getAllPeriodos(liquidationState.id)
+        const allPeriodos = await getAllPeriodos(liquidationState.id, showNotification);
         setPeriodos(allPeriodos)
         setLoaderOn(false)
     }
@@ -46,7 +48,7 @@ const Liquidaciones = () => {
         setLoaderOn(true);
 
         if (userData.role === 'root') {
-            const arrayLiquidaciones = await getAllLiquidaciones(Number(id));
+            const arrayLiquidaciones = await getAllLiquidaciones(Number(id), showNotification);
             if (arrayLiquidaciones[0]) {
                 const date = periodos?.length && arrayLiquidaciones[0]?.periodos?.fecha_creacion.slice(0, 7);
                 setSelectedDateValue(date);
@@ -56,7 +58,7 @@ const Liquidaciones = () => {
             }
         }
         if (userData.role !== 'root' && userData.role !== "") {
-            const allLiquidations = await getMyLiquidation(Number(id), userData.role, userData.id);
+            const allLiquidations = await getMyLiquidation(Number(id), userData.role, userData.id, showNotification);
             setLiquiData(allLiquidations || []); // <-- Asegura array vacío si no hay datos
         }
         setLoaderOn(false);
@@ -64,7 +66,7 @@ const Liquidaciones = () => {
 
     const sendNotificaciones = async () => {
         const emails = await getUsersEmails(liquiData, selectedDateValue)
-        sendEmails(emails)
+        sendEmails(emails, showNotification)
     }
 
     useEffect(() => {

@@ -165,7 +165,7 @@
     margin: 5px 20px;
 }
 
-.inputContainer p{
+.inputContainer p {
     color: rgb(142, 14, 14);
     font-size: 12px;
     align-self: flex-start;
@@ -278,14 +278,14 @@
     align-self: flex-start;
 }
 
-.ordinaryText{
+.ordinaryText {
     color: #ddfaeb;
     font-size: 14px;
     font-weight: 300;
     align-self: flex-start;
 }
 
-.ordinaryText.marginY{
+.ordinaryText.marginY {
     margin: 10px 0 40px 0;
 }
 
@@ -446,7 +446,7 @@
     background-color: #051a13;
 }
 
-.table.sm{
+.table.sm {
     width: 50%;
 }
 
@@ -474,28 +474,28 @@
     font-size: 16px;
 }
 
-.table th{
+.table th {
     text-align: center;
 }
 
-.tdContainer{
+.tdContainer {
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-around !important;
     align-items: center !important;
 }
 
-.tdContainer span{
+.tdContainer span {
     cursor: pointer;
     color: #29ce97;
 }
 
-.tdContainer span a{
+.tdContainer span a {
     color: #29ce97;
     text-decoration: none;
 }
 
-.tdImportant{
+.tdImportant {
     background-color: #1a815e !important;
     color: #000 !important;
     font-weight: 600;
@@ -515,8 +515,8 @@ tbody tr:nth-child(even) {
 
 .tdContainer p {
     margin: 5px 10px;
-    cursor: pointer;   
-    height: 100%;                                                                                                                                                                             
+    cursor: pointer;
+    height: 100%;
 }
 
 /* OTHERS */
@@ -537,6 +537,39 @@ tbody tr:nth-child(even) {
     width: 100%;
     height: 30%;
     z-index: -1;
+}
+
+.notification-tooltip {
+    position: fixed;
+    top: 85px;
+    right: 70px;
+    left: 70px;
+    background: #e74c3c;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 6px;
+    z-index: 9999;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s;
+}
+
+.notification-tooltip.success {
+    background: #27ae60;
+}
+
+.notification-tooltip.info {
+    background: #2980b9;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes btnsAnimation {
@@ -562,33 +595,33 @@ tbody tr:nth-child(even) {
         font-size: 38px;
     }
 
-    .btn{
+    .btn {
         font-size: 14px;
     }
 }
 
-@media (max-width: 768px){
-    .container{
+@media (max-width: 768px) {
+    .container {
         padding: 130px 2% 90px 2%;
     }
 
-    .inputContainer{
+    .inputContainer {
         width: 100%;
     }
 
-    .input{
+    .input {
         width: 100%;
     }
 
-    .btnsContainer{
+    .btnsContainer {
         flex-wrap: wrap;
     }
 
-    .formBtnContainer{
+    .formBtnContainer {
         bottom: -40px;
     }
 
-    .btn{
+    .btn {
         margin-bottom: 5px;
     }
 }

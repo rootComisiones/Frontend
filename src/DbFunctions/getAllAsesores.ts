@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { AsesorData } from "../Types/Types";
 
-const getAllAsesores = async (setAllAsesores: Dispatch<SetStateAction<AsesorData[]>>) => {
+const getAllAsesores = async (setAllAsesores: Dispatch<SetStateAction<AsesorData[]>>, showNotification: (msg: string) => void) => {
 
     let url = `${process.env.REACT_APP_BASE_URL}/clients/possible-asesor`;
 
@@ -9,7 +9,7 @@ const getAllAsesores = async (setAllAsesores: Dispatch<SetStateAction<AsesorData
         const response = await fetch(url);
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error('Error en la solicitud: ' + errorData.message);
+            showNotification('Error en la solicitud: ' + errorData.message);
         }
         const data = await response.json();
         let cleanData = [...data.asesores, ...data.coordinadores, ...data.managers];
@@ -26,7 +26,8 @@ const getAllAsesores = async (setAllAsesores: Dispatch<SetStateAction<AsesorData
 
         console.log('Respuesta del servidor:', finalData);
         setAllAsesores(finalData)
-    } catch (error) {
+    } catch (error: any) {
+        showNotification(error.message || "Ocurrió un error inesperado");
         console.error('Error en la solicitud:', error);
         return []
     }

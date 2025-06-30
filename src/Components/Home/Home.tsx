@@ -1,8 +1,6 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import './Home.css';
 import '../../Styles/Reutilized.css'
-import { UserContext } from '../../Context/UserContext';
-import getTeams from '../../DbFunctions/getTeams';
 import Background from '../Background/Background';
 import dotImage from '../../Assets/iconoLogoBlanco.png'
 

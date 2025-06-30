@@ -1,4 +1,4 @@
-const editCliente = async (cliente: any, asesorId: any) => {
+const editCliente = async (cliente: any, asesorId: any, showNotification: (msg: string) => void) => {
 
     let url = `${process.env.REACT_APP_BASE_URL}/clients/update/${asesorId}`;
 
@@ -12,14 +12,15 @@ const editCliente = async (cliente: any, asesorId: any) => {
         });
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error('Error en la solicitud: ' + errorData.message);
+            showNotification('Error en la solicitud: ' + errorData.message);
         }
         const data = await response.json();
 
         console.log('Respuesta del servidor:', data);
         return true
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
         return false
     }
 }

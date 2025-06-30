@@ -17,6 +17,7 @@ import DetalleEquipo from "./DetalleEquipo";
 import postExcelClients from "../../DbFunctions/postExcelClients";
 import getAllSagencias from "../../DbFunctions/getAllSagencias";
 import TableSubAgencias from "../Tables/TableSubAgencias";
+import { useNotification } from "../../Context/NotificationContext";
 
 const AdminUsers = () => {
 
@@ -28,14 +29,15 @@ const AdminUsers = () => {
     const [fileSelected, setFileSelected] = useState<any>(null)
 
     const { adminUsersState, setAdminUsersState, setAllAsesores, setLoaderOn, setAllTeams, setAllClientes, userData, setEdicion, setAllSagencias } = useContext(UserContext)
+    const { showNotification } = useNotification();
 
     const handleGetData = async () => {
         setLoaderOn(true);
-        await getAllAsesores(setAllAsesores)
-        await getTeams(setAllTeams)
-        const sagencias = await getAllSagencias()
+        await getAllAsesores(setAllAsesores, showNotification)
+        await getTeams(setAllTeams, showNotification)
+        const sagencias = await getAllSagencias(showNotification);
         setAllSagencias(sagencias);
-        const clientes = await getAllClientes()
+        const clientes = await getAllClientes(showNotification);
         setAllClientes(clientes)
         
         setLoaderOn(false)
@@ -54,8 +56,8 @@ const AdminUsers = () => {
 
     const handleSubmitFile = async () => {
         setLoaderOn(true)
-        await postExcelClients(fileSelected)
-        const clientes = await getAllClientes()
+        await postExcelClients(fileSelected, showNotification)
+        const clientes = await getAllClientes(showNotification)
         setAllClientes(clientes)
         setLoaderOn(false)
     }

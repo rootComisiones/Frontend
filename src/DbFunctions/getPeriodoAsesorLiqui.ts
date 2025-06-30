@@ -1,4 +1,4 @@
-const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role: string, selectedFile: any) => {
+const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role: string, selectedFile: any, showNotification: (msg: string) => void) => {
 
     let url = `${process.env.REACT_APP_BASE_URL}/liquidation/${selectedFile}/${periodo_id}/${asesor_id}/${role}`;
 
@@ -11,7 +11,8 @@ const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role
         const response = await fetch(url);
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error('Error en la solicitud: ' + errorData.message);
+            showNotification('Error en la solicitud: ' + errorData.message);
+            return { asesorACargo, beneficiario, total: 0 };
         }
         const data = await response.json();
         console.log(data, 'DATA SIN CAMBIOS');
@@ -46,8 +47,9 @@ const getPeriodoAsesorLiqui = async (periodo_id: string, asesor_id: string, role
 
         console.log('Respuesta del servidor datitaaaa:', allData);
         return { asesorACargo, beneficiario };
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
         return { asesorACargo, beneficiario, total: 0 }
     }
 }

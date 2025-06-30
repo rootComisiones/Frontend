@@ -1,6 +1,6 @@
 const url = process.env.REACT_APP_BASE_URL;
 
-const postPeriodo = async ( fecha: string, idCompania: number ) => {    
+const postPeriodo = async ( fecha: string, idCompania: number, showNotification: (msg: string) => void ) => {    
 
     console.log(fecha, idCompania);
 
@@ -19,12 +19,14 @@ const postPeriodo = async ( fecha: string, idCompania: number ) => {
         const response = await fetch(`${url}/period/create`, options);
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error('Error en la solicitud: ' + errorData.message);
+            showNotification('Error en la solicitud: ' + errorData.message);
+            return
         }
         const data = await response.json();
         console.log('Respuesta del servidor:', data);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
     }
 }
 

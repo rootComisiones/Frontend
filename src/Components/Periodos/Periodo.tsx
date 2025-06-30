@@ -9,11 +9,13 @@ import postAranceles from "../../DbFunctions/postAranceles";
 import { UserContext } from "../../Context/UserContext";
 import Page404 from "../Page404/Page404";
 import getPeriodoTable from "../../DbFunctions/getPeriodoTable";
+import { useNotification } from "../../Context/NotificationContext";
 
 const Periodo = () => {
 
     const [fileSelected, setFileSelected] = useState<any>(null)
     const { setLoaderOn, userData } = useContext(UserContext)
+    const { showNotification } = useNotification();
     const [tableData, setTableData] = useState(null)
     const [refresh, setRefresh] = useState(false)
 
@@ -42,14 +44,14 @@ const Periodo = () => {
         setLoaderOn(true)
         console.log(periodoData, fileSelected, 'LOCOOO');
 
-        await postAranceles(fileSelected, periodoData.newId, setFileSelected, moneda)
+        await postAranceles(fileSelected, periodoData.newId, setFileSelected, moneda, showNotification)
         setLoaderOn(false)
         setRefresh(prev => !prev)
     }
 
     const getTablePeriodoData = async () => {
         setLoaderOn(true)
-        const data = await getPeriodoTable(periodoId);
+        const data = await getPeriodoTable(periodoId, showNotification);
 
         if (data?.length) {
             setTableData(data[0]);

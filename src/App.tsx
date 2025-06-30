@@ -16,19 +16,21 @@ import getAllAsesores from "./DbFunctions/getAllAsesores";
 import getTeams from "./DbFunctions/getTeams";
 import getAllClientes from "./DbFunctions/getAllClientes";
 import getAllSagencias from "./DbFunctions/getAllSagencias";
+import { useNotification } from "./Context/NotificationContext";
 
 
 const ContextWrapper = ({ children }: { children: JSX.Element }) => {
   const { setUserData, setLoaderOn, setAllAsesores, setAllTeams, setAllClientes, setDataFetched, dataFetched, setAllSagencias } = useContext(UserContext);
+  const { showNotification } = useNotification();
 
   const handleGetData = async () => {
     if (!dataFetched) {
       setLoaderOn(true);
-      await getAllAsesores(setAllAsesores)
-      await getTeams(setAllTeams)
-      const sagencias = await getAllSagencias();
+      await getAllAsesores(setAllAsesores, showNotification)
+      await getTeams(setAllTeams, showNotification)
+      const sagencias = await getAllSagencias(showNotification );
       setAllSagencias(sagencias)
-      const clientes = await getAllClientes()
+      const clientes = await getAllClientes(showNotification)
       setAllClientes(clientes)
       setDataFetched(true)
       setLoaderOn(false)

@@ -4,17 +4,16 @@ import Background from "../Background/Background";
 import { UserContext } from "../../Context/UserContext";
 import getPeriodoAsesorLiqui from "../../DbFunctions/getPeriodoAsesorLiqui";
 import TableAranceles from "../Tables/TableAranceles";
-import TableProductores from "../Tables/TableProductores";
 import getResults from "../../DbFunctions/getResults";
 import Page404 from "../Page404/Page404";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowAltCircleDown } from "@fortawesome/free-solid-svg-icons";
+import { useNotification } from "../../Context/NotificationContext";
 
 const Liquidacion = () => {
 
     const { setLoaderOn, userData } = useContext(UserContext);
+    const { showNotification } = useNotification();
     const [selectedFile, setSelectedFile] = useState('aranceles');
     const [companyFiles, setCompanyFiles] = useState<any>(['aranceles']);
     const [liquiData, setLiquiData] = useState<any>([]);
@@ -64,14 +63,14 @@ const Liquidacion = () => {
         setLoaderOn(true)
         const empresa = selectedFile;
         console.log('prporporoppor', empresa);
-        const { asesorACargo, beneficiario, total } = await getPeriodoAsesorLiqui(periodo_id, productor_id, role, empresa)
+        const { asesorACargo, beneficiario, total } = await getPeriodoAsesorLiqui(periodo_id, productor_id, role, empresa, showNotification);
         setDataAsesorACargo(asesorACargo)
         console.log('ASESORESACARGO', asesorACargo);
         setLiquiData(beneficiario)
 
         setTotalLiquiData(total)
 
-        const results = await getResults(periodo_id, productor_id, role)
+        const results = await getResults(periodo_id, productor_id, role, showNotification);
         setResultsData(results)
         setLoaderOn(false)
     }

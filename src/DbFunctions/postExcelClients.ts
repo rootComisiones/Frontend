@@ -1,6 +1,6 @@
 const url = process.env.REACT_APP_BASE_URL;
 
-const postExcelClients = async ( file: File ) => {    
+const postExcelClients = async ( file: File, showNotification: (msg: string) => void ) => {    
 
     const formData = new FormData();
     
@@ -20,8 +20,9 @@ const postExcelClients = async ( file: File ) => {
             const errorData = await response.json();
             console.error('Error al enviar el archivo', errorData);
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
     }
 }
 

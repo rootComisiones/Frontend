@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import getAllAsesores from "../../../../DbFunctions/getAllAsesores";
 import getTeams from "../../../../DbFunctions/getTeams";
 import getAllSagencias from "../../../../DbFunctions/getAllSagencias";
+import { useNotification } from "../../../../Context/NotificationContext";
 
 interface Company {
     name: String;
@@ -24,6 +25,8 @@ const FormCrearAsesor = () => {
         manager_id: 0,
     });
 
+    const { showNotification } = useNotification();
+
     const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([]);
 
     const [coordinadores, setCoordinadores] = useState<Coordinador[]>([]);
@@ -32,9 +35,9 @@ const FormCrearAsesor = () => {
 
     const handleGetData = async () => {
         setLoaderOn(true);
-        await getAllAsesores(setAllAsesores)
-        await getTeams(setAllTeams)
-        const sagencias = await getAllSagencias()
+        await getAllAsesores(setAllAsesores, showNotification)
+        await getTeams(setAllTeams, showNotification)
+        const sagencias = await getAllSagencias(showNotification)
         setAllSagencias(sagencias)
         setLoaderOn(false)
     }
@@ -107,7 +110,7 @@ const FormCrearAsesor = () => {
 
     const handleGetCoordinadores = async (manager_id: string) => {
         setLoaderOn(true);
-        const equipo = await getCoordinadores(Number(manager_id));
+        const equipo = await getCoordinadores(Number(manager_id), showNotification);
         console.log(equipo, 'equipitooo');
         equipo !== null ? setCoordinadores(equipo.coordinadores) : setCoordinadores([]);
         setLoaderOn(false);
@@ -169,24 +172,20 @@ const FormCrearAsesor = () => {
                         formAsesor.comisionEmpresa2 = null;
                     }
 
-                    veredicto = await editAsesor(formAsesor, edicion.id, edicion.rol)
+                    veredicto = await editAsesor(formAsesor, edicion.id, edicion.rol, showNotification)
                 } else {
-                    veredicto = await editAsesor(formObject, edicion.id, 'sagencia')
+                    veredicto = await editAsesor(formObject, edicion.id, 'sagencia', showNotification)
                 }
 
                 if (veredicto) {
                     handleGetData()
                     navigate('/administracion')
-                } else {
-                    alert('Hubo un error al editar el asesor!')
                 }
             } else {
-                const veredicto = await postAsesor(formObject, formObject.role);
+                const veredicto = await postAsesor(formObject, formObject.role, showNotification);
                 if (veredicto) {
                     handleGetData()
                     navigate('/administracion')
-                } else {
-                    alert('Hubo un error al crear el asesor!')
                 }
             }
         }

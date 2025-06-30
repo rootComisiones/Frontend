@@ -5,7 +5,7 @@ const urlCoordinador = `${process.env.REACT_APP_BASE_URL}/coordinadores/create`;
 const urlManager = `${process.env.REACT_APP_BASE_URL}/manager/register`;
 const urlSagencia =  `${process.env.REACT_APP_BASE_URL}/sagencia/register`;
 
-const postAsesor = async (newAsesor: AsesorData, type: string) => {
+const postAsesor = async (newAsesor: AsesorData, type: string, showNotification: (msg: string) => void) => {
 
     let newUrl = "";
 
@@ -32,8 +32,9 @@ const postAsesor = async (newAsesor: AsesorData, type: string) => {
         const data = await response.json();
         console.log('Respuesta del servidor:', data);
         return true
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
         return false
     }
 }

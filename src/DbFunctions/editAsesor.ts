@@ -1,8 +1,8 @@
-const editAsesor = async (asesor: any, asesorId: any, rol: any) => {
+const editAsesor = async (asesor: any, asesorId: any, rol: any, showNotification: (msg: string) => void) => {
 
-    const rolUrl =rol === 'sagencia' ? 'sagencia' : rol === 'coordinador' ? 'coordinadores' : rol === 'asesor' ? 'asesor' : 'manager'
+    const rolUrl = rol === 'sagencia' ? 'sagencia' : rol === 'coordinador' ? 'coordinadores' : rol === 'asesor' ? 'asesor' : 'manager'
 
-    let url = `${process.env.REACT_APP_BASE_URL}/${rolUrl}/update/${asesorId}`;    
+    let url = `${process.env.REACT_APP_BASE_URL}/${rolUrl}/update/${asesorId}`;
 
     try {
         const response = await fetch(url, {
@@ -20,8 +20,9 @@ const editAsesor = async (asesor: any, asesorId: any, rol: any) => {
         const data = await response.json();
         console.log('Respuesta del servidor:', data);
         return true
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
         return false
     }
 }

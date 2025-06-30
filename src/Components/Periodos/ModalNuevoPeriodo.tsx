@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FC, useContext, useState } from "react";
 import postPeriodo from "../../DbFunctions/postPeriodo";
 import { UserContext } from "../../Context/UserContext";
+import { useNotification } from "../../Context/NotificationContext";
 
 interface ModalNuevoPeriodoProps {
     onVisible: boolean;
@@ -19,6 +20,7 @@ const ModalNuevoPeriodo:FC<ModalNuevoPeriodoProps> = ({ onVisible, closeModal, c
 
     const [date, setDate] = useState("");
     const { setLoaderOn } = useContext(UserContext);
+    const { showNotification } = useNotification();
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDate(event.target.value);
@@ -27,7 +29,7 @@ const ModalNuevoPeriodo:FC<ModalNuevoPeriodoProps> = ({ onVisible, closeModal, c
     const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         setLoaderOn(true)
-        await postPeriodo(date, companyState.id)
+        await postPeriodo(date, companyState.id, showNotification)
         setNewPeriod(!newPeriod)
         setLoaderOn(false)
         closeModal()

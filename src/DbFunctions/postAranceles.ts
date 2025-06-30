@@ -1,6 +1,6 @@
 const url = process.env.REACT_APP_BASE_URL;
 
-const postAranceles = async (file: File, idPeriodo: string, setFileSelected: any, moneda: string) => {
+const postAranceles = async (file: File, idPeriodo: string, setFileSelected: any, moneda: string, showNotification: (msg: string) => void) => {
 
     const formData = new FormData();
 
@@ -34,15 +34,15 @@ const postAranceles = async (file: File, idPeriodo: string, setFileSelected: any
 
         if (response.ok) {
             const data = await response.json();
-            alert('Archivo importado correctamente.');
+            showNotification('Archivo importado correctamente.');
             setFileSelected(null)
         } else {
             const errorData = await response.json();
-            alert(`Error al enviar el archivo o el ID: ${errorData}`);
+            showNotification(`Error al enviar el archivo o el ID: ${errorData}`);
             setFileSelected(null)
         }
-    } catch (error) {
-        alert(`Error en la solicitud:' ${error}`);
+    } catch (error: any) {
+        showNotification(`Error en la solicitud: ${error.message}`);
     }
 }
 

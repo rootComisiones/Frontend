@@ -3,17 +3,19 @@ import { UserContext } from '../../Context/UserContext'
 import getCoordinadores from '../../DbFunctions/getCoordinadores';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useNotification } from '../../Context/NotificationContext';
 
 const DetalleEquipo = ({ detalleManager, setIsDetalleOn }: { detalleManager: any, setIsDetalleOn: any }) => {
 
     const { setLoaderOn } = useContext(UserContext);
+    const { showNotification } = useNotification();
     const [equipo, setEquipo] = useState<any>(null)
 
     const handleGetCoordinadores = async (manager_id: any) => {
         setLoaderOn(true)
         console.log("este es el manager id: ", manager_id);
 
-        const team = await getCoordinadores(Number(manager_id))
+        const team = await getCoordinadores(Number(manager_id), showNotification)
         setEquipo(team)
         setLoaderOn(false)
     }

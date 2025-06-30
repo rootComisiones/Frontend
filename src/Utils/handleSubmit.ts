@@ -1,8 +1,3 @@
-import { FormEvent } from "react";
-import { AsesorData, ClientData } from "../Types/Types";
-import postClient from "../DbFunctions/postClient";
-import postAsesor from "../DbFunctions/postAsesor";
-
 export const handleSubmit = (
     newItem: any,
 ) => {

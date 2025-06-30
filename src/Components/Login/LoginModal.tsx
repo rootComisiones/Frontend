@@ -8,6 +8,7 @@ import dotLogo from '../../Assets/iconoLogoBlanco.png';
 
 import handleLogin from '../../DbFunctions/handleLogin';
 import { UserContext } from '../../Context/UserContext';
+import { useNotification } from '../../Context/NotificationContext';
 
 
 export const LoginModal: FC<LoginModalProps> = ({ onVisible, closeModal, setOnVisible }) => {
@@ -18,6 +19,7 @@ export const LoginModal: FC<LoginModalProps> = ({ onVisible, closeModal, setOnVi
     const [modalStatus, setModalStatus] = useState('login');
 
     const { userData, setUserData, setLoaderOn } = useContext(UserContext);
+    const { showNotification } = useNotification();
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
@@ -25,7 +27,7 @@ export const LoginModal: FC<LoginModalProps> = ({ onVisible, closeModal, setOnVi
 
     const handleLoginAction = async() =>{
         setLoaderOn(true)
-        await handleLogin(email, password, setUserData)
+        await handleLogin(email, password, setUserData, showNotification)
         setLoaderOn(false)
         setOnVisible(false)
     }

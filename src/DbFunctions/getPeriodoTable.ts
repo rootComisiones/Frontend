@@ -1,4 +1,4 @@
-const getPeriodoTable = async (periodoId: any) => {
+const getPeriodoTable = async (periodoId: any, showNotification: (msg: string) => void) => {
 
     let url = `${process.env.REACT_APP_BASE_URL}/liquidation/data/archivo/${periodoId}`
 
@@ -11,8 +11,9 @@ const getPeriodoTable = async (periodoId: any) => {
         const data = await response.json();
         console.log('Respuesta del servidorazoooooo:', data);
         return data
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error en la solicitud:', error);
+        showNotification(error.message || "Ocurrió un error inesperado");
     }
 }
 
