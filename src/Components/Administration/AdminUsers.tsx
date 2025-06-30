@@ -144,7 +144,7 @@ const AdminUsers = () => {
                     />
                 </div>
 
-            } */}
+            } */} 
             {
                 fileSelected !== null && adminUsersState.state === 'Cliente' &&
                 <>
