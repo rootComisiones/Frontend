@@ -91,61 +91,56 @@ export interface UserContextType {
 }
 
 interface Company {
-    name: string,
-    id: number
+    name: string;
+    id: number;
 }
 
 /* ADMINISTRACION */
 
 
 export interface ClientData {
-    nombre: string;
-    apellido: string;
-    tipo_persona: string;
-    cuit: string;
-    fecha_inicio_actividades: string;
-    direccion: string;
-    codigo_postal: string;
-    provincia: string;
-    localidad: string;
-    telefono: string;
-    email: string;
-    asesor: string;
-    observacion: string;
-    companias: { compania: string; numero_cuenta: string; }[];
+    id: number,
+    nombre: string,
+    apellido: string,
+    email: string,
+    telefono: string,
+    numero_cuenta: string,
+    cuit: string,
+    fecha_nacimiento: string,
+    fecha_vinculacion: string,
+    direccion: string,
+    equipo_id: number,
+    empresaUno: number,
+    empresaDos: number,
+    manager_id: number,
+    coordinador_id: number,
+    asesor_id: number,
+    username_productor: string,
+    nombre_completo_productor: string,
 }
 
 export interface FormCrearClienteProps {
     newClient: ClientData;
-    setNewClient: React.Dispatch<React.SetStateAction<ClientData>>,
+    setNewClient: React.Dispatch<React.SetStateAction<ClientData>>;
 }
 
 export interface AsesorData {
-    username: string;
-    apellido: string;
-    nombre: string;
-    fecha_nacimiento: string;
-    fecha_ingreso: string;
-    inscripto_iva: boolean;
-    cuit: string;
-    email: string;
-    interno_externo: string;
-    contrasena: string;
-    rol: string;
+    id: number,
+    username: string,
+    apellido: string,
+    cuit: string,
+    email: string,
+    fecha_ingreso: string,
+    fecha_nacimiento: string,
+    inscripto_iva: string,
+    interno_externo: string,
+    nombre: string,
+    rol: string,
+    sagencia_id: number,
+    comisionEmpresa1: number,
+    comisionEmpresa2: number,
+    coordinador_id: number,
     manager_id: number,
-    coordinador_id?: number,
-    v_manager_manager?: number,
-    v_manager_coordinador?: number,
-    v_manager_asesor?: number,
-    v_coordinador_coordinador?: number,
-    v_coordinador_manager?: number,
-    v_coordinador_asesor?: number,
-    v_asesor_manager?: number,
-    v_asesor_coordinador?: number,
-    v_asesor_asesor?: number,
-    v_asesor_sc_manager?: number,
-    v_asesor_sc_asesor?: number,
-    id?: string,
 }
 
 export interface FormCrearAsesorProps {
@@ -226,7 +221,3 @@ export interface TableProps {
     tableData: any;
     empresa: any;
 }
-
-
-
-

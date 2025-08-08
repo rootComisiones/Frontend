@@ -41,10 +41,18 @@ const RegularNavbar: FC<NavbarProps> = ({ setLoginOn, handleResetAdminState, act
                             <Link onClick={handleResetAdminState} to={"/administracion"} className={`navItem ${actualLocation === "administracion" && "active"}`}>Administración</Link>
                             <Link to={"/liquidaciones"} className={`navItem ${actualLocation === "liquidaciones" && "active"}`}>Liquidaciones</Link>
                             <Link to={"/periodos"} className={`navItem ${actualLocation === "periodos" && "active"}`}>Períodos</Link>
+                            <Link to={"/reporte-liquidaciones"} className={`navItem ${actualLocation === "reporte-liquidaciones" && "active"}`}>Reporte de Liquidaciones</Link>
                             <SesionUsuario />
                         </>
                         :
-                        <SesionUsuario />
+                        userData.role === 'sagencia' ?
+                            <>
+                                <Link to={"/liquidaciones"} className={`navItem ${actualLocation === "liquidaciones" && "active"}`}>Liquidaciones</Link>
+                                <Link to={"/reporte-liquidaciones"} className={`navItem ${actualLocation === "reporte-liquidaciones" && "active"}`}>Reporte de Liquidaciones</Link>
+                                <SesionUsuario />
+                            </>
+                            :
+                            <SesionUsuario />
             }
         </>
     )

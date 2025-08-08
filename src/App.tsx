@@ -11,6 +11,7 @@ import Periodo from './Components/Periodos/Periodo';
 import Liquidaciones from './Components/Liquidaciones/Liquidaciones';
 import Page404 from './Components/Page404/Page404';
 import Liquidacion from "./Components/Liquidaciones/Liquidacion";
+import ReporteLiquidaciones from "./Components/ReporteLiquidaciones/ReporteLiquidaciones";
 import { useContext, useEffect } from "react";
 import getAllAsesores from "./DbFunctions/getAllAsesores";
 import getTeams from "./DbFunctions/getTeams";
@@ -20,31 +21,30 @@ import { useNotification } from "./Context/NotificationContext";
 
 
 const ContextWrapper = ({ children }: { children: JSX.Element }) => {
-  const { setUserData, setLoaderOn, setAllAsesores, setAllTeams, setAllClientes, setDataFetched, dataFetched, setAllSagencias } = useContext(UserContext);
+
+  const { setAllAsesores, setAllTeams, setAllClientes, setLoaderOn, setAllSagencias } = useContext(UserContext);
   const { showNotification } = useNotification();
 
   const handleGetData = async () => {
-    if (!dataFetched) {
-      setLoaderOn(true);
-      await getAllAsesores(setAllAsesores, showNotification)
-      await getTeams(setAllTeams, showNotification)
-      const sagencias = await getAllSagencias(showNotification );
-      setAllSagencias(sagencias)
-      const clientes = await getAllClientes(showNotification)
-      setAllClientes(clientes)
-      setDataFetched(true)
-      setLoaderOn(false)
-    }
+    setLoaderOn(true);
+    await getAllAsesores(setAllAsesores, showNotification)
+    await getTeams(setAllTeams, showNotification)
+    const clientes = await getAllClientes(showNotification);
+    setAllClientes(clientes)
+    const sagencias = await getAllSagencias(showNotification);
+    setAllSagencias(sagencias);
+    setLoaderOn(false);
   }
 
   useEffect(() => {
-    handleGetData()
+    handleGetData();
   }, [])
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
     if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
+      const parsedUserData = JSON.parse(storedUserData);
+      console.log('Datos del usuario cargados desde localStorage:', parsedUserData);
     }
   }, []);
 
@@ -99,6 +99,14 @@ function App() {
       element: (
         <ContextWrapper>
           <Liquidaciones />
+        </ContextWrapper>
+      ),
+    },
+    {
+      path: 'reporte-liquidaciones',
+      element: (
+        <ContextWrapper>
+          <ReporteLiquidaciones />
         </ContextWrapper>
       ),
     },

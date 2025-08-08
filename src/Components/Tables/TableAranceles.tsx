@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import '../../Styles/Reutilized.css'
+import { UserContext } from '../../Context/UserContext';
 
 interface TableArancelesProps {
     liquiData: any,
@@ -7,6 +8,8 @@ interface TableArancelesProps {
 }
 
 const TableAranceles: FC<TableArancelesProps> = ({ liquiData, totalLiquiData }) => {
+
+    const { userData } = useContext(UserContext);
 
     const totalBeneficiario = (array: any) => {
         let total = array.reduce((acumulador: any, elementoActual: any) => {
@@ -46,8 +49,17 @@ const TableAranceles: FC<TableArancelesProps> = ({ liquiData, totalLiquiData }) 
                         <th>Equipo</th>
                         <th>Coordinador</th>
                         <th>Team Leader</th>
-                        <th>Rentabilidad Subagencia</th>
-                        <th>Rentabilidad Root</th>
+                        {
+                            userData.role === 'root' &&
+                            <>
+                                <th>Rentabilidad Subagencia</th>
+                                <th>Rentabilidad Root</th>
+                            </>
+                        }
+                        {
+                            userData.role === 'sagencia' &&
+                            <th>Rentabilidad Subagencia</th>
+                        }
 
                         {/* // Asesor ve hasta comision asesor + equipo + pf/pj
                     // Coordinador ve hasta plus coordinador +equipo + pf/pj + Coordinador
@@ -79,9 +91,19 @@ const TableAranceles: FC<TableArancelesProps> = ({ liquiData, totalLiquiData }) 
                                     <td>{liquidacion.cabeza_agencia_nombre}</td>
                                     <td>{liquidacion.coordinador_name}</td>
                                     <td>{liquidacion.teamleader_name}</td>
-                                    <td>{liquidacion.rentabilidad_sub_agencia}</td>
-                                    <td>{liquidacion.rentabilidad_root}</td>
-
+                                    {
+                                        userData.role === 'root' &&
+                                        <>
+                                            <td>{liquidacion.rentabilidad_sub_agencia}</td>
+                                            <td>{liquidacion.rentabilidad_root}</td>
+                                        </>
+                                    }
+                                    {
+                                        userData.role === 'sagencia' &&
+                                        <>
+                                            <td>{liquidacion.rentabilidad_sub_agencia}</td>
+                                        </>
+                                    }
                                 </tr>
                             )
                         })

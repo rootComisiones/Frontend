@@ -1,6 +1,5 @@
-import React, { FC, createContext, useState } from "react";
+import React, { FC, createContext, useState, useEffect } from "react";
 import { AsesorData, ClientData, Equipo, Sagencia, UserContextType } from "../Types/Types";
-
 
 interface UserProviderProps {
   children: React.ReactNode;
@@ -29,14 +28,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   })
 
   const [allSagencias, setAllSagencias] = useState<Sagencia[]>([])
-
   const [allTeams, setAllTeams] = useState<Equipo[]>([])
   const [allClientes, setAllClientes] = useState<ClientData[]>([])
-
   const [loginModal, setLoginModal] = useState(false);
-
   const [allAsesores, setAllAsesores] = useState<AsesorData[]>([])
-
   const [edicion, setEdicion] = useState<any>(null)
 
   const companies = [
@@ -50,14 +45,24 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     }
   ];
 
-  const [userData, setUserData] = useState({
-    nombre: '',
-    apellido: '',
-    username: '',
-    email: '',
-    id: '',
-    role: '',
-  })
+  // Persistencia de userData en localStorage
+  const [userData, setUserData] = useState(() => {
+    const stored = localStorage.getItem('userData');
+    return stored
+      ? JSON.parse(stored)
+      : {
+          nombre: '',
+          apellido: '',
+          username: '',
+          email: '',
+          id: '',
+          role: '',
+        };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('userData', JSON.stringify(userData));
+  }, [userData]);
 
   const [loaderOn, setLoaderOn] = useState(false);
 

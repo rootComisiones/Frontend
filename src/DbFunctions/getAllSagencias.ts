@@ -12,7 +12,7 @@ const getAllSagencias = async (showNotification: (msg: string) => void) => {
         }
         const data = await response.json();
 
-        console.log('Respuesta del servidor tobiiiiiiiiiiiiiiiiii:', data.data);
+        console.log('Respuesta del servidor sagenciassssssssssss:', data.data);
         return data.data
     } catch (error: any) {
         showNotification(error.message || "Ocurrió un error inesperado");
