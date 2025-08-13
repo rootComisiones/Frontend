@@ -12,6 +12,9 @@ import Page404 from "../Page404/Page404";
 import TableAranceles from "../Tables/TableAranceles";
 import getReporteLiquidacionesBySagencia from "../../DbFunctions/getReporteLiquidacionesBySagnecia";
 import handleFormatPeriodDate from "../../Utils/handleFormatPeriodDate";
+import * as XLSX from "xlsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface Periodo {
     id: number;
@@ -74,7 +77,6 @@ const ReporteLiquidaciones = () => {
         const data = await getReporteLiquidaciones(selectedEmpresa.id, selectedPeriodoEmpresa);
         if (data && data.desglose) {
             setDesgloseEmpresa(data.desglose);
-            // Selección por defecto
             if (data.desglose.aranceles_privados.length > 0) setSelectedTipoEmpresa('privados');
             else setSelectedTipoEmpresa('publicos');
             setShowTableEmpresa(true);
@@ -126,7 +128,6 @@ const ReporteLiquidaciones = () => {
         setLoaderOn(false);
     };
 
-    // --- Efectos iniciales ---
     useEffect(() => {
         if (userData.role === 'root') {
             handleGetPeriodosEmpresa(selectedEmpresa.id);
@@ -137,7 +138,6 @@ const ReporteLiquidaciones = () => {
         // eslint-disable-next-line
     }, [userData, selectedEmpresa.id]);
 
-    // --- Render de botones de aranceles ---
     const renderArancelesButtons = (desglose: { aranceles_privados: any[], aranceles_publicos: any[] }, selectedTipo: string, setSelectedTipo: (tipo: 'privados' | 'publicos') => void) => {
         const showPrivados = desglose.aranceles_privados.length > 0;
         const showPublicos = desglose.aranceles_publicos.length > 0;
@@ -161,6 +161,57 @@ const ReporteLiquidaciones = () => {
                 )}
             </div>
         );
+    };
+
+    // --- Exportar a Excel respetando columnas por rol ---
+    const getExcelData = (data: any[], role: string) => {
+        if (!data || !data.length) return [];
+        // Columnas y orden según TableAranceles
+        return data.map((liquidacion: any) => {
+            const base = {
+                "Nº de Comitente": liquidacion.numero_cuenta,
+                "Comitente": liquidacion.cliente,
+                "Base de calculo": liquidacion.base_de_calculo,
+                "Condicion": liquidacion.condicion,
+                "Broker": liquidacion.compania_nombre,
+                "Productor": liquidacion.productor_nombre,
+                "Sit. Impositiva": liquidacion.situacion_impositiva,
+                "% Comision": liquidacion.porcentaje_comi,
+                "Comision Asesor": liquidacion.comision_asesor,
+                "Plus Coordinador": liquidacion.plus_coordinador,
+                "Plus Team Leader": liquidacion.plus_teamleader,
+                "Plus Referral": liquidacion.plus_referral,
+                "Equipo": liquidacion.cabeza_agencia_nombre,
+                "Coordinador": liquidacion.coordinador_name,
+                "Team Leader": liquidacion.teamleader_name,
+            };
+            if (role === "root") {
+                return {
+                    ...base,
+                    "Rentabilidad Subagencia": liquidacion.rentabilidad_sub_agencia,
+                    "Rentabilidad Root": liquidacion.rentabilidad_root,
+                };
+            }
+            if (role === "sagencia") {
+                return {
+                    ...base,
+                    "Rentabilidad Subagencia": liquidacion.rentabilidad_sub_agencia,
+                };
+            }
+            return base;
+        });
+    };
+
+    const exportToExcel = (data: any[], fileName: string, role: string) => {
+        const excelData = getExcelData(data, role);
+        if (!excelData || excelData.length === 0) {
+            showNotification("No hay datos para exportar.");
+            return;
+        }
+        const ws = XLSX.utils.json_to_sheet(excelData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Reporte");
+        XLSX.writeFile(wb, fileName);
     };
 
     return (
@@ -191,7 +242,6 @@ const ReporteLiquidaciones = () => {
                                             Inviu
                                         </button>
                                     </div>
-                                    {/* Período */}
                                 </div>
                                 <div className="inputContainer lg start">
                                     <label htmlFor="periodo" className="label">Período</label>
@@ -218,6 +268,22 @@ const ReporteLiquidaciones = () => {
                                         liquiData={selectedTipoEmpresa === 'privados' ? desgloseEmpresa.aranceles_privados : desgloseEmpresa.aranceles_publicos}
                                     />
                                 )}
+                                <hr className="marginYTitle" />
+                                {showTableEmpresa && (
+                                    <div className="flexStart btnNoBg marginY" onClick={
+                                        () => exportToExcel(
+                                            selectedTipoEmpresa === 'privados'
+                                                ? desgloseEmpresa.aranceles_privados
+                                                : desgloseEmpresa.aranceles_publicos,
+                                            `Reporte_${selectedEmpresa.name}_${selectedTipoEmpresa}.xlsx`,
+                                            "root"
+                                        )
+                                    }>
+                                        <FontAwesomeIcon icon={faPlus} className='plus' />
+                                        Exportar tabla a Excel
+                                    </div>
+                                )}
+                                <hr className="marginYTitle" />
                                 <hr className="marginYTitle" />
                             </>
                         )}
@@ -263,6 +329,21 @@ const ReporteLiquidaciones = () => {
                             <TableAranceles
                                 liquiData={selectedTipoSagencia === 'privados' ? desgloseSagencia.aranceles_privados : desgloseSagencia.aranceles_publicos}
                             />
+                        )}
+                        <hr className="marginYTitle" />
+                        {showTableSagencia && (
+                            <div className="flexStart btnNoBg marginY" onClick={
+                                () => exportToExcel(
+                                    selectedTipoSagencia === 'privados'
+                                        ? desgloseSagencia.aranceles_privados
+                                        : desgloseSagencia.aranceles_publicos,
+                                    `Reporte_SubAgencia_${selectedTipoSagencia}.xlsx`,
+                                    userData.role
+                                )
+                            }>
+                                <FontAwesomeIcon icon={faPlus} className='plus' />
+                                Exportar tabla a Excel
+                            </div>
                         )}
                     </section>
                 </Background>
