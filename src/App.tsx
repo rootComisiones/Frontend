@@ -21,15 +21,16 @@ import { useNotification } from "./Context/NotificationContext";
 
 
 const ContextWrapper = ({ children }: { children: JSX.Element }) => {
-
   const { setAllAsesores, setAllTeams, setAllClientes, setLoaderOn, setAllSagencias } = useContext(UserContext);
   const { showNotification } = useNotification();
 
   const handleGetData = async () => {
     setLoaderOn(true);
-    await getAllAsesores(setAllAsesores, showNotification)
+    const asesoresResponse = await getAllAsesores(1, 50, showNotification);
+    setAllAsesores(asesoresResponse.asesores || []);
     await getTeams(setAllTeams, showNotification)
-    const clientes = await getAllClientes(showNotification);
+    const response = await getAllClientes(1, 50, showNotification);
+    const clientes = response?.clients || [];
     setAllClientes(clientes)
     const sagencias = await getAllSagencias(showNotification);
     setAllSagencias(sagencias);

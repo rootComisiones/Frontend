@@ -11,32 +11,30 @@ import getAllPeriodos from '../../DbFunctions/getAllPeriodos';
 import getAllSagencias from '../../DbFunctions/getAllSagencias';
 import { useNotification } from '../../Context/NotificationContext';
 
-
 const Popup = () => {
-    
-    const { popupData, setPopupData, setLoaderOn, setUserData, setAllAsesores, setAllClientes, setAllTeams, periodState, setPeriodos, setAllSagencias} = useContext(UserContext);
-
+    const { popupData, setPopupData, setLoaderOn, setUserData, setAllAsesores, setAllClientes, setAllTeams, periodState, setPeriodos, setAllSagencias } = useContext(UserContext);
     const { showNotification } = useNotification();
 
     const handleGetClientes = async () => {
         setLoaderOn(true);
-        const clientes = await getAllClientes(showNotification);
-        if (!clientes) {
+        const response = await getAllClientes(1, 50, showNotification);
+        if (!response || !response.clients) {
             setLoaderOn(false)
             return
         }
-        setAllClientes(clientes)
+        setAllClientes(response.clients)
         setLoaderOn(false)
     }
 
-    const handleGetAsesores = async() => {
+    const handleGetAsesores = async () => {
         setLoaderOn(true);
-        await getAllAsesores(setAllAsesores, showNotification);
+        const response = await getAllAsesores(1, 50, showNotification);
+        setAllAsesores(response.asesores || []);
         await getTeams(setAllTeams, showNotification);
         setLoaderOn(false)
     }
 
-    const handleGetSagencias = async() =>{
+    const handleGetSagencias = async () => {
         setLoaderOn(true)
         const sagencias = await getAllSagencias(showNotification);
         setAllSagencias(sagencias)
@@ -60,22 +58,20 @@ const Popup = () => {
 
     const popupAction = async () => {
         const action = popupData.action;
-        console.log(popupData);
-
         setLoaderOn(true)
         if (action === 'logout') {
             await handleLogout(setUserData)
         } else if (action === 'cliente') {
             await deleteUser(popupData.asesorId, action, showNotification)
             handleGetClientes()
-        } else if(action === 'periodo'){
+        } else if (action === 'periodo') {
             await deletePeriodo(popupData.asesorId, showNotification)
             await handleGetPeriodos()
             handleGetAsesores()
-        }else if(action === 'sagencia'){
+        } else if (action === 'sagencia') {
             await deleteUser(popupData.asesorId, action, showNotification)
             handleGetSagencias()
-        }else{
+        } else {
             await deleteUser(popupData.asesorId, action, showNotification)
             handleGetAsesores()
         }
@@ -90,7 +86,6 @@ const Popup = () => {
                 <div className='loginModalOverlay'>
                     <div className='loginModalContainer'>
                         <p className='label popup'>{popupData.text}</p>
-
                         <div className='logRegisterBtns' style={{ 'marginTop': '20px' }}>
                             <button className='btn btnDarkGreen marginXSmall' onClick={popupAction}>Si</button>
                             <button className='btn btnDarkGreen marginXSmall' onClick={closePopUp}>No</button>

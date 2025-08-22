@@ -19,9 +19,9 @@ const FormCrearCliente = () => {
 
     const handleGetData = async () => {
         setLoaderOn(true);
-        const clientes = await getAllClientes(showNotification)
-        setAllClientes(clientes)
-        setLoaderOn(false)
+        const response = await getAllClientes(1, 50, showNotification);
+        setAllClientes(response?.clients || []);
+        setLoaderOn(false);
     }
 
     const handleNumeroCompanias = (e: any) => {

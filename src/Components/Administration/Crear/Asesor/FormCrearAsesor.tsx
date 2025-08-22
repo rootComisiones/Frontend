@@ -35,11 +35,12 @@ const FormCrearAsesor = () => {
 
     const handleGetData = async () => {
         setLoaderOn(true);
-        await getAllAsesores(setAllAsesores, showNotification)
-        await getTeams(setAllTeams, showNotification)
-        const sagencias = await getAllSagencias(showNotification)
-        setAllSagencias(sagencias)
-        setLoaderOn(false)
+        const response = await getAllAsesores(1, 50, showNotification);
+        setAllAsesores(response.asesores || []);
+        await getTeams(setAllTeams, showNotification);
+        const sagencias = await getAllSagencias(showNotification);
+        setAllSagencias(sagencias);
+        setLoaderOn(false);
     }
 
     const handleSelectedCompanies = (value: any) => {
