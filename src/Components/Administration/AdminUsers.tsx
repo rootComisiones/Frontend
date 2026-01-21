@@ -40,6 +40,8 @@ const AdminUsers = () => {
     const [searchResults, setSearchResults] = useState<any[]>([])
     const [isSearchModeAsesor, setIsSearchModeAsesor] = useState(false)
     const [searchResultsAsesor, setSearchResultsAsesor] = useState<any[]>([])
+    // Estado para los asesores a mostrar (resultado de búsqueda o lista completa)
+    const [asesoresToShow, setAsesoresToShow] = useState<any[] | undefined>(undefined);
 
     const { adminUsersState, setAdminUsersState, setAllAsesores, setLoaderOn, setAllTeams, setAllClientes, userData, setEdicion, setAllSagencias, allClientes, allAsesores } = useContext(UserContext)
     const { showNotification } = useNotification();
@@ -181,9 +183,22 @@ const AdminUsers = () => {
         setSearchResultsAsesor([]);
     }, [adminUsersState.state, refreshTrigger])
 
+    useEffect(() => {
+        console.log('Clientes buscados:', searchResultsAsesor);
+    }, [searchResultsAsesor]);
+
+    // Cuando cambia el modo de búsqueda o los resultados, actualiza asesoresToShow
+    useEffect(() => {
+        if (isSearchModeAsesor) {
+            console.log('Actualizando asesoresToShow con resultados de búsqueda:', searchResultsAsesor);
+            setAsesoresToShow(searchResultsAsesor);
+        } else {
+            setAsesoresToShow(undefined); // para que la tabla use allAsesores
+        }
+    }, [isSearchModeAsesor, searchResultsAsesor, allAsesores]);
+
     // Decidir qué mostrar
     const clientesToShow = isSearchMode ? searchResults : allClientes;
-    const asesoresToShow = isSearchModeAsesor ? searchResultsAsesor : allAsesores;
 
     return (
         <>

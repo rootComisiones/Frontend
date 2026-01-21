@@ -18,8 +18,17 @@ export const validateFormFields = (fields: FormFields, type: string) => {
 
     // Validar si las claves que terminan en "_id" no tienen valor 0
     if (key.endsWith('_id') && value === 0) {
-      errores.push(key)
-      console.log(`Error: El campo '${key}' debe tener un valor distinto de 0.`);
+      // Para el rol 'asesor', solo sagencia_id es obligatorio
+      if (type === 'asesor') {
+        if (key === 'sagencia_id') {
+          errores.push(key);
+          console.log(`Error: El campo '${key}' debe tener un valor distinto de 0 para el rol asesor.`);
+        }
+        // manager_id y coordinador_id pueden ser 0 para asesores, así que los saltamos
+      } else {
+        errores.push(key);
+        console.log(`Error: El campo '${key}' debe tener un valor distinto de 0.`);
+      }
     }
 
 
@@ -32,8 +41,8 @@ export const validateFormFields = (fields: FormFields, type: string) => {
     noComisiones && errores.push('noComisiones')
   }
 
-
-  let finalErrores = errores.filter(error => error !== 'observacion' && error !== 'coordinador_id');
+  // No filtrar coordinador_id para asesor, ya que no se agrega como error
+  let finalErrores = errores.filter(error => error !== 'observacion');
   console.log(finalErrores);
 
   return finalErrores;

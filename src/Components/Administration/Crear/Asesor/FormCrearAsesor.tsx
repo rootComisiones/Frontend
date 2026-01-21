@@ -398,6 +398,10 @@ const FormCrearAsesor = () => {
                 selectedAsesor.role === 'sagencia' &&
                 <FormCrear label="Comision Sub Agencia(%)" name="porcentaje_neto" type="number" value={edicion !== null ? edicion : ''} />
             }
+            {
+                selectedAsesor.role === 'manager' &&
+                <FormCrear label="Comisión Manager(%)" name="porcentaje_neto" type="number" value={edicion !== null ? edicion : ''} />
+            }
 
             <div className="formBtnContainer">
                 <button type="submit" className="btn xl btnDarkGreen">{edicion !== null ? 'Editar usuario' : `Crear usuario`}</button>

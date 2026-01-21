@@ -1,7 +1,7 @@
 const getAllSagencias = async (showNotification: (msg: string) => void) => {
 
     let url = `${process.env.REACT_APP_BASE_URL}/sagencia/all`;
-    console.log(909934348394939);
+    console.log('BUSCANDO SAGENCIAS!!!!');
 
     try {
         const response = await fetch(url);

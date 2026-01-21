@@ -26,13 +26,20 @@ const SearchAsesores: React.FC<SearchAsesoresProps> = ({ onAsesorFound, onClearS
         setSearchError('');
         try {
             const result = await getAsesorByUsername(searchTerm.trim());
-            if (result) {
-                setSearchResult(result);
-                onAsesorFound([result]);
+            console.log('Resultado búsqueda asesor:', result);
+            let found = null;
+            if (result?.asesor && typeof result.asesor === 'object' && result.asesor.username) {
+                found = result.asesor;
+            } else if (result && typeof result === 'object' && result.username) {
+                found = result;
+            }
+            if (found) {
+                setSearchResult(found);
+                onAsesorFound([found]);
                 setSearchError('');
             } else {
                 setSearchResult(null);
-                setSearchError(result.error || 'Asesor no encontrado');
+                setSearchError(result?.error || 'Asesor no encontrado');
                 onAsesorFound([]);
             }
         } catch (error) {

@@ -21,8 +21,8 @@ const TableClientes: React.FC<TableClientesProps> = ({
     const { allClientes, setEdicion, setPopupData } = useContext(UserContext);
     const navigate = useNavigate();
 
-    // Usar clientesToShow si está disponible, sino usar allClientes del contexto
-    const clientes = clientesToShow || allClientes;
+    // Usar clientesToShow si está definido (aunque sea array vacío), sino usar allClientes
+    const clientes = typeof clientesToShow !== 'undefined' ? clientesToShow : allClientes;
 
     const handleDetalle = (cliente: any) => {
         setDetalleCliente(cliente);
@@ -48,24 +48,27 @@ const TableClientes: React.FC<TableClientesProps> = ({
                 </thead>
                 <tbody>
                     {clientes && clientes.length > 0 ? (
-                        clientes.map((cliente: any) => (
-                            <tr key={"tabla_clientes_" + cliente.id}>
-                                <td>{cliente.nombre} {cliente.apellido}</td>
-                                <td>{cliente.email ? cliente.email.slice(0, 30) : 'Sin email'}</td>
-                                <td>{cliente.telefono || 'Sin teléfono'}</td>
-                                <td>{cliente.numero_cuenta}</td>
-                                <td className="tdContainer">
-                                    <p onClick={() => handleDetalle(cliente)}>Detalle</p>
-                                    <p onClick={() => handleEdit(cliente)}>Editar</p>
-                                    <p onClick={() => setPopupData({
-                                        text: `¿Desea eliminar el cliente ${cliente.nombre} ${cliente.apellido}?`,
-                                        action: 'cliente',
-                                        asesorId: cliente.id,
-                                        refreshData: refreshData
-                                    })}>Eliminar</p>
-                                </td>
-                            </tr>
-                        ))
+                        clientes.map((cliente: any) => {
+                            const uniqueKey = cliente.id ? `tabla_clientes_${cliente.id}` : `tabla_clientes_${cliente.numero_cuenta}_${cliente.email}`;
+                            return (
+                                <tr key={uniqueKey}>
+                                    <td>{cliente.nombre} {cliente.apellido}</td>
+                                    <td>{cliente.email ? cliente.email.slice(0, 30) : 'Sin email'}</td>
+                                    <td>{cliente.telefono || 'Sin teléfono'}</td>
+                                    <td>{cliente.numero_cuenta}</td>
+                                    <td className="tdContainer">
+                                        <p onClick={() => handleDetalle(cliente)}>Detalle</p>
+                                        <p onClick={() => handleEdit(cliente)}>Editar</p>
+                                        <p onClick={() => setPopupData({
+                                            text: `¿Desea eliminar el cliente ${cliente.nombre} ${cliente.apellido}?`,
+                                            action: 'cliente',
+                                            asesorId: cliente.id,
+                                            refreshData: refreshData
+                                        })}>Eliminar</p>
+                                    </td>
+                                </tr>
+                            );
+                        })
                     ) : (
                         <tr>
                             <td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>

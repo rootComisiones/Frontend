@@ -1,5 +1,5 @@
 // filepath: [TableAsesores.tsx](http://_vscodecontentref_/3)
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import '../../Styles/Reutilized.css'
 import { UserContext } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,8 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
     const { allAsesores, setEdicion, setPopupData } = useContext(UserContext);
     const navigate = useNavigate();
 
-    const asesores = asesoresToShow || allAsesores;
+    // Usar asesoresToShow si está definido (aunque sea array vacío), sino usar allAsesores
+    const asesores = typeof asesoresToShow !== 'undefined' ? asesoresToShow : allAsesores;
 
     console.log('Asesores a mostrar9999999999999:', asesores);
 
@@ -35,6 +36,10 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
         setEdicion(asesor);
         navigate('/administracion/asesores/crear');
     };
+
+    useEffect(() => {
+        console.log('Asesores en TableAsesores:', asesores);
+    }, [asesores]);
 
     return (
         <>
@@ -50,24 +55,27 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
                 </thead>
                 <tbody>
                     {asesores && asesores.length > 0 ? (
-                        asesores.map((asesor: any) => (
-                            <tr key={"tabla_asesores_" + asesor.username}>
-                                <td>{asesor.username}</td>
-                                <td>{asesor.nombre + " " + asesor.apellido}</td>
-                                {/* <td>{asesor.rol.toUpperCase()}</td> */}
-                                <td>{asesor.email}</td>
-                                <td className="tdContainer">
-                                    <p onClick={() => handleDetalle(asesor)}>Detalle</p>
-                                    <p onClick={() => handleEdit(asesor)}>Editar</p>
-                                    <p onClick={() => setPopupData({
-                                        text: `Desea eliminar el asesor ${asesor.username}?`,
-                                        action: asesor.rol,
-                                        asesorId: Number(asesor.id),
-                                        refreshData: refreshData
-                                    })}>Eliminar</p>
-                                </td>
-                            </tr>
-                        ))
+                        asesores.map((asesor: any) => {
+                            console.log('Renderizando asesor:', asesor);
+                            return (
+                                <tr key={"tabla_asesores_" + asesor.username+'_' + asesor.id }>
+                                    <td>{asesor.username}</td>
+                                    <td>{asesor.nombre + " " + asesor.apellido}</td>
+                                    {/* <td>{asesor.rol.toUpperCase()}</td> */}
+                                    <td>{asesor.email}</td>
+                                    <td className="tdContainer">
+                                        <p onClick={() => handleDetalle(asesor)}>Detalle</p>
+                                        <p onClick={() => handleEdit(asesor)}>Editar</p>
+                                        <p onClick={() => setPopupData({
+                                            text: `Desea eliminar el asesor ${asesor.username}?`,
+                                            action: asesor.rol,
+                                            asesorId: Number(asesor.id),
+                                            refreshData: refreshData
+                                        })}>Eliminar</p>
+                                    </td>
+                                </tr>
+                            );
+                        })
                     ) : (
                         <tr>
                             <td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>

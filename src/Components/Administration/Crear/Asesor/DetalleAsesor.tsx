@@ -11,18 +11,18 @@ const DetalleAsesor = ({ detalle, setIsDetalleOn, setDetalleAsesor }: { detalle:
     }
 
     useEffect(() => {
-        console.log(detalle);
+        console.log('Detalleeeee:', detalle);
     }, [])
 
     return (
         <div className='detalleOverlay'>
             <div className='detalleContainer'>
                 <FontAwesomeIcon icon={faXmark} className='exitIcon' onClick={closeModal} />
-                <p>Usuario: {detalle.username.toUpperCase()}</p>
-                <p>Rol: {detalle.rol.toUpperCase()}</p>
-                <p>Nombre: {detalle.nombre.toUpperCase()}</p>
-                <p>Apellido: {detalle.apellido.toUpperCase()}</p>
-                <p>Email: {detalle.email.toUpperCase()}</p>
+                <p>Usuario: {detalle?.username?.toUpperCase()}</p>
+                <p>Rol: {detalle.rol}</p>
+                <p>Nombre: {detalle?.nombre?.toUpperCase()}</p>
+                <p>Apellido: {detalle?.apellido?.toUpperCase()}</p>
+                <p>Email: {detalle?.email?.toUpperCase()}</p>
             </div>
         </div>
     )

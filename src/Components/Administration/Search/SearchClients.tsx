@@ -26,14 +26,14 @@ const SearchClients: React.FC<SearchClientsProps> = ({ onClientFound, onClearSea
         setSearchError('');
         try {
             const result = await getClientByAccount(searchTerm.trim());
-            if (result) {
-                setSearchResult(result);
-                onClientFound([result]);
-                setSearchError('');
-            } else {
+            if (result?.error || !result?.cliente) {
                 setSearchResult(null);
                 setSearchError(result.error || 'Cliente no encontrado');
                 onClientFound([]);
+            } else {
+                setSearchResult(result.cliente);
+                onClientFound([result.cliente]);
+                setSearchError('');
             }
         } catch (error) {
             setSearchError('Error al buscar cliente');
@@ -93,7 +93,7 @@ const SearchClients: React.FC<SearchClientsProps> = ({ onClientFound, onClearSea
             )}
             {searchResult && (
                 <div className="searchSuccess">
-                    Cliente encontrado: {searchResult.nombre} {searchResult.apellido} - Cuenta: {searchResult.numero_cuenta}
+                    Cliente encontrado: {searchResult.nombre} {searchResult.apellido} - {searchResult.cuenta}
                 </div>
             )}
         </div>
