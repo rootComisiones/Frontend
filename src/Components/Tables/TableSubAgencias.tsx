@@ -6,12 +6,34 @@ import { useNavigate } from "react-router-dom";
 
 const TableSubAgencias = ({ refreshData }: { refreshData: ()=> void }) => {
 
-    const { allSagencias, setEdicion, setPopupData } = useContext(UserContext)
+    const { allSagencias, allAsesores, setEdicion, setPopupData } = useContext(UserContext)
     const navigate = useNavigate();
 
     const handleEdit = (detalle: any) => {
         setEdicion(detalle)
         navigate('/administracion/asesores/crear')
+    }
+
+    const handleDelete = (sagencia: any) => {
+        const usuariosAfectados = allAsesores.filter(
+            (asesor) => asesor.sagencia_id === sagencia.id
+        );
+
+        let mensaje = `¿Desea eliminar la Sub Agencia ${sagencia.username}?`;
+
+        if (usuariosAfectados.length > 0) {
+            const nombresUsuarios = usuariosAfectados
+                .map((u) => u.username)
+                .join(', ');
+            mensaje += `\n\n⚠️ Los siguientes usuarios quedarán sin subagencia asignada: ${nombresUsuarios}`;
+        }
+
+        setPopupData({
+            text: mensaje,
+            action: 'sagencia',
+            asesorId: Number(sagencia.id),
+            refreshData: refreshData
+        });
     }
 
     return (
@@ -36,12 +58,7 @@ const TableSubAgencias = ({ refreshData }: { refreshData: ()=> void }) => {
                             <td>{sagencia.porcentaje_neto}</td>
                             <td className="tdContainer">
                                 <p onClick={()=>handleEdit(sagencia)}>Editar</p>
-                                <p onClick={()=>setPopupData({
-                                    text: `Desea eliminar la Sub Agencia ${sagencia.username}?`,
-                                    action: 'sagencia',
-                                    asesorId: Number(sagencia.id),
-                                    refreshData: refreshData
-                                })}>Eliminar</p>
+                                <p onClick={() => handleDelete(sagencia)}>Eliminar</p>
                             </td>
                         </tr>
                     })

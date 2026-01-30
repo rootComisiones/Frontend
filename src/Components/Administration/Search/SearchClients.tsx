@@ -52,7 +52,7 @@ const SearchClients: React.FC<SearchClientsProps> = ({ onClientFound, onClearSea
         onClearSearch();
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             handleSearch();
         }
@@ -66,7 +66,7 @@ const SearchClients: React.FC<SearchClientsProps> = ({ onClientFound, onClearSea
                     placeholder="Buscar por número de cuenta..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     className="searchInput"
                 />
                 <button 

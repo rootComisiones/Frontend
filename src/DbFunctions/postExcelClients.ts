@@ -13,15 +13,21 @@ const postExcelClients = async ( file: File, showNotification: (msg: string) => 
             body: formData,
         });
 
+        const text = await response.text();
+        let data: any;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            data = null;
+        }
+
         if (response.ok) {
-            const data = await response.json();
-            console.log('Archivo enviado correctamente:', data);
+            showNotification(data?.message || "Archivo importado correctamente");
         } else {
-            const errorData = await response.json();
-            console.error('Error al enviar el archivo', errorData);
+            const errorMsg = data?.message || text || response.statusText;
+            showNotification('Error al importar: ' + errorMsg);
         }
     } catch (error: any) {
-        console.error('Error en la solicitud:', error);
         showNotification(error.message || "Ocurrió un error inesperado");
     }
 }

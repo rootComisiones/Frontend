@@ -46,18 +46,29 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   ];
 
   // Persistencia de userData en localStorage
+  const defaultUserData = {
+    nombre: '',
+    apellido: '',
+    username: '',
+    email: '',
+    id: '',
+    role: '',
+  };
+
   const [userData, setUserData] = useState(() => {
     const stored = localStorage.getItem('userData');
-    return stored
-      ? JSON.parse(stored)
-      : {
-          nombre: '',
-          apellido: '',
-          username: '',
-          email: '',
-          id: '',
-          role: '',
-        };
+    if (!stored) return defaultUserData;
+
+    try {
+      const parsed = JSON.parse(stored);
+      // Validar que tenga la estructura esperada
+      if (typeof parsed === 'object' && parsed !== null && 'id' in parsed) {
+        return parsed;
+      }
+      return defaultUserData;
+    } catch {
+      return defaultUserData;
+    }
   });
 
   useEffect(() => {
@@ -82,7 +93,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const [dataFetched, setDataFetched] = useState(false);
 
-  const [periodos, setPeriodos] = useState([]);
+  const [periodos, setPeriodos] = useState<unknown[]>([]);
 
   const contextValue: UserContextType = {
     adminState,

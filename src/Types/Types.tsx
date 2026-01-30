@@ -71,7 +71,7 @@ export interface UserContextType {
         role: string,
     }>>;
     edicion: any;
-    setEdicion:any;
+    setEdicion: Dispatch<SetStateAction<any>>;
     popupData: {
         text: string,
         action: string,
@@ -86,8 +86,9 @@ export interface UserContextType {
     }>>;
     dataFetched: boolean;
     setDataFetched: Dispatch<SetStateAction<boolean>>;
-    periodos: any;
-    setPeriodos: any;
+    // TODO: Definir interface Periodo cuando se conozca la estructura
+    periodos: unknown[];
+    setPeriodos: Dispatch<SetStateAction<unknown[]>>;
 }
 
 interface Company {
@@ -211,7 +212,7 @@ export interface NavbarProps {
 export interface LoginModalProps {
     onVisible: boolean;
     closeModal: () => void;
-    setOnVisible: any;
+    setOnVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 /* TABLE */

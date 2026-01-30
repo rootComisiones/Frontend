@@ -10,18 +10,25 @@ const editCliente = async (cliente: any, asesorId: any, showNotification: (msg: 
             },
             body: JSON.stringify(cliente),
         });
-        if (!response.ok) {
-            const errorData = await response.json();
-            showNotification('Error en la solicitud: ' + errorData.message);
-        }
-        const data = await response.json();
 
-        console.log('Respuesta del servidor:', data);
-        return true
-    } catch (error:any) {
-        console.error('Error en la solicitud:', error);
+        const text = await response.text();
+        let data: any;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            data = null;
+        }
+
+        if (!response.ok) {
+            const errorMsg = data?.message || text || response.statusText;
+            showNotification('Error en la solicitud: ' + errorMsg);
+            return false;
+        }
+
+        return true;
+    } catch (error: any) {
         showNotification(error.message || "Ocurrió un error inesperado");
-        return false
+        return false;
     }
 }
 

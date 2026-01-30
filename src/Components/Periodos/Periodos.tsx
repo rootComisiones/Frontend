@@ -47,9 +47,10 @@ const Periodos = () => {
     }, [])
 
     useEffect(() => {
-        handleGetPeriodos()
-        console.log("actualizando periodos", periodState);
-    }, [newPeriod, periodState])
+        // Solo cargar periodos si el usuario está logueado como root
+        if (!userData.role || userData.role !== 'root') return;
+        handleGetPeriodos();
+    }, [newPeriod, periodState, userData.role])
 
     return (
         <>

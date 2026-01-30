@@ -110,9 +110,14 @@ const FormCrearAsesor = () => {
     };
 
     const handleGetCoordinadores = async (manager_id: string) => {
+        // No llamar al endpoint si no hay manager seleccionado
+        if (!manager_id || manager_id === "0") {
+            setCoordinadores([]);
+            return;
+        }
+
         setLoaderOn(true);
         const equipo = await getCoordinadores(Number(manager_id), showNotification);
-        console.log(equipo, 'equipitooo');
         equipo !== null ? setCoordinadores(equipo.coordinadores) : setCoordinadores([]);
         setLoaderOn(false);
     };
@@ -148,58 +153,91 @@ const FormCrearAsesor = () => {
             return acc;
         }, {} as any);
 
-        console.log('formObject', formObject);
-
         const errores = validateFormFields(formObject, 'asesor');
 
-        if (errores.length) {
-            console.error('Faltan completar los siguientes campos: ' + errores.toString());
-        } else {
-            console.log(formObject);
-            if (edicion !== null) {
-                let veredicto;
-                if (edicion.rol !== undefined) {
-                    console.log('ASESOR COMISIONES', formObject);
-                    const { comisionEmpresa1, comisionEmpresa2 } = formObject;
+        // Validar comisiones para roles que no sean sagencia
+        if (selectedAsesor.role !== 'sagencia' && edicion === null) {
+            // Verificar que haya al menos una empresa seleccionada
+            if (selectedCompanies.length === 0) {
+                errores.push('empresa');
+                showNotification('Debe seleccionar al menos una empresa');
+                setLoaderOn(false);
+                return;
+            }
 
-                    const formAsesor = formObject;
+            // Verificar que al menos una comisión sea mayor a 0
+            const comisionFields = [
+                'comisionEmpresa1', 'comisionEmpresa2',
+                'comisionManager1', 'comisionManager2',
+                'comisionCoordinador1', 'comisionCoordinador2'
+            ];
+            const tieneComision = comisionFields.some(field =>
+                formObject[field] !== undefined && Number(formObject[field]) > 0
+            );
 
-                    if (comisionEmpresa1 === undefined) {
-
-                        formAsesor.comisionEmpresa1 = null;
-                    }
-                    if (comisionEmpresa2 === undefined) {
-
-                        formAsesor.comisionEmpresa2 = null;
-                    }
-
-                    veredicto = await editAsesor(formAsesor, edicion.id, edicion.rol, showNotification)
-                } else {
-                    veredicto = await editAsesor(formObject, edicion.id, 'sagencia', showNotification)
-                }
-
-                if (veredicto) {
-                    handleGetData()
-                    navigate('/administracion')
-                }
-            } else {
-                const veredicto = await postAsesor(formObject, formObject.role, showNotification);
-                if (veredicto) {
-                    handleGetData()
-                    navigate('/administracion')
-                }
+            if (!tieneComision) {
+                errores.push('comision');
+                showNotification('Debe ingresar al menos una comisión mayor a 0');
+                setLoaderOn(false);
+                return;
             }
         }
 
-        setLoaderOn(false)
+        // Validar porcentaje_neto para sagencia
+        if (selectedAsesor.role === 'sagencia' && edicion === null) {
+            if (!formObject.porcentaje_neto || Number(formObject.porcentaje_neto) <= 0) {
+                errores.push('porcentaje_neto');
+                showNotification('Debe ingresar un porcentaje de comisión mayor a 0');
+                setLoaderOn(false);
+                return;
+            }
+        }
+
+        if (errores.length) {
+            showNotification('Faltan completar los siguientes campos: ' + errores.toString());
+            setLoaderOn(false);
+            return;
+        }
+
+        if (edicion !== null) {
+            let veredicto;
+            if (edicion.rol !== undefined) {
+                const { comisionEmpresa1, comisionEmpresa2 } = formObject;
+                const formAsesor = formObject;
+
+                if (comisionEmpresa1 === undefined) {
+                    formAsesor.comisionEmpresa1 = null;
+                }
+                if (comisionEmpresa2 === undefined) {
+                    formAsesor.comisionEmpresa2 = null;
+                }
+
+                veredicto = await editAsesor(formAsesor, edicion.id, edicion.rol, showNotification);
+            } else {
+                veredicto = await editAsesor(formObject, edicion.id, 'sagencia', showNotification);
+            }
+
+            if (veredicto) {
+                handleGetData();
+                navigate('/administracion');
+            }
+        } else {
+            const veredicto = await postAsesor(formObject, formObject.role, showNotification);
+            if (veredicto) {
+                handleGetData();
+                navigate('/administracion');
+            }
+        }
+
+        setLoaderOn(false);
     };
 
     useEffect(() => {
         let companias = [];
         if (edicion !== null) {
-            edicion?.rol === undefined && setSelectedAsesor({
-                manager_id: 0,
-                role: 'sagencia'
+            setSelectedAsesor({
+                manager_id: edicion.manager_id || 0,
+                role: edicion.rol || 'sagencia'
             })
         }
 

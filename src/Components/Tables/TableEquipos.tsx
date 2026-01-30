@@ -32,7 +32,6 @@ const TableEquipos = ({ setDetalleEquipo, setIsDetalleOn } : { setDetalleEquipo:
                             <td>{equipo.email}</td>
                             <td className="tdContainer">
                                 <p onClick={()=>handleDetalle(equipo)}>Detalle</p>
-                                <p>Editar</p>
                             </td>
                         </tr>
                     })

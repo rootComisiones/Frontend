@@ -60,11 +60,13 @@ const Periodo = () => {
     }
 
     useEffect(() => {
-        getTablePeriodoData()
+        // Solo cargar datos si el usuario está logueado como root
+        if (!userData.role || userData.role !== 'root') return;
+        getTablePeriodoData();
         window.scrollTo({
             top: 0,
         });
-    }, [refresh])
+    }, [refresh, userData.role])
 
     return (
         <>

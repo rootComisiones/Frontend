@@ -1,5 +1,5 @@
 // filepath: [TableAsesores.tsx](http://_vscodecontentref_/3)
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useMemo } from "react";
 import '../../Styles/Reutilized.css'
 import { UserContext } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -23,9 +23,9 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
     const navigate = useNavigate();
 
     // Usar asesoresToShow si está definido (aunque sea array vacío), sino usar allAsesores
-    const asesores = typeof asesoresToShow !== 'undefined' ? asesoresToShow : allAsesores;
-
-    console.log('Asesores a mostrar9999999999999:', asesores);
+    const asesores = useMemo(() => {
+        return typeof asesoresToShow !== 'undefined' ? asesoresToShow : allAsesores;
+    }, [asesoresToShow, allAsesores]);
 
     const handleDetalle = (asesor: any) => {
         setDetalleAsesor(asesor);
@@ -36,10 +36,6 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
         setEdicion(asesor);
         navigate('/administracion/asesores/crear');
     };
-
-    useEffect(() => {
-        console.log('Asesores en TableAsesores:', asesores);
-    }, [asesores]);
 
     return (
         <>
@@ -55,9 +51,7 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
                 </thead>
                 <tbody>
                     {asesores && asesores.length > 0 ? (
-                        asesores.map((asesor: any) => {
-                            console.log('Renderizando asesor:', asesor);
-                            return (
+                        asesores.map((asesor: any) => (
                                 <tr key={"tabla_asesores_" + asesor.username+'_' + asesor.id }>
                                     <td>{asesor.username}</td>
                                     <td>{asesor.nombre + " " + asesor.apellido}</td>
@@ -74,8 +68,7 @@ const TableAsesores: React.FC<TableAsesoresProps> = ({
                                         })}>Eliminar</p>
                                     </td>
                                 </tr>
-                            );
-                        })
+                        ))
                     ) : (
                         <tr>
                             <td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>

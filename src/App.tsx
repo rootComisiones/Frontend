@@ -26,28 +26,32 @@ const ContextWrapper = ({ children }: { children: JSX.Element }) => {
 
   const handleGetData = async () => {
     setLoaderOn(true);
-    const asesoresResponse = await getAllAsesores(1, 50, showNotification);
-    setAllAsesores(asesoresResponse.asesores || []);
-    await getTeams(setAllTeams, showNotification)
-    const response = await getAllClientes(1, 50, showNotification);
-    const clientes = response?.clients || [];
-    setAllClientes(clientes)
-    const sagencias = await getAllSagencias(showNotification);
-    setAllSagencias(sagencias);
-    setLoaderOn(false);
+    try {
+      const [asesoresResponse, clientesResponse, sagencias] = await Promise.all([
+        getAllAsesores(1, 50, showNotification),
+        getAllClientes(1, 50, showNotification),
+        getAllSagencias(showNotification),
+      ]);
+
+      setAllAsesores(asesoresResponse.asesores || []);
+      setAllClientes(clientesResponse?.clients || []);
+      setAllSagencias(sagencias);
+
+      // getTeams modifica estado directamente, se ejecuta después
+      await getTeams(setAllTeams, showNotification);
+    } catch (error: any) {
+      // Los errores individuales ya se manejan en cada función
+    } finally {
+      setLoaderOn(false);
+    }
   }
 
   useEffect(() => {
     handleGetData();
   }, [])
 
-  useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      const parsedUserData = JSON.parse(storedUserData);
-      console.log('Datos del usuario cargados desde localStorage:', parsedUserData);
-    }
-  }, []);
+  // TODO: Este useEffect es redundante - UserContext ya maneja la persistencia de userData
+  // Se puede eliminar en un futuro refactor
 
   return children;
 };

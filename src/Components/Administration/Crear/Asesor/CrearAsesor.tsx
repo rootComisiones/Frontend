@@ -8,7 +8,22 @@ import Page404 from "../../../Page404/Page404";
 
 const CrearAsesor = () => {
 
-    const { userData } = useContext(UserContext);
+    const { userData, edicion } = useContext(UserContext);
+
+    const getTitulo = () => {
+        if (edicion === null) return 'Nuevo Usuario';
+
+        // Si no tiene rol definido, es una subagencia
+        if (edicion.rol === undefined) return 'Editar Sub Agencia';
+
+        const titulos: Record<string, string> = {
+            'asesor': 'Editar Asesor',
+            'coordinador': 'Editar Coordinador',
+            'manager': 'Editar Manager',
+            'sagencia': 'Editar Sub Agencia',
+        };
+        return titulos[edicion.rol] || 'Editar Usuario';
+    };
 
     useEffect(() => {
         window.scrollTo({
@@ -22,7 +37,7 @@ const CrearAsesor = () => {
                 userData.role === 'root' ?
                     <Background>
                         <section className="container">
-                            <h1 className="title2 marginYTitle">Usuario</h1>
+                            <h1 className="title2 marginYTitle">{getTitulo()}</h1>
                             <FormCrearAsesor />
                         </section>
                     </Background>

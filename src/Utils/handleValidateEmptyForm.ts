@@ -11,8 +11,7 @@ export const validateFormFields = (fields: FormFields, type: string) => {
     // Validar si el campo está vacío
     if (value === '' || value === null || value === undefined) {
       if (!key.includes('perfil_riesgo')) {
-        errores.push(key)
-        console.log(`Error: El campo '${key}' no puede estar vacío.`);
+        errores.push(key);
       }
     }
 
@@ -22,12 +21,10 @@ export const validateFormFields = (fields: FormFields, type: string) => {
       if (type === 'asesor') {
         if (key === 'sagencia_id') {
           errores.push(key);
-          console.log(`Error: El campo '${key}' debe tener un valor distinto de 0 para el rol asesor.`);
         }
         // manager_id y coordinador_id pueden ser 0 para asesores, así que los saltamos
       } else {
         errores.push(key);
-        console.log(`Error: El campo '${key}' debe tener un valor distinto de 0.`);
       }
     }
 
@@ -37,13 +34,9 @@ export const validateFormFields = (fields: FormFields, type: string) => {
     }
   }
 
-  if (type === 'asesor') {
-    noComisiones && errores.push('noComisiones')
+  if (type === 'asesor' && noComisiones) {
+    errores.push('noComisiones');
   }
 
-  // No filtrar coordinador_id para asesor, ya que no se agrega como error
-  let finalErrores = errores.filter(error => error !== 'observacion');
-  console.log(finalErrores);
-
-  return finalErrores;
+  return errores;
 }

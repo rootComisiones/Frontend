@@ -139,16 +139,32 @@ const FormCrearCliente = () => {
             return acc;
         }, {} as any);
 
-        console.log('formObject', formObject);
-        
+        // Cuando es edición, transformar campos con sufijo _1 a sin sufijo
+        let finalFormObject = formObject;
+        if (edicion !== null) {
+            const suffixMap: Record<string, string> = {
+                'compania_1': 'compania',
+                'numero_cuenta_1': 'numero_cuenta',
+                'perfil_riesgo_1': 'perfil_riesgo',
+                'presentador_dk_1': 'presentador_dk',
+                'presentador_pd_1': 'presentador_pd',
+                'repheral_1': 'repheral',
+            };
 
-        const errores = validateFormFields(formObject, 'cliente');
+            finalFormObject = Object.entries(formObject).reduce((acc, [key, value]) => {
+                const newKey = suffixMap[key] || key;
+                acc[newKey] = value;
+                return acc;
+            }, {} as any);
+        }
+
+        const errores = validateFormFields(finalFormObject, 'cliente');
 
         if (errores.length) {
-            console.error('Faltan completar los siguientes campos: ' + errores.toString());
+            showNotification('Faltan completar los siguientes campos: ' + errores.toString());
         } else {
             if (edicion !== null) {
-                const veredicto = await editCliente(formObject, edicion.id, showNotification)
+                const veredicto = await editCliente(finalFormObject, edicion.id, showNotification)
                 if (veredicto) {
                     handleGetData()
                     navigate('/administracion')
@@ -156,7 +172,7 @@ const FormCrearCliente = () => {
                     showNotification('Hubo un error al editar el cliente!')
                 }
             } else {
-                const veredicto = await postClient(formObject, showNotification);
+                const veredicto = await postClient(finalFormObject, showNotification);
                 if (veredicto) {
                     handleGetData()
                     navigate('/administracion')

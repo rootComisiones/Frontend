@@ -2,23 +2,29 @@ import { Dispatch, SetStateAction } from "react";
 import { Coordinador } from "../Types/Types";
 
 const getCoordinadores = async (id: number, showNotification: (msg: string) => void) => {
-
-    // let url = `${process.env.REACT_APP_BASE_URL}/teams/coordinadores/${id}`;    
-    let url = `${process.env.REACT_APP_BASE_URL}/manager/relations/${id}`
+    const url = `${process.env.REACT_APP_BASE_URL}/manager/relations/${id}`;
 
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            const errorData = await response.json();
-           console.log('Error en la solicitud: ' + errorData.message);
+
+        const text = await response.text();
+        let data: any;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            data = null;
         }
-        const data = await response.json();
-        console.log('Respuesta del servidor:', data);
-        return data
+
+        if (!response.ok) {
+            // No mostrar notificación - es esperado cuando no hay coordinadores
+            return null;
+        }
+
+        return data;
     } catch (error: any) {
-        console.log('Error en la solicitud:', error);
-        showNotification(error.message || "Ocurrió un error inesperado");
-        return null
+        // Solo mostrar error en casos de fallo de red real
+        console.error('Error en getCoordinadores:', error);
+        return null;
     }
 }
 

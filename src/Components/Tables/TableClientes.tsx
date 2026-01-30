@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import '../../Styles/Reutilized.css'
 import { UserContext } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,9 @@ const TableClientes: React.FC<TableClientesProps> = ({
     const navigate = useNavigate();
 
     // Usar clientesToShow si está definido (aunque sea array vacío), sino usar allClientes
-    const clientes = typeof clientesToShow !== 'undefined' ? clientesToShow : allClientes;
+    const clientes = useMemo(() => {
+        return typeof clientesToShow !== 'undefined' ? clientesToShow : allClientes;
+    }, [clientesToShow, allClientes]);
 
     const handleDetalle = (cliente: any) => {
         setDetalleCliente(cliente);

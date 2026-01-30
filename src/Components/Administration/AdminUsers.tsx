@@ -145,11 +145,16 @@ const AdminUsers = () => {
     };
 
     const handleSubmitFile = async () => {
-        setLoaderOn(true)
-        await postExcelClients(fileSelected, showNotification)
-        await handleGetClientes(currentClientsPage);
-        setFileSelected(null);
-        setLoaderOn(false)
+        setLoaderOn(true);
+        try {
+            await postExcelClients(fileSelected, showNotification);
+            await handleGetClientes(currentClientsPage);
+            setFileSelected(null);
+        } catch (error: any) {
+            showNotification(error.message || "Error al procesar el archivo");
+        } finally {
+            setLoaderOn(false);
+        }
     }
 
     useEffect(() => {
@@ -183,19 +188,14 @@ const AdminUsers = () => {
         setSearchResultsAsesor([]);
     }, [adminUsersState.state, refreshTrigger])
 
-    useEffect(() => {
-        console.log('Clientes buscados:', searchResultsAsesor);
-    }, [searchResultsAsesor]);
-
     // Cuando cambia el modo de búsqueda o los resultados, actualiza asesoresToShow
     useEffect(() => {
         if (isSearchModeAsesor) {
-            console.log('Actualizando asesoresToShow con resultados de búsqueda:', searchResultsAsesor);
             setAsesoresToShow(searchResultsAsesor);
         } else {
             setAsesoresToShow(undefined); // para que la tabla use allAsesores
         }
-    }, [isSearchModeAsesor, searchResultsAsesor, allAsesores]);
+    }, [isSearchModeAsesor, searchResultsAsesor]);
 
     // Decidir qué mostrar
     const clientesToShow = isSearchMode ? searchResults : allClientes;

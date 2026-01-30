@@ -1,3 +1,4 @@
+import { error } from "console";
 import { AsesorData } from "../Types/Types";
 
 const urlAsesor = `${process.env.REACT_APP_BASE_URL}/asesor/register`;
@@ -27,6 +28,7 @@ const postAsesor = async (newAsesor: AsesorData, type: string, showNotification:
         if (!response.ok) {
             const errorData = await response.json();
             console.log('Error en la solicitudd: ' + errorData.message);
+            showNotification(errorData.message || "Ocurrió un error inesperado");
             return false
         }
         const data = await response.json();

@@ -26,20 +26,18 @@ const SearchAsesores: React.FC<SearchAsesoresProps> = ({ onAsesorFound, onClearS
         setSearchError('');
         try {
             const result = await getAsesorByUsername(searchTerm.trim());
-            console.log('Resultado búsqueda asesor:', result);
-            let found = null;
-            if (result?.asesor && typeof result.asesor === 'object' && result.asesor.username) {
-                found = result.asesor;
-            } else if (result && typeof result === 'object' && result.username) {
-                found = result;
-            }
-            if (found) {
-                setSearchResult(found);
-                onAsesorFound([found]);
+
+            if (result?.error) {
+                setSearchResult(null);
+                setSearchError(result.error);
+                onAsesorFound([]);
+            } else if (result?.asesor) {
+                setSearchResult(result.asesor);
+                onAsesorFound([result.asesor]);
                 setSearchError('');
             } else {
                 setSearchResult(null);
-                setSearchError(result?.error || 'Asesor no encontrado');
+                setSearchError('Asesor no encontrado');
                 onAsesorFound([]);
             }
         } catch (error) {
@@ -59,7 +57,7 @@ const SearchAsesores: React.FC<SearchAsesoresProps> = ({ onAsesorFound, onClearS
         onClearSearch();
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             handleSearch();
         }
@@ -73,7 +71,7 @@ const SearchAsesores: React.FC<SearchAsesoresProps> = ({ onAsesorFound, onClearS
                     placeholder="Buscar por username..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     className="searchInput"
                 />
                 <button 
